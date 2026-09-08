@@ -1,0 +1,17 @@
+{
+  "name": "@ccc/NN-name",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs NN",
+    "reset": "node ../../scripts/reset.mjs NN",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.15.0"
+  }
+}

@@ -1,0 +1,13 @@
+The linter bans one punctuation mark and eleven phrases. Quoting one on purpose
+takes a marker on the line above.
+
+<!-- prose-lint-ignore -->
+The banned mark looks like this — and the checker skips this line.
+
+Fenced blocks are skipped too, so sample text can hold anything:
+
+```
+It is worth noting that this line sits inside a fence — nothing fires.
+```
+
+The rest of the file is checked as normal.

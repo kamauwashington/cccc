@@ -1,0 +1,9 @@
+**Done.** Split the queue worker out of src/index.ts into src/worker.ts.
+
+**Works.** 31 tests pass. The worker starts and drains a seeded queue in under a second.
+
+**Doesn't work.** Shutdown is still abrupt. An in flight job is dropped when the process exits.
+
+**Fixed.** Yes for the split. No for shutdown, which was never in scope and will surface again the first time someone deploys mid job.
+
+**Suggestions.** Give the worker a drain timeout before anyone runs it in staging.

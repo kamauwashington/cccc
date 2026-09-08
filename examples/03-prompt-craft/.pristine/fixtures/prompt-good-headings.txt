@@ -1,0 +1,20 @@
+## Goal
+
+Write a script that reports the ten largest files in a repository.
+
+## Constraints
+
+Node 20, no dependencies outside the standard library. Skip node_modules.
+
+## Output format
+
+One file, scripts/big-files.mjs, plus a two line usage note in the README.
+
+## Success criteria
+
+`node scripts/big-files.mjs .` prints 10 rows, largest first, in under 2
+seconds on this repository.
+
+## What to avoid
+
+Do not shell out to `du` or `find`. Do not follow symlinks.

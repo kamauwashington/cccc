@@ -1,0 +1,12 @@
+{
+  "name": "@ccc/03-prompt-craft",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 03",
+    "reset": "node ../../scripts/reset.mjs 03",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  }
+}

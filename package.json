@@ -1,0 +1,39 @@
+{
+  "name": "claude-code-crash-course",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Eight small examples that each teach one Claude Code feature.",
+  "workspaces": [
+    "examples/*"
+  ],
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/setup.mjs",
+    "setup": "node scripts/setup.mjs",
+    "reset": "node scripts/reset.mjs",
+    "snapshot": "node scripts/snapshot.mjs",
+    "verify": "node scripts/verify.mjs && node scripts/lint-prose.mjs",
+    "preflight": "node scripts/preflight.mjs",
+    "lint:prose": "node scripts/lint-prose.mjs",
+    "check:solutions": "node scripts/check-solutions.mjs",
+    "go": "node scripts/go.mjs",
+    "site": "node scripts/build-site.mjs",
+    "solution": "node scripts/solution.mjs",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.16",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.15.0",
+    "drizzle-orm": "^0.44.7",
+    "express": "^5.2.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "zod": "^4.5.4"
+  }
+}

@@ -1,0 +1,5 @@
+Great question. I went ahead and looked through the whole duration helper, and after weighing a few approaches I settled on a table driven parser. Here is a summary of what I did.
+
+Done. Added parseDuration in src/duration.ts.
+
+Works. 18 tests pass and npm run typecheck is clean.

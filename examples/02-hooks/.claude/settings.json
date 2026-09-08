@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "autoMemoryEnabled": false,
+  "permissions": {
+    "deny": [
+      "Read(./.pristine/**)",
+      "Edit(./.pristine/**)",
+      "Read(./.solution/**)",
+      "Edit(./.solution/**)"
+    ],
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run codegen)",
+      "Bash(npm run codegen:*)",
+      "Bash(npm run reset:*)",
+      "Bash(node ../../scripts/reset.mjs:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/complete.mjs"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/bash-output-guard.mjs"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/protect-generated.mjs"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/typecheck-after-edit.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}

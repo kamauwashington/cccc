@@ -1,0 +1,15 @@
+{
+  "name": "@ccc/04-progressive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 04",
+    "reset": "node ../../scripts/reset.mjs 04",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit",
+    "fat": "node swap.mjs fat",
+    "lean": "node swap.mjs lean",
+    "context": "node swap.mjs status"
+  }
+}

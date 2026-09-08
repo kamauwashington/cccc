@@ -1,0 +1,6 @@
+It is worth noting that the hook runs on every turn.
+It's worth noting that the timeout is 180 seconds.
+Importantly, the hook always exits 0.
+It should be noted that a non zero exit can loop the model.
+Needless to say, that would be bad on a projector.
+In today's world every CLI ships with hooks.

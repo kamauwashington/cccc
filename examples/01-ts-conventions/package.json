@@ -1,0 +1,12 @@
+{
+  "name": "@ccc/01-ts-conventions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 01",
+    "reset": "node ../../scripts/reset.mjs 01",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  }
+}

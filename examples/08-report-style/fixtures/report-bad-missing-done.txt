@@ -1,0 +1,3 @@
+Works. 18 tests pass and npm run typecheck is clean.
+
+Suggestions. Let the server call the parser instead of holding a raw number.

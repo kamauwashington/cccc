@@ -1,0 +1,13 @@
+{
+  "name": "@ccc/02-hooks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 02",
+    "reset": "node ../../scripts/reset.mjs 02",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit",
+    "codegen": "tsx scripts/codegen.mjs"
+  }
+}

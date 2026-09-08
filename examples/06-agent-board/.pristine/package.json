@@ -1,0 +1,14 @@
+{
+  "name": "@ccc/06-agent-board",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 06",
+    "reset": "node ../../scripts/reset.mjs 06",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx src/server.ts",
+    "sharpen": "node tools/sharpen.mjs"
+  }
+}

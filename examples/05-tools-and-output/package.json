@@ -1,0 +1,13 @@
+{
+  "name": "@ccc/05-tools-and-output",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 05",
+    "reset": "node ../../scripts/reset.mjs 05",
+    "seed": "node tools/seed.mjs",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  }
+}

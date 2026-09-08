@@ -1,0 +1,5 @@
+Goal: add pagination to the GET /orders endpoint.
+
+Constraints: keep the response shape, no new dependencies.
+
+Success criteria: `npm test` passes and a limit of 25 is honored.

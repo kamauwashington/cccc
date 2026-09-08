@@ -1,0 +1,12 @@
+{
+  "name": "@ccc/07-commands",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 07",
+    "reset": "node ../../scripts/reset.mjs 07",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  }
+}

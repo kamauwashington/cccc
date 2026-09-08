@@ -1,0 +1,15 @@
+Goal: add pagination to the GET /orders endpoint in src/routes/orders.ts.
+
+Constraints:
+- Keep the existing response shape. Add a `nextCursor` field, nothing else.
+- Cursor is the order id, encoded base64. No offset paging.
+- No new dependencies.
+
+Output format: a diff for src/routes/orders.ts and one new test file.
+
+Success criteria: `npm test` passes, and a request with `?limit=25` returns at
+most 25 orders plus a `nextCursor`.
+
+What to avoid:
+- Do not touch the database schema.
+- Do not rename the existing query helpers.

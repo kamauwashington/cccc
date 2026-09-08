@@ -1,0 +1,9 @@
+Done. Added parseDuration in src/duration.ts.
+
+Works. 18 tests pass and npm run typecheck is clean.
+
+Doesn't work. Nothing.
+
+Fixed. Yes for the three units in the request.
+
+Suggestions. None.

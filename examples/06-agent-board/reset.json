@@ -1,0 +1,26 @@
+{
+  "restore": [
+    "openapi",
+    "src",
+    "tests",
+    "tools",
+    "package.json",
+    "REVIEW.md",
+    "tsconfig.json",
+    "vitest.config.ts",
+    ".claude/agents",
+    "CLAUDE.md",
+    ".claude/memory",
+    ".claude/skills"
+  ],
+  "delete": [
+    "RESULT.md",
+    "TRANSCRIPT.md",
+    "dist",
+    ".tmp",
+    ".claude/.complete-state.json",
+    ".claude/.subagent-starts.json"
+  ],
+  "verify": "npm run typecheck && npm test",
+  "postReset": "node ../../scripts/setup.mjs"
+}

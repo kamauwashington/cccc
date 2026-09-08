@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "autoMemoryEnabled": false,
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "deny": [
+      "Read(./.pristine/**)",
+      "Edit(./.pristine/**)",
+      "Read(./.solution/**)",
+      "Edit(./.solution/**)"
+    ],
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run seed)",
+      "Bash(npm run reset:*)",
+      "Bash(node ../../scripts/reset.mjs:*)",
+      "Bash(node tools/board.mjs:*)",
+      "Bash(node tools/seed.mjs:*)",
+      "Bash(jq:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/complete.mjs"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/bash-output-guard.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}

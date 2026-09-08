@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci > /tmp/install.log 2>&1 || (tail -30 /tmp/install.log && exit 1)
+
+      # Checks the root .claude/ is bare and every workspace has the skeleton.
+      # A skill added to the root .claude/ would load into all eight examples.
+      - name: Verify structure
+        run: node scripts/verify.mjs
+
+      # Fails on em dashes and on the banned phrase list.
+      - name: Lint prose
+        run: node scripts/lint-prose.mjs
+
+      # The documentation site is generated from the repository. This fails
+      # when site/index.html is older than the content it was built from.
+      - name: Check site is built
+        run: node scripts/build-site.mjs --check
+
+      # Each workspace starts broken on purpose, so a red test run here is the
+      # expected state. This job proves the solutions compile and pass.
+      - name: Check solutions
+        run: node scripts/check-solutions.mjs

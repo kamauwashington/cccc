@@ -1,0 +1,5 @@
+Done. Added parseDuration in src/duration.ts.
+
+Works.
+
+Fixed. Yes for the three units in the request.

@@ -1,0 +1,12 @@
+{
+  "name": "@ccc/08-report-style",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../../scripts/start.mjs 08",
+    "reset": "node ../../scripts/reset.mjs 08",
+    "test": "vitest run --reporter=dot",
+    "typecheck": "tsc --noEmit"
+  }
+}

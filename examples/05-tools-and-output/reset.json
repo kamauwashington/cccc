@@ -1,0 +1,22 @@
+{
+  "restore": [
+    "mcp",
+    "src",
+    "tests",
+    "tools",
+    "package.json",
+    "tsconfig.json",
+    "vitest.config.ts",
+    "CLAUDE.md",
+    ".claude/memory"
+  ],
+  "delete": [
+    "RESULT.md",
+    "TRANSCRIPT.md",
+    "dist",
+    ".claude/.complete-state.json",
+    ".tmp"
+  ],
+  "verify": "npm run typecheck && npm test",
+  "postReset": "node ../../scripts/setup.mjs"
+}

@@ -1,0 +1,10 @@
+Goal: add pagination to the GET /orders endpoint.
+
+Constraints: keep the response shape, and add no new dependencies.
+
+Output format: a diff plus a test file.
+
+Success criteria: it should feel fast and the reviewer should be happy with the
+result.
+
+What to avoid: do not touch the schema.

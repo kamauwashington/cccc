@@ -1,0 +1,7 @@
+The hook runs before the tool call. It reads the command off stdin and exits 0
+to allow it. Any other exit code blocks the call.
+
+Two things can go wrong. The hook can be slow, which stalls every command. The
+hook can throw, which the CLI treats as a block.
+
+Keep it under 50 lines and give it a timeout.

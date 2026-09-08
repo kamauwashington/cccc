@@ -1,0 +1,21 @@
+{
+  "restore": [
+    "fixtures",
+    "src",
+    "tests",
+    "package.json",
+    "tsconfig.json",
+    "vitest.config.ts",
+    "CLAUDE.md",
+    ".claude/output-styles",
+    ".claude/memory"
+  ],
+  "delete": [
+    "RESULT.md",
+    "dist",
+    ".tmp",
+    ".claude/.complete-state.json"
+  ],
+  "verify": "npm run typecheck && npm test",
+  "postReset": "node ../../scripts/setup.mjs"
+}

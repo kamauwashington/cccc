@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.tmp/
+
+# Generated per machine by scripts/setup.mjs. Holds absolute paths.
+# The glob is required. A bare .claude/settings.local.json anchors to the
+# repository root and misses the eight workspace copies.
+**/.claude/settings.local.json
+
+# Written by the Stop hook in each workspace.
+RESULT.md
+TRANSCRIPT.md
+
+# Auto memory is redirected here so it is easy to see and easy to wipe.
+examples/*/.claude/memory/
+
+# Build output from the enum codegen demo.
+**/*.generated.ts
+
+.DS_Store
+*.log

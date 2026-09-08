@@ -1,0 +1,11 @@
+{
+  "openapi": "",
+  "info": {
+    "title": "Agent Board",
+    "version": "0.0.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {}
+  }
+}
