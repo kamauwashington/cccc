@@ -63,8 +63,11 @@ The rest of that example's speed list, in order of payoff:
    then 5.1s in example 06, slowest last.
 
 Personality is output tokens, and output tokens are wall clock time. Each agent
-in example 06 prints one line in character, under ten words, then emits its
-file. The limit is in the agent prompt on purpose.
+in example 06 writes its file and then signs off with one line, under twenty
+words, in its own voice and led by its own icon. That line is the only thing
+that reaches the main session, and the prompt there says to print it word for
+word. The word limit is in the agent prompt on purpose. One line buys the
+character and costs almost nothing.
 
 ## Cheap visibility
 

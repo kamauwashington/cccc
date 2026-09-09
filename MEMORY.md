@@ -313,3 +313,29 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   line `sh` wrapper around `scripts/go.mjs`, so `npm run go NN` still works and
   the logic lives in one place. A slash command could not do this job anyway,
   since it runs inside a session that has already picked its launch directory.
+- 2026-09-09 06's four agents each carry a voice and an icon (🧬 copperhead,
+  📘 cottonmouth, 🚦 black-mamba, 🔍 sidewinder). The icons live in the
+  `ICONS` table in `subagent-line.mjs` next to `OPENERS`, and each agent prompt
+  repeats its own icon. The pre edit line is gone. Each agent now writes its
+  file and then signs off with one line, under twenty words, and `PROMPT.md`
+  tells Bill to print that line word for word instead of paraphrasing. Only an
+  agent's final message reaches the parent, so a line printed before the edit
+  was never visible on stage.
+- 2026-09-09 06 opens with the same `You asked:` receipt 03 uses, added to
+  `.claude/commands/start.md`. 06's `PROMPT.md` carries stage direction as well
+  as the ask, so the receipt quotes the first paragraph word for word rather
+  than the whole file. `.claude/commands/` is not in `reset.json`, so the edit
+  survives a reset and needs no snapshot refresh.
+- 2026-09-09 An emoji is two terminal columns wide and a markdown table
+  renderer counts it as one, so every data row with an icon sits one column off
+  the header. 06 keeps icons out of every table it prints and puts them in the
+  free text lines instead.
+- 2026-09-09 The transcript line for a subagent shows the `description` passed
+  to Task, under a fixed `Agent` label that nothing in the workspace controls.
+  06's `PROMPT.md` says the description is the agent's name in lower case, so
+  the line reads `Agent "copperhead"` rather than a paraphrase of the work.
+- 2026-09-09 `scripts/lint-prose.mjs` scans `REVIEW.md`, which sidewinder
+  writes on every run, so an em dash in a review turns the repository lint red.
+  Every 06 agent prompt now bans em dashes in its output. Reset restores the
+  `REVIEW.md` stub, so a red lint after a demo clears with a reset.
+

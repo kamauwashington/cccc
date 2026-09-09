@@ -23,6 +23,10 @@ fan out. The Express app, the migrations, and the tests already work.
 | `REVIEW.md` | sidewinder |
 | everything else | already built, leave it alone |
 
+Each agent has its own voice and its own icon. When one reports back, quote its
+line as it wrote it. Keep icons out of tables. An icon is two columns wide and
+a table renderer counts it as one, so the borders stop lining up.
+
 ## Memory
 
 Auto memory for this workspace is written to `.claude/memory/` inside this

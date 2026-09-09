@@ -14,5 +14,14 @@ status codes, or the schema names.
 Do none of this work yourself. Do not read the files first. Do not run the
 tests, the Stop hook runs them once.
 
-When all four return, print one table with agent, file, and line count. Then
-stop.
+Give each Task the agent's name as its description, in lower case, and nothing
+else. The line on screen shows that description, so the room reads `copperhead`
+rather than a paraphrase of the work.
+
+Each agent signs off with one line in its own voice, led by its own icon. As
+each one comes back, print that line word for word. Do not paraphrase it, do
+not summarise it in your own voice, and do not narrate the ones still running.
+
+When all four return, print one table with agent, file, and line count. Put no
+icons in the table. An icon is two columns wide and it pushes the borders out
+of line. Then stop.

@@ -30,13 +30,22 @@ const COLORS = {
   'black-mamba': '\u001b[33m',
   sidewinder: '\u001b[38;5;208m',
 };
+// One icon per agent. The same icon leads the agent's own sign off line, so a
+// line on screen is traceable to a snake at a glance.
+const ICONS = {
+  copperhead: '\u{1F9EC}',
+  cottonmouth: '\u{1F4D8}',
+  'black-mamba': '\u{1F6A6}',
+  sidewinder: '\u{1F50D}',
+};
 // What each agent says when it picks up its file. The hook says it, so the
-// line costs zero output tokens and lands the moment the agent starts.
+// line costs zero output tokens and lands the moment the agent starts. Each
+// one is written in that agent's voice, the same voice its prompt describes.
 const OPENERS = {
-  copperhead: 'Copperhead here. The schema is mine.',
-  cottonmouth: 'Cottonmouth here. I will take the spec.',
-  'black-mamba': 'Black Mamba here. Routes. Stand back.',
-  sidewinder: 'Sidewinder here. I read. I judge. I leave.',
+  copperhead: 'Copperhead. Schema is mine. Starting now.',
+  cottonmouth: 'Cottonmouth. I will take the spec. Every ref will resolve.',
+  'black-mamba': 'Black Mamba. Routes. Stand back.',
+  sidewinder: 'Sidewinder. I read, I judge, I leave.',
 };
 
 const CYAN = '\u001b[36m';
@@ -140,7 +149,8 @@ function onStart(payload) {
 
   const colour = COLORS[name] || CYAN;
   const opener = OPENERS[name] || 'On it.';
-  process.stdout.write(colour + '  [' + name + ']' + RESET + ' ' + opener + '\n');
+  const icon = ICONS[name] || '\u{1F41B}';
+  process.stdout.write(icon + ' ' + colour + '[' + name + ']' + RESET + ' ' + opener + '\n');
 
   const starts = readJson(STARTS, {});
   starts[id] = Date.now();
@@ -176,8 +186,10 @@ function onStop(payload) {
   const colour = COLORS[name] || CYAN;
 
   process.stdout.write(
-    colour +
-      '  [' +
+    (ICONS[name] || '\u{1F41B}') +
+      ' ' +
+      colour +
+      '[' +
       name +
       ']' +
       RESET +

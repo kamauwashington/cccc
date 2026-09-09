@@ -27,7 +27,14 @@ start it prints that agent's opener in character, so the room sees four agents
 pick up work the moment they are dispatched. On stop it reads the model, the
 elapsed time, and the token count out of the session transcript, prints the
 line, and appends a row to `TRANSCRIPT.md`. All of it costs zero model tokens.
-The openers live in the `OPENERS` table in that file. Edit them there.
+The openers live in the `OPENERS` table in that file and the icons live in
+`ICONS` next to it. Edit them there.
+
+Each agent does talk once. After it writes its file it signs off with a single
+line in its own voice, led by its own icon. That line is the only thing that
+travels back to the main session, and `PROMPT.md` tells the main session to
+print it word for word. The same icon leads the hook lines, so every line on
+screen traces back to one snake.
 
 The database is PGlite, real Postgres compiled to WebAssembly, running inside
 the Node process. `CREATE TYPE ... AS ENUM` works and `pg_enum` is there to read
@@ -93,10 +100,14 @@ the repository is cloned, with `npm install` at the root. After that this exampl
 is runnable from a cold machine at any time.
 
 That launches Claude Code in this folder and sends `/start`, which resets the
-workspace and runs `PROMPT.md`. Then watch. Four agents announce themselves in
-character as they pick up their files. Four coloured lines come back as they
-finish, one per agent, with the model, the elapsed time, and the token count.
-When the turn ends the Stop hook prints the verdict and the file list.
+workspace and runs `PROMPT.md`. The run opens with a one line receipt, `You
+asked:` followed by the first paragraph of the prompt word for word, the same
+opener example 03 uses. It puts the ask and the fan out in one frame. Then
+watch. Four agents announce themselves in character as they pick up their
+files. Each one signs off in its own voice as
+it finishes, and a coloured line follows it with the model, the elapsed time,
+and the token count. When the turn ends the Stop hook prints the verdict and
+the file list.
 
 Two beats worth knowing. The openers come from `SubagentStart` and the closing
 lines come from `SubagentStop`, so the gap between them is the fan out you can
@@ -141,9 +152,21 @@ Sidewinder has no Edit tool and no Bash tool. It holds Write so it can leave
 every write whose target is not that file. Per agent hooks are shown on
 Sidewinder only.
 
-Each agent prints one line in character, under ten words, and then emits its
-file. That limit is in the agent prompt on purpose. Personality is output
-tokens and output tokens are wall clock time.
+| Agent | Icon | Voice |
+| --- | --- | --- |
+| Copperhead | 🧬 | fast and clipped, no adjectives |
+| Cottonmouth | 📘 | precise and formal, counts things out loud |
+| Black Mamba | 🚦 | quick and cocky |
+| Sidewinder | 🔍 | dry, unimpressed, softens nothing |
+
+Each agent writes its file and then signs off with one line, under twenty
+words, in that voice, with wit and no em dashes. `PROMPT.md` also tells the
+main session to pass the agent's name as the task description, so the line on
+screen reads `copperhead` rather than a paraphrase of the work. Icons stay out
+of the tables, since an icon is two columns wide and a table renderer counts it
+as one. The word limit is in the agent prompt on purpose.
+Personality is output tokens and output tokens are wall clock time. One line
+buys the character and costs almost nothing.
 
 ## Four ways to invoke an agent
 

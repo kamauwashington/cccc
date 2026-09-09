@@ -11,6 +11,13 @@ Stop here if this conversation already holds an earlier run of this example.
 Reply with one line asking the user to run `/clear` and then `/start` again.
 Read no files and change nothing.
 
-Otherwise do exactly what the following prompt says. Nothing more.
+Otherwise open your reply with one line, before anything else:
+
+```
+You asked: <the first paragraph of the prompt below, word for word, on one line>
+```
+
+Then a blank line. Then do exactly what the rest of that prompt says. Nothing
+more.
 
 @PROMPT.md
