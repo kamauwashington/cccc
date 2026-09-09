@@ -1,2 +1,0 @@
-The skill loads on demand — Claude reads the description first, then the body.
-The range is 10–20 files per run.

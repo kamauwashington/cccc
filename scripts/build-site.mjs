@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Builds the documentation site from the repository itself.
 //
-//   node scripts/build-site.mjs           write site/index.html
-//   node scripts/build-site.mjs --check   fail if the committed file is stale
+//   npm run build                         write dist/index.html
+//   node scripts/build-site.mjs --check   fail if dist/ is stale
 //
 // Two content sources feed the site.
 //
@@ -14,18 +14,21 @@
 //                           example and it shows up here with no edit to this
 //                           script.
 //
-// Output is one self contained file. No build step to install, no server to
-// run, no network needed except the web font. site/artifact-body.html holds
-// the same page without the document wrapper, for publishing as an Artifact.
+// Output is one self contained file, dist/index.html. No build step to
+// install, no server to run, no network needed except the web font.
+// dist/artifact-body.html holds the same page without the document wrapper.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT, listWorkspaces, readJson, c, CLAUDE_CODE_TESTED_VERSION } from './lib.mjs';
 
+// site/ holds the sources. dist/ holds the build, and nothing else writes
+// there, so it is safe to wipe.
 const SITE_DIR = path.join(REPO_ROOT, 'site');
 const CONTENT_DIR = path.join(SITE_DIR, 'content');
-const OUT_PAGE = path.join(SITE_DIR, 'index.html');
-const OUT_BODY = path.join(SITE_DIR, 'artifact-body.html');
+const DIST_DIR = path.join(REPO_ROOT, 'dist');
+const OUT_PAGE = path.join(DIST_DIR, 'index.html');
+const OUT_BODY = path.join(DIST_DIR, 'artifact-body.html');
 
 const SECTION_ORDER = [
   'Start here',
@@ -488,7 +491,7 @@ const EXAMPLE_TABS = [
   ['Overview', 'What you will see', 'How it works'],
   ['The prompt', 'The prompt'],
   ['Watch for', 'What to watch for'],
-  ['Speaker notes', 'Speaker notes'],
+  ['Running it', 'Running it', 'Speaker notes'],
   ['Try next', 'Try next'],
 ];
 
@@ -712,6 +715,7 @@ h1.title .num{color:var(--accent-line);margin-right:12px;font-variant-numeric:ta
 .spec:has(+ .morefacts){border-radius:4px 4px 0 0}
 .morefacts{
   display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 20px;
+  align-items:baseline;
   margin:-1px 0 0;padding:14px 16px;background:var(--surface);
   border:1px solid var(--line);border-radius:0 0 4px 4px;
 }
@@ -819,8 +823,16 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 }
 .srow:hover{border-bottom-color:var(--line)}
 .srow .who{width:264px;flex:none}
-.srow .who h2{font-family:var(--cond);font-weight:600;font-size:19px;margin:0;text-wrap:balance}
-.srow .who .lbl{margin-top:6px;display:block}
+.srow .who h2{
+  font-family:var(--cond);font-weight:600;font-size:19px;margin:0;text-wrap:balance;
+  display:flex;align-items:center;gap:10px;
+}
+.srow .sicon{
+  flex:none;width:20px;height:20px;color:var(--muted-text);
+  transition:color .15s ease;
+}
+.srow:hover .sicon,.srow:focus-visible .sicon{color:var(--accent)}
+.srow .who .lbl{margin-top:6px;display:block;padding-left:30px}
 .srow .what{flex:1;font-size:14.5px;color:var(--ink-2);line-height:1.5;min-width:0}
 .srow .go{flex:none;font-size:13px;color:var(--accent)}
 .homefoot{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-text);margin-top:40px}
@@ -862,13 +874,85 @@ const SECTION_BLURBS = {
   'Field notes': 'The project memory, the checks that move between versions, and the decisions behind the build.',
 };
 
+// One mark per section, drawn inline so the page keeps its single request
+// budget. Line art on a 24 box, stroke only, sized and coloured by CSS
+// through currentColor. A section with no entry here renders without a mark.
+const SECTION_ICONS = {
+  'Start here':
+    '<path d="M6 3v18"/><path d="M6 4h11l-2.2 3.5L17 11H6"/>',
+  'Repo staples':
+    '<path d="M9 3h6.5L20 7.5V17a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>' +
+    '<path d="M15 3v5h5"/><path d="M4 8v11a2 2 0 0 0 2 2h9"/>',
+  'Claude Code concepts':
+    '<path d="M12 7.5C10.6 6 8.8 5.2 6.5 5.2H4v12h2.5c2.3 0 4.1.8 5.5 2.3"/>' +
+    '<path d="M12 7.5c1.4-1.5 3.2-2.3 5.5-2.3H20v12h-2.5c-2.3 0-4.1.8-5.5 2.3"/>' +
+    '<path d="M12 7.5v12"/>',
+  'The eight examples':
+    '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/>' +
+    '<rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/>' +
+    '<rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/>' +
+    '<rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/>',
+  'Scripts':
+    '<rect x="3" y="4.5" width="18" height="15" rx="2"/>' +
+    '<path d="M7.5 10l2.5 2.2-2.5 2.2"/><path d="M12.5 15h4"/>',
+  'Field notes':
+    '<path d="M7 3.5h10a1.5 1.5 0 0 1 1.5 1.5v15.5l-3-2-3 2-3-2-3 2V5A1.5 1.5 0 0 1 7 3.5Z"/>' +
+    '<path d="M9.5 8h5"/><path d="M9.5 11.5h5"/>',
+};
+
+function sectionIcon(name) {
+  const paths = SECTION_ICONS[name];
+  if (!paths) return '';
+  return '<svg class="sicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" ' +
+    'fill="none" stroke="currentColor" stroke-width="1.6" ' +
+    'stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
+}
+
 // site/logo.png rides along as a data URI, so the page stays one file.
 // Swap that file and rebuild to change the mark. Drop it and the hero
 // falls back to the title on its own.
-function readLogo() {
+function readLogoAsset() {
   const file = path.join(SITE_DIR, 'logo.png');
-  if (!fs.existsSync(file)) return '';
-  return 'data:image/png;base64,' + fs.readFileSync(file).toString('base64');
+  if (!fs.existsSync(file)) return null;
+  const raw = fs.readFileSync(file);
+  // PNG header: the IHDR width and height are big endian at bytes 16 and 20.
+  const width = raw.length > 24 ? raw.readUInt32BE(16) : 0;
+  const height = raw.length > 24 ? raw.readUInt32BE(20) : 0;
+  return {
+    dataUri: 'data:image/png;base64,' + raw.toString('base64'),
+    width,
+    height,
+  };
+}
+
+function readLogo() {
+  const asset = readLogoAsset();
+  return asset ? asset.dataUri : '';
+}
+
+// The same mark serves as the tab icon. The logo is taller than it is wide,
+// and a browser would squash it to fill a square, so it is centred inside a
+// square SVG instead and the padding is transparent. The PNG is offered as a
+// fallback for anything that will not take an SVG icon. Both are inline, so
+// the tab icon costs no request either.
+function buildFavicon() {
+  const asset = readLogoAsset();
+  if (!asset || !asset.width || !asset.height) return '';
+
+  const side = Math.max(asset.width, asset.height);
+  const x = (side - asset.width) / 2;
+  const y = (side - asset.height) / 2;
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + side + ' ' + side + '">' +
+    '<image x="' + x + '" y="' + y + '" width="' + asset.width + '" height="' + asset.height +
+    '" href="' + asset.dataUri + '"/></svg>';
+
+  return (
+    '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,' +
+      Buffer.from(svg, 'utf8').toString('base64') + '" />\n' +
+    '<link rel="alternate icon" type="image/png" href="' + asset.dataUri + '" />\n' +
+    '<link rel="apple-touch-icon" href="' + asset.dataUri + '" />\n'
+  );
 }
 
 function buildBody(pages, meta) {
@@ -910,6 +994,7 @@ function buildBody(pages, meta) {
       count: s.pages.length,
       first: s.pages[0].id,
       blurb: SECTION_BLURBS[s.name] || '',
+      icon: sectionIcon(s.name),
     }));
 
   const data = pages.map((p) => ({
@@ -979,7 +1064,8 @@ function renderHome(){
   shell.setAttribute('data-view', 'home');
   const rows = SECTIONS.map(sec =>
     '<a class="srow" href="#/' + sec.first + '">' +
-      '<div class="who"><h2>' + esc(sec.name) + '</h2><span class="lbl">' + sec.count + ' pages</span></div>' +
+      '<div class="who"><h2>' + (sec.icon || '') + '<span>' + esc(sec.name) + '</span></h2>' +
+        '<span class="lbl">' + sec.count + ' pages</span></div>' +
       '<div class="what">' + esc(sec.blurb) + '</div>' +
       '<div class="go">Browse</div>' +
     '</a>').join('');
@@ -1063,7 +1149,7 @@ function renderDoc(p){
       (p.summary ? '<p class="lead">' + md(p.summary) + '</p>' : '') +
       chips + strip + more + bodyHtml +
       '<div class="srcnote">' + esc(p.source) +
-        (p.generated ? ' &middot; generated by npm run site' : ' &middot; edit and rebuild') + '</div>' +
+        (p.generated ? ' &middot; generated by npm run build' : ' &middot; edit and rebuild') + '</div>' +
     '</article></div>';
 
   markNav(p.id);
@@ -1153,6 +1239,7 @@ function buildDocument(body) {
     '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8" />\n' +
     '<meta name="viewport" content="width=device-width, initial-scale=1" />\n' +
     '<meta name="description" content="Field manual for the eight example workspaces. What each Claude Code feature does, how the repository is put together, and what breaks." />\n' +
+    buildFavicon() +
     '<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none !important}</style>\n' +
     '</head>\n<body>\n' +
     body +
@@ -1189,14 +1276,14 @@ function main() {
     // The build date changes every day, so compare everything except that line.
     const strip = (s) => String(s).replace(/"built":"\d{4}-\d\d-\d\d"/, '');
     if (strip(current) !== strip(page)) {
-      console.log(c.red(c.bold('site stale')) + ': run `npm run site` and commit site/index.html');
+      console.log(c.red(c.bold('site stale')) + ': run `npm run build`');
       process.exit(1);
     }
     console.log(c.green(c.bold('site ok')) + ': ' + meta.pages + ' pages, up to date');
     return;
   }
 
-  fs.mkdirSync(SITE_DIR, { recursive: true });
+  fs.mkdirSync(DIST_DIR, { recursive: true });
   fs.writeFileSync(OUT_PAGE, page, 'utf8');
   fs.writeFileSync(OUT_BODY, body, 'utf8');
 
@@ -1206,9 +1293,9 @@ function main() {
       meta.pages +
       ' pages (' +
       meta.examples +
-      ' examples) into site/index.html'
+      ' examples) into dist/index.html'
   );
-  console.log(c.dim('Open it with: open site/index.html'));
+  console.log(c.dim('Open it with: open dist/index.html'));
 }
 
 main();

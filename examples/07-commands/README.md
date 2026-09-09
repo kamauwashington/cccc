@@ -5,95 +5,209 @@ for on its own. That is the whole difference.
 
 ## What you will see
 
-`/ship 1.4.0` reads a real commit list, groups it, and writes `CHANGELOG.md`,
-and the failing tests go green. Then you ask for the same changelog in plain
-English and get a different file.
+Three commands run against a 50 issue backlog for an order processing service.
+`/grab:next` hands you the same six issues every time. `/grab:complex` offers
+three complex issues to choose between. `/grab:up-for-grabs` lists the work
+anyone can pick up. All three end in a picker you can tick more than one box in.
+
+There is nothing to set up. The backlog ships ready in `data/issues.json`,
+nothing generates or seeds it, and nobody fixes anything here. Launch Claude
+Code in this folder and run a command. That is the whole example.
 
 ## How it works
 
-`.claude/commands/ship.md` is the command. A markdown file under
-`.claude/commands/` becomes a slash command named after the file. Claude Code
-finds it at launch and lists it in the `/` menu.
+A markdown file under `.claude/commands/` becomes a slash command named after
+the file. Claude Code finds it at launch and lists it in the `/` menu.
 
-Three mechanisms are in that one file.
+A subdirectory becomes a prefix. `.claude/commands/grab/next.md` is
+`/grab:next`. That is why the three group together in the menu.
 
-- `$1` is the first argument. `$ARGUMENTS` is everything the user typed after
-  the command name. `/ship 1.4.0` sets `$1` to `1.4.0`.
+Four mechanisms are spread across those files.
+
 - A line starting with `!` and holding a backtick command runs in the shell
   before Claude reads the prompt. Its output is pasted in place. The model never
   chooses to run it and never sees a version without it.
+- `$1` is the first argument. `$ARGUMENTS` is everything typed after the command
+  name. `/grab:up-for-grabs payments` sets `$1` to `payments`.
 - Frontmatter carries `description`, `argument-hint`, `allowed-tools`, and
-  `model`. `argument-hint` is what the `/` menu shows after the name.
+  `model`. `argument-hint` is what the `/` menu shows after the name. All three
+  commands pin `model: sonnet`, because the script already did the thinking and
+  the model is only rendering a picker.
+- `allowed-tools` on all three includes `AskUserQuestion`, so a command can put
+  a picker on screen.
 
-The injection line in `ship.md` is this:
-
-```
-!`cat fixtures/history.txt`
-```
-
-In a real project with a git repository, that same line is this:
+The injection line in `next.md` is this:
 
 ```
-!`git log --oneline v1.3.0..HEAD`
+!`node tools/issues.mjs next`
 ```
 
-The two produce the same text. These examples ship without their own git
-repository, because an embedded repository makes the parent repository stop
-tracking the folder. So the history lives in `fixtures/history.txt` instead. The
-lesson is unchanged. The command file is the only thing that would differ.
+`tools/issues.mjs` reads `data/issues.json` and prints fixed width rows. The
+selection lives in that script, so it happens before the model reads a token.
+Three quick, two mid, one complex, lowest issue number first.
 
-Subdirectories become a prefix. `.claude/commands/db/seed.md` is `/db:seed` and
-`.claude/commands/db/reset.md` is `/db:reset`. Both carry `model: haiku`,
-because both do one mechanical thing against the JSON store in `src/db/`.
+`data/issues.json` is denied to the Read tool in `.claude/settings.json`. Without
+that rule, reading the raw JSON is the cheapest path and 50 issues land in the
+transcript.
 
-`.claude/commands/explain.md` takes a file reference. `/explain
-@src/orders/service.ts` puts that file in the prompt before the model starts.
+### The picker
+
+Every grab command ends the same way. The script narrows 50 issues down to a
+handful, and the model turns that handful into an `AskUserQuestion` call. The
+command file says what the options are, what the labels and descriptions hold,
+and that the question is multi select:
+
+```
+- Multi select. Set `multiSelect` to true, and phrase the question in the
+  plural.
+```
+
+`multiSelect` is what lets you tick more than one box. A real morning is rarely
+one issue, and a picker that stops at one forces a second round trip. The
+command file is where that decision lives, so changing one line changes the
+picker for good.
+
+## Doing this against GitHub
+
+`data/issues.json` is a stand in for a real tracker. These examples ship without
+their own git repository, because an embedded repository makes the parent
+repository stop tracking the folder. So the backlog lives in a file.
+
+The commands do not change when the backlog is real. Only the source of the
+rows changes.
+
+### Before you start
+
+Install the GitHub CLI and confirm it is authenticated against the repository
+you want issues from:
+
+```
+gh auth status
+gh issue list --state open --limit 5
+```
+
+If the second command prints rows, the injection line will print the same rows.
+Run it from inside the repository, or add `--repo owner/name` to every call.
+
+### Route one, no script at all
+
+`gh` already filters, so the injection line does the whole job. Copy
+`up-for-grabs.md` into your own repository and replace the injection line:
+
+```
+!`gh issue list --state open --label "help wanted" --limit 20`
+```
+
+Add `Bash(gh issue list:*)` to `allowed-tools` in the frontmatter:
+
+```
+---
+description: List the issues anyone on the team can pick up
+allowed-tools: Bash(gh issue list:*), AskUserQuestion
+model: sonnet
+---
+```
+
+Then add the same string to the `allow` list in `.claude/settings.json`, so the
+command runs without a permission prompt in front of an audience:
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(gh issue list:*)"]
+  }
+}
+```
+
+The prompt below the injection line does not change at all. It still says one
+option per issue, `multiSelect` true, print what was picked and stop.
+
+To take the area argument with you, keep `argument-hint: [area]` and pass `$1`
+through to a label or an assignee filter:
+
+```
+!`gh issue list --state open --label "$1" --limit 20`
+```
+
+### Route two, keep the script
+
+Use this when the picking rule is more than a label filter. `/grab:next` mixes
+three tiers into one list, and `gh` cannot express that in a single call.
+
+`tools/issues.mjs` only needs a different `load()`. This:
+
+```js
+const issues = JSON.parse(fs.readFileSync(DATA, 'utf8'));
+```
+
+becomes this:
+
+```js
+const issues = JSON.parse(
+  execFileSync('gh', ['issue', 'list', '--state', 'open', '--limit', '100',
+    '--json', 'number,title,state,labels'], { encoding: 'utf8' })
+);
+```
+
+Two details to get right after that.
+
+- `gh --json` gives you `labels` as an array of objects, not strings. Map it to
+  `i.labels = raw.labels.map((l) => l.name)` before anything else reads it.
+- Tiers come from labels. `size/S`, `size/M`, and `size/L` is one common set.
+  Derive `i.tier` from those where the script currently reads the field, and
+  decide what an unlabelled issue counts as rather than letting it vanish.
+
+There is no `area` field on a GitHub issue. Use a label prefix like
+`area/payments`, or drop the column and the `/grab:up-for-grabs [area]`
+argument with it.
+
+The same swap works for GitLab with `glab issue list --output json`, and for
+Jira with its CLI. The command file is the part that stays put.
 
 ## The prompt
 
 ```
-/ship 1.4.0
+/grab:next
 ```
 
 ## What to watch for
 
-Run `/ship 1.4.0`. Then run `npm run reset -- 07`, `/clear`, and ask in plain
-English: "write a changelog for 1.4.0 from the commits since the last tag."
+Run `/grab:next` twice. Six issues, the same six, in the same order. The rows
+are identical because the shell output is fixed before the model starts.
 
-Claude does something reasonable both times. The plain English run picks its own
-headings, its own ordering, and its own idea of which commits matter. Run it
-twice and you get two different files. The command produces the same file every
-time, because the shell output and the file paths are fixed before the model
-reads a single token. Repeatability is the reason to write a command.
+Then ask for the same thing in plain English: "grab me a few issues to work on
+today." Claude picks its own number, its own mix, and its own ordering, and it
+picks differently the next time you ask.
 
-`npm test` checks that claim two ways. `tests/changelog.test.ts` checks the file
-`/ship` wrote. `tests/repeatable.test.ts` renders the same changelog twenty
-times from `src/changelog/render.ts` and asserts the bytes never move.
+Repeatability is the reason to write a command.
 
-## Speaker notes
+`npm test` holds that claim to code. `tests/issues.test.ts` renders `next`
+twenty times and asserts the bytes never move.
 
-Open the `/` menu first and let people see `argument-hint` next to `/ship`. That
-sells the frontmatter in two seconds.
+## Running it
 
-Say the one sentence at the top of this file out loud. Attendees mix up commands
-and skills every time. A command is invoked. A skill is chosen.
+1. Launch Claude Code from inside this folder and run `/grab:next`. Nothing has
+   to be seeded or reset first.
+2. Tick more than one box in each question. The command prints every issue you
+   picked and stops. Nothing is assigned.
+3. Run `/grab:next` again and compare the two lists. Same six, same order.
+4. Open the `/` menu. The three `grab:` commands group under one prefix, and
+   `argument-hint` sits next to `/grab:up-for-grabs`.
+5. Run `/grab:complex` to see the same picker over a different slice.
+6. Run `/grab:up-for-grabs payments` to see `$1` reach the shell command.
 
-If `/ship` writes a changelog the tests reject, read the failure out. The test
-names say which rule broke. Fix it by tightening the rules in `ship.md`, which is
-a better demo than fixing the file by hand.
-
-Fallback: `npm run solution -- 07` copies the finished `CHANGELOG.md` in. Keep
-talking and move on.
-
-`/db:seed` and `/db:reset` are the cheap ones. Run them if the room needs to see
-namespacing. Skip them if you are behind.
+Commands and skills get mixed up constantly. A command is invoked. A skill is
+chosen. That one sentence is the whole example.
 
 ## Try next
 
-- Add `.claude/commands/release/notes.md` and watch it appear as
-  `/release:notes`. One file, one new command, no restart.
-- Point the injection line at `package.json` instead of the fixture and rerun
-  `/ship`. The prompt changes before the model sees it. Ask Claude what it
-  received and it will read back the new text.
-- Drop `argument-hint` from `ship.md` and open the `/` menu again. The hint is
-  the only thing that tells a user the command wants a version.
+- Add `.claude/commands/grab/mine.md` and watch it appear as `/grab:mine`. One
+  file, one new command, no restart.
+- Change the mix in `tools/issues.mjs` from three quick to five and rerun
+  `/grab:next`. The command file does not change. The answer does.
+- Flip `multiSelect` back to single select in one command file and run it. The
+  picker changes shape, and no code changed.
+- Drop `argument-hint` from `up-for-grabs.md` and open the `/` menu again. The
+  hint is the only thing telling a user the command takes an area.
+- Point `up-for-grabs.md` at `gh issue list` in a repository you own, following
+  route one above. The command file barely changes.

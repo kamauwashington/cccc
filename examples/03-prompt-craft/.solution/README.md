@@ -1,23 +1,22 @@
 # Solution snapshot
 
-The finished `OUTPUT.md` for 03-prompt-craft. It is the five section block the
-`sharpen` skill produces from the rough request in `PROMPT.md`.
+The finished `src/orders.ts` for 03-prompt-craft. It is what the run should
+write once the three questions are answered: page size 25 by default, cursor
+based, rows plus a next cursor.
 
-`OUTPUT.md` ships as a copy of that rough request, so `tests/output.test.ts`
-starts red with five missing sections. The other 25 tests cover the two
-checkers and pass from the first run.
+The starting `src/orders.ts` hands back all 137 rows from a `listOrders()` that
+takes no arguments. `tests/orders.test.ts` starts red because of that.
 
-Nothing under `src/` changes. Both checkers, the CLI, the tests, the fixtures,
-and the config are already correct in the starting state. This example is about
-the skills firing, so the code they call has to work.
+The test suite is a backstop, never part of the demo. Nobody puts it on screen.
+It exists so CI can prove the built code works.
 
-Use it as the fallback when a live run stalls:
+Use this as the fallback when a live run stalls:
 
 ```
 npm run solution -- 03
 ```
 
-That copies `OUTPUT.md` over the live file. Then `npm run typecheck` and
-`npm test` both pass, 26 of 26. `npm run reset -- 03` puts the rough copy back.
+That copies `src/orders.ts` over the live file. Then `npm run typecheck` and
+`npm test` both pass. `npm run reset -- 03` puts the starting version back.
 
 Do not edit anything here during a demo.

@@ -1,16 +1,17 @@
 {
   "restore": [
-    "fixtures",
+    "data",
     "src",
+    "tools",
     "tests",
     "package.json",
     "tsconfig.json",
     "vitest.config.ts",
     "CLAUDE.md",
+    "PROMPT.md",
     ".claude/memory"
   ],
   "delete": [
-    "CHANGELOG.md",
     "RESULT.md",
     "TRANSCRIPT.md",
     "dist",

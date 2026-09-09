@@ -44,7 +44,7 @@ first, and every workspace here already sets `"test": "vitest run
 --reporter=dot"`, so a bare `npm test` goes through. A hook that fires on safe
 commands trains people to turn hooks off.
 
-Worth saying out loud: the terminal folding long output behind `ctrl+o to
+Worth knowing: the terminal folding long output behind `ctrl+o to
 expand` is only the display. The whole thing already went into context, and it
 is stored in the session file, so one noisy command is paid again every time the
 session continues.
@@ -87,7 +87,7 @@ Run the prompt three times, resetting between runs.
 1. **Ask nicely.** Hooks off:
    `claude --settings '{"disableAllHooks": true}'`
    `CLAUDE.md` says never hand edit `src/generated/`. Claude edits it
-   anyway, because that is the shortest path. The rule fails on stage.
+   anyway, because that is the shortest path. The rule fails.
 2. **Block.** Hooks on: `claude`. The `PreToolUse` hook exits 2 the moment
    Claude reaches for `src/generated/db-types.ts`. Watch the red line. Claude
    reads the reason, edits `src/schema.ts`, and runs `npm run codegen`. Nobody
@@ -99,21 +99,26 @@ Run the prompt three times, resetting between runs.
    Claude adds the missing `case 'status'` and moves on. A hook is also a
    feedback loop. That is the underrated half.
 
-## Speaker notes
+## Running it
 
-Beat 1 is the whole talk. Say it out loud while it happens: the model read the
-rule and made a different call. Then turn hooks on and let the exit code speak.
+1. Launch with hooks off, for the first pass only:
+   `claude --settings '{"disableAllHooks": true}'`
+2. Run `/start`. It resets the workspace, shows the starting state, and runs
+   the prompt. Watch Claude edit the generated file anyway.
+3. Run `/clear`, quit, and relaunch with plain `claude`.
+4. Run `/start` again. The `PreToolUse` hook blocks the write, and the
+   `PostToolUse` hook hands back the compiler error. That is passes two and
+   three, in one run.
+5. Read `RESULT.md`. The Stop hook writes it at the end of every pass.
 
-Version 2.1.263 has no flag for turning hooks off. `--safe-mode` also drops
-`CLAUDE.md`, which kills beat 1, so use the `--settings` JSON above. Setting
-`"disableAllHooks": true` in `.claude/settings.local.json` works too, and needs
-a restart.
+What can go wrong. Version 2.1.263 has no flag for turning hooks off. Avoid
+`--safe-mode`, which also drops `CLAUDE.md`, and the first pass needs that rule
+loaded. Setting `"disableAllHooks": true` in `.claude/settings.local.json`
+works too, and needs a restart. If Claude skips the generated file in the first
+pass and does the right thing on its own, that is the honest result. The other
+two passes still land.
 
-If Claude skips the generated file in beat 1 and does the right thing on its
-own, say so and move on. That is the honest result. Beats 2 and 3 still land.
-
-Between runs: `/reset` then `/clear`. If a live run stalls, run
-`npm run solution -- 02` and keep talking.
+Fallback. `npm run solution -- 02`.
 
 ## Try next
 

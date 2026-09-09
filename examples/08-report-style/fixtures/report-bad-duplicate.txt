@@ -1,5 +1,0 @@
-Done. Added parseDuration in src/duration.ts.
-
-Works. 18 tests pass.
-
-Done. Also wired it into the retry backoff.

@@ -1,90 +1,84 @@
 ---
 name: sharpen
-description: Turn a rough, vague, or bloated request into a five section checklist (goal, constraints, output format, success criteria, what to avoid). Use whenever a request arrives loose enough that a finished answer is hard to picture, and whenever the user asks to sharpen, tighten, clean up, or write up a prompt before running it.
+description: Ask before building when a request is too vague to act on. Use whenever a request arrives loose, rough, or underspecified, so that a finished answer is hard to picture. Ask up to three questions, wait for the answers, then build the smallest thing that satisfies them.
 ---
 
 # The decision rule, before anything else
 
 Read the request once and pick one of two paths.
 
-- **Ambiguous.** You cannot tell what a finished answer looks like. Ask.
-- **Bloated.** You can tell what it wants, and it is buried in words. Rewrite it
-  and do not ask.
+- **Vague.** You cannot picture what a finished answer looks like. Ask.
+- **Clear enough.** You can picture it. Build it. Do not ask.
 
-When both look true, it is bloated. Rewrite.
+When you are on the fence, ask. A wrong guess costs more than a question.
 
 ## If you ask
 
-Three questions, maximum. All three in one turn, as a numbered list. Nothing
-else in that turn.
-
-There is never a second round. When the answers come back, write the prompt with
-what you have. Guess the rest and record the guess inside `Constraints`.
-
-Ask first, check second. The checker run at the bottom of this file happens
-after the answers arrive, never in the same turn as the questions.
-
-## The output
-
-One fenced block. Nothing before it and nothing after it. No greeting, no
-summary of what you changed, no offer to iterate. This rule covers the text you
-write. Tool calls are not text, so the checker runs below still happen.
-
-The block holds these five headings, in this order, with content under each:
+Open with the request itself, on one line:
 
 ```
-Goal: one sentence. What the finished work is.
-
-Constraints:
-- Anything that limits the solution. Files, versions, style, scope.
-
-Output format: what comes back. A diff, a file, a table, a list.
-
-Success criteria: how anyone checks it. Name a number, a command to run,
-or a file path. "It works well" is not a criterion.
-
-What to avoid:
-- The wrong turns you can see coming.
+You asked: <the request, word for word>
 ```
 
-Keep the whole block under 400 words. A longer prompt is a design document.
+That line is a receipt. It puts the request and the questions in one frame, so
+the person can see what you heard. Quote it exactly. Do not tidy it up, do not
+fix the spelling, and do not summarize it.
 
-## Save a copy
+Then ask with the `AskUserQuestion` tool. Do not write the questions out as a
+numbered list in your reply. The tool draws a picker, so the answer is two
+keystrokes instead of a paragraph, and it always carries an "Other" row for
+typing something you did not offer.
 
-The block is the answer, so it goes in the chat. Write the same block to
-`OUTPUT.md` at the workspace root as the last thing you do. Write the five
-sections only. No fence markers, no heading above them, no note about what
-changed. `tests/output.test.ts` reads that file and runs both checkers over it.
+Three questions, maximum. All of them in one `AskUserQuestion` call, never one
+call after another. Nothing else in that turn, and no first draft of the answer.
 
-## Check your own work before you answer
+Each question needs:
 
-Write the draft to `.tmp/draft.txt`, then run both checks:
+- A `header` of twelve characters or less. It shows as a chip, so `Storage`
+  works and `Where should this get stored` does not.
+- Two to four `options`. Name the real choices. Skip the option nobody picks.
+- A `label` of one to five words, and a `description` that names the trade off.
+  The description is what makes the pick obvious to someone who has not thought
+  about it yet.
 
-```
-npx tsx src/cli.ts sharpen .tmp/draft.txt
-npx tsx src/cli.ts concise .tmp/draft.txt
-```
+Never add an "Other" option yourself. The tool adds one.
 
-Each one prints findings and exits 1 when something is wrong. Fix what they name
-and run them again. Return the block only after both exit 0.
+Ask about what changes the shape of the code. Skip anything you can pick
+yourself and mention later.
 
-`sharpen` counts the five sections, looks for a testable success criterion, and
-counts words. `concise` applies the repository writing rules to the same text. A
-sharpened prompt has to pass both, so a tight checklist written in bloated prose
-still fails.
-
-Both checkers are plain code in `src/`. No model grades this, so the same draft
-gets the same answer every time.
-
-## Worked example
-
-Rough input:
+The shape, on an unrelated request. Someone asks you to clean up old records:
 
 ```
-make the orders endpoint paginated somehow, it is slow right now and the
-frontend team keeps complaining
+header: Delete style
+  Soft delete        Flag the rows and keep them. Reversible.
+  Hard delete        Remove them. Frees space, no undo.
+
+header: Trigger
+  On a schedule      A nightly job. Nobody has to remember it.
+  On demand          A command someone runs. Predictable timing.
+
+header: Cutoff
+  Fixed at 90 days   One rule, nothing to configure.
+  Caller passes it   An argument, defaulting to 90 days.
 ```
 
-That one is ambiguous. Page size, cursor style, and response shape are all
-unknown, so ask three questions. `fixtures/prompt-good.txt` shows what the
-answer turns into.
+Three unknowns, each one changing what gets written. None of them is a question
+you could answer yourself and mention later.
+
+There is never a second round. When the answers come back, build with what you
+have. Pick the rest yourself and say which defaults you took.
+
+## Then build
+
+Build the smallest thing that satisfies the answers. One file when one file
+does it. No new dependencies, no config, no scaffolding for a future request.
+
+Leave the rest of the workspace alone.
+
+## The answer
+
+Short. What you built, in one or two sentences, and any default you picked that
+the questions did not cover. Run the `concise` skill over it before it goes out.
+
+Do not restate the code. It is on screen already. Do not offer to iterate, do
+not list what you considered, and do not summarize the conversation.

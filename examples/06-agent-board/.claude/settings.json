@@ -24,6 +24,8 @@
       "Bash(npm test:*)",
       "Bash(npm run typecheck)",
       "Bash(npm run sharpen)",
+      "Bash(npm start)",
+      "Bash(npm start:*)",
       "Bash(npm run reset:*)",
       "Bash(node ../../scripts/reset.mjs:*)",
       "Bash(node ../../scripts/solution.mjs:*)",

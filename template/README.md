@@ -25,9 +25,12 @@ The one prompt, copied from PROMPT.md.
 
 The one moment that carries the lesson. Say where to look on screen.
 
-## Speaker notes
+## Running it
 
-What to say. What can go wrong. The fallback if it does.
+Numbered steps. Use this workspace's own slash commands where they exist.
+`/start` resets the workspace and runs the prompt, so it is the only command
+the reader needs between runs. Never tell the reader to run `npm start`. Then
+what can go wrong, then the fallback.
 
 ## Try next
 
@@ -49,6 +52,6 @@ Two or three variations for someone reading this at home.
 | `.claude/memory/` | Auto memory lands here. Gitignored. |
 | `.claude/hooks/complete.mjs` | Stop hook. Verifies, then writes `RESULT.md`. |
 | `.claude/hooks/bash-output-guard.mjs` | PreToolUse hook on Bash. Blocks unbounded output. |
-| `.claude/commands/start.md` | `/start` runs the contents of `PROMPT.md` |
+| `.claude/commands/start.md` | `/start` resets, then runs the contents of `PROMPT.md` |
 | `.claude/commands/reset.md` | `/reset` shells out to the npm script |
 | `.pristine/` | Reset snapshot. Created by `scripts/snapshot.mjs`. |

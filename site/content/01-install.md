@@ -42,12 +42,10 @@ cd examples/01-ts-conventions
 claude
 ```
 
-Then paste the contents of that folder's `PROMPT.md`. Or run `/start`, which
-is a slash command in every workspace that reads `PROMPT.md` for you.
-
-`npm start` inside a workspace is the demo one liner. It resets the workspace,
-shows the first red signal, and stops. It always exits 0, because a non zero
-exit makes npm print seven lines of its own error block over the output.
+Then run `/start`. It is the demo one liner. Every workspace has it. It resets
+the workspace, shows the first red signal, then runs the prompt in `PROMPT.md`
+for you. Run `/clear` first if the session already holds an earlier attempt,
+and `/start` will say so if you forget.
 
 ## Reset between runs
 
@@ -61,6 +59,9 @@ together, so the model does not remember the previous attempt. Use `/rewind`
 mid example and `npm run reset` between sessions. Auto memory is the one thing
 `/rewind` does not clear, which is why [reset.json](#/reset-json) always wipes
 `.claude/memory/`.
+
+Inside a workspace, `/start` resets before it runs the prompt. So `/clear` then
+`/start` is the whole loop between runs.
 
 ## Take one folder home
 

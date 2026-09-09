@@ -1,23 +1,16 @@
 # Solution snapshot
 
-The finished checker for 08-report-style. It ships as a stub that throws, so
-21 of the 23 tests start red. The two that pass are the ones that read
-`.claude/output-styles/report.md` without calling the checker.
+There is nothing to repair here. This example starts working and stays
+working, the same way 02, 05, and 07 do. The demo is a prompt running and an
+answer coming back in a shape, not a red suite going green.
 
-- `src/report-check.ts` splits a report into sections, then runs seven passes
-  in a fixed order: preamble, per section rules, heading order, missing Done,
-  evidence, and length.
-
-Nothing else changes. The tests, the fixtures, the output style, and the
-config are already correct in the starting state.
-
-Use it as the fallback when a run stalls:
+`src/server.ts` is the file the prompt asks for. It is here as the fallback
+for a run that stalls on stage:
 
 ```
 npm run solution -- 08
 ```
 
-That copies `src/` over the live file. Then `npm run typecheck` and `npm test`
-both pass, 23 of 23. `npm run reset -- 08` puts the stub back.
+`npm run reset -- 08` deletes it again.
 
 Do not edit anything here during a demo.

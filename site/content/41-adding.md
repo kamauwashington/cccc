@@ -5,10 +5,11 @@ order: 2
 summary: The site is built from the repository by one script with no dependencies. Add an example and its page appears on its own. Add a concept and it is one markdown file with frontmatter.
 facts:
   Built by | `scripts/build-site.mjs`
-  Rebuild with | `npm run site`
-  Output | `site/index.html`, one self contained file
-  Also emits | `site/artifact-body.html`, the same page with no document wrapper
-  Checked in CI | `node scripts/build-site.mjs --check`
+  Rebuild with | `npm run build`
+  Output | `dist/index.html`, one self contained file
+  Also emits | `dist/artifact-body.html`, the same page with no document wrapper
+  Sources | `site/content/*.md` and `site/logo.png`
+  Publish with | `npm run publish:web`
 docs:
   Common workflows | common-workflows
 tabs:
@@ -20,7 +21,7 @@ tabs:
 ## Add a ninth example
 
 Copy `template/` into `examples/09-name/`, fill in the README, and run
-`npm run site`. The page appears in the nav with no edit to the build script.
+`npm run build`. The page appears in the nav with no edit to the build script.
 The example section is generated from `listWorkspaces()`, the same helper reset
 and verify use, so the site can never list an example the tooling does not
 know about.
@@ -104,6 +105,9 @@ The prose linter scans `site/content/*.md` like every other markdown file in
 the repository, so the house writing rules apply here. Run
 `npm run lint:prose` before you commit.
 
-CI runs `node scripts/build-site.mjs --check`, which fails when
-`site/index.html` is older than the content it was built from. The build date
-is ignored in that comparison, so a stale check means real content drift.
+`dist/` is generated and gitignored, so CI runs `npm run build` instead of
+diffing a committed file. A change that breaks the generator fails the build.
+
+The published copy lives in its own repository, which holds the built
+`index.html` and nothing else. `npm run publish:web` copies `dist/index.html`
+there and commits. It never pushes, because it carries no credentials.

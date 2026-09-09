@@ -1,10 +1,9 @@
-# Solved state for 07-commands
+# Solution snapshot
 
-This is what the workspace looks like after `/ship 1.4.0` has run. The only
-file the demo produces is `CHANGELOG.md`. Everything else here is the same as
-the starting state, kept so a copy is complete.
+Nothing to solve here. This example starts working and stays working, the same
+way 02 and 05 do. The demo is a command running, not a repair.
 
-`npm run solution -- 07` copies these over the live files. Use it when a live
-run stalls. `npm run reset -- 07` puts the starting state back.
+`tools/issues.mjs` and `data/issues.json` ship complete. `npm run reset -- 07`
+restores both, which is also how the backlog comes back after `/teardown`.
 
-Do not read this folder while running the example.
+Do not edit anything here during a demo.

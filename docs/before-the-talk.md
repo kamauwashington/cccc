@@ -38,6 +38,8 @@ the ones only a human can confirm.
       and `npm run reset` is needed instead.
 - [ ] Does `npm run reset -- NN` followed by `/clear` fully reset an example
       without restarting the CLI?
+- [ ] Does `/start` reset the workspace and run the prompt in one turn, without
+      a permission prompt on `npm start`?
 
 ## Settings and memory
 
@@ -65,10 +67,14 @@ the ones only a human can confirm.
       `name`, which has to match `outputStyle` in `.claude/settings.json`.
 - [ ] Does switching with `/output-style default` and back hold for the rest of
       the session, and does it write the choice into settings?
-- [ ] Ask a documentation question with the style on. The style says it does
-      not apply to prose. Check whether that actually holds, since the honest
-      version of this example says a style shapes output and does not enforce
-      it.
+- [ ] Ask a documentation question with the style on. There is nothing to be
+      green in a prose answer, so watch what lands under "Works". This is where
+      a style drifts, and the honest version of the example says a style shapes
+      output and does not enforce it.
+- [ ] Run `npm start` in `examples/08-report-style`. It should say typecheck
+      clean, 4 tests passed, and that the workspace starts green on purpose.
+      Express comes from the root `node_modules`, so a workspace with no
+      install of its own is expected.
 - [ ] Check `~/.claude/output-styles/` is empty on the presentation machine. A
       personal style there competes with the project one.
 

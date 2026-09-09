@@ -13,35 +13,24 @@
       "Bash(npm test)",
       "Bash(npm test:*)",
       "Bash(npm run typecheck)",
+      "Bash(npm start)",
+      "Bash(npm start:*)",
       "Bash(npm run reset:*)",
       "Bash(node ../../scripts/reset.mjs:*)",
-      "Bash(npx vitest run:*)",
-      "Bash(mkdir -p .tmp)",
-      "Write(./.tmp/**)",
-      "Edit(./.tmp/**)",
-      "Read(./fixtures/**)"
+      "Write(./src/server.ts)",
+      "Edit(./src/server.ts)"
     ]
   },
   "hooks": {
     "Stop": [
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node .claude/hooks/complete.mjs"
-          }
-        ]
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/complete.mjs" }]
       }
     ],
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node .claude/hooks/bash-output-guard.mjs"
-          }
-        ]
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/bash-output-guard.mjs" }]
       }
     ]
   }

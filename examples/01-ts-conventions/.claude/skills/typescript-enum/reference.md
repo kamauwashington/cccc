@@ -39,18 +39,18 @@ that came back from a driver typed as `string`.
 A numeric TypeScript enum emits both directions:
 
 ```ts
-enum Priority { Low, Normal, High, Urgent }
-Priority.High   // 2
-Priority[2]     // 'High'
+enum Level { Debug, Info, Warn, Error }
+Level.Warn   // 2
+Level[2]     // 'Warn'
 ```
 
 A const object gives you only the forward direction. Build the reverse map
 once, from the same object, so the names are still written once:
 
 ```ts
-export const PRIORITY_NAMES = Object.fromEntries(
-  Object.entries(Priority).map(([name, value]) => [value, name])
-) as Record<Priority, PriorityName>;
+export const LEVEL_NAMES = Object.fromEntries(
+  Object.entries(Level).map(([name, value]) => [value, name])
+) as Record<Level, LevelName>;
 ```
 
 The tradeoff:
@@ -73,12 +73,12 @@ when the column is already a smallint or the wire format demands it.
 ## Exhaustive switches
 
 ```ts
-switch (status) {
-  case OrderStatus.Pending:
-    return OrderStatus.Paid;
+switch (heading) {
+  case Direction.Up:
+    return Direction.Down;
   // ... every other member ...
   default:
-    return assertNever(status, 'order status');
+    return assertNever(heading, 'direction');
 }
 ```
 

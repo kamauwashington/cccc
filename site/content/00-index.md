@@ -17,7 +17,7 @@ site cannot drift from the code. The concept pages are written by hand.
 | Everything else | `site/content/*.md`, written by hand |
 
 Add a ninth example and its page appears with no edit to the build script.
-Change an example README and the page changes with it. Run `npm run site` to
+Change an example README and the page changes with it. Run `npm run build` to
 rebuild, and see [Adding to this site](#/adding).
 
 The root `CLAUDE.md` sets the writing rules for every markdown file here, and

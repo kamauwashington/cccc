@@ -1,0 +1,563 @@
+[
+  {
+    "number": 101,
+    "title": "Retry webhook delivery on a 502",
+    "state": "open",
+    "area": "payments",
+    "tier": "quick",
+    "labels": [
+      "bug",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-03"
+  },
+  {
+    "number": 103,
+    "title": "Order confirmation email drops the order number",
+    "state": "open",
+    "area": "notifications",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-03"
+  },
+  {
+    "number": 105,
+    "title": "Delivery ETA shows the wrong timezone",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "quick",
+    "labels": [
+      "bug",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-04"
+  },
+  {
+    "number": 107,
+    "title": "Trim whitespace from coupon codes",
+    "state": "open",
+    "area": "checkout",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-04"
+  },
+  {
+    "number": 109,
+    "title": "Sort the admin order list newest first",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-05"
+  },
+  {
+    "number": 111,
+    "title": "Add an index on orders.customer_id",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "chore",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-05"
+  },
+  {
+    "number": 113,
+    "title": "Log the payment provider name on a decline",
+    "state": "open",
+    "area": "payments",
+    "tier": "quick",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-06"
+  },
+  {
+    "number": 115,
+    "title": "Show the SKU on the packing slip",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "quick",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-06"
+  },
+  {
+    "number": 117,
+    "title": "Cap the cart quantity field at 99",
+    "state": "open",
+    "area": "checkout",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-07"
+  },
+  {
+    "number": 119,
+    "title": "Fix the plural in \"1 items shipped\"",
+    "state": "open",
+    "area": "notifications",
+    "tier": "quick",
+    "labels": [
+      "bug",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-07"
+  },
+  {
+    "number": 121,
+    "title": "Redact the card last four from debug logs",
+    "state": "open",
+    "area": "payments",
+    "tier": "quick",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-10"
+  },
+  {
+    "number": 123,
+    "title": "Add a loading state to the refund button",
+    "state": "open",
+    "area": "refunds",
+    "tier": "quick",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-10"
+  },
+  {
+    "number": 125,
+    "title": "Rename the pending status label to awaiting payment",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "chore",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-11"
+  },
+  {
+    "number": 127,
+    "title": "Return 404 instead of 500 for an unknown order id",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-11"
+  },
+  {
+    "number": 129,
+    "title": "Stop sending review requests for cancelled orders",
+    "state": "open",
+    "area": "notifications",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-12"
+  },
+  {
+    "number": 131,
+    "title": "Add the tracking link to the shipped email",
+    "state": "open",
+    "area": "notifications",
+    "tier": "quick",
+    "labels": [
+      "feature",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-12"
+  },
+  {
+    "number": 133,
+    "title": "Round shipping estimates to the nearest cent",
+    "state": "open",
+    "area": "checkout",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-13"
+  },
+  {
+    "number": 135,
+    "title": "Show out of stock badges in search results",
+    "state": "open",
+    "area": "search",
+    "tier": "quick",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-13"
+  },
+  {
+    "number": 137,
+    "title": "Add a health check endpoint to the order service",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "chore",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-14"
+  },
+  {
+    "number": 139,
+    "title": "Fix the sort order of refund history",
+    "state": "open",
+    "area": "refunds",
+    "tier": "quick",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-14"
+  },
+  {
+    "number": 141,
+    "title": "Drop the unused promo_codes_old table",
+    "state": "open",
+    "area": "admin",
+    "tier": "quick",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-17"
+  },
+  {
+    "number": 143,
+    "title": "Split the checkout controller into two services",
+    "state": "open",
+    "area": "checkout",
+    "tier": "mid",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-03"
+  },
+  {
+    "number": 145,
+    "title": "Add partial refunds for a single line item",
+    "state": "open",
+    "area": "refunds",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-04"
+  },
+  {
+    "number": 147,
+    "title": "Backfill missing SKUs on legacy orders",
+    "state": "open",
+    "area": "inventory",
+    "tier": "mid",
+    "labels": [
+      "chore",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-05"
+  },
+  {
+    "number": 149,
+    "title": "Rate limit the order lookup endpoint",
+    "state": "open",
+    "area": "admin",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-06"
+  },
+  {
+    "number": 151,
+    "title": "Move address validation behind a provider interface",
+    "state": "open",
+    "area": "checkout",
+    "tier": "mid",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-07"
+  },
+  {
+    "number": 153,
+    "title": "Add idempotency keys to the capture call",
+    "state": "open",
+    "area": "payments",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-10"
+  },
+  {
+    "number": 155,
+    "title": "Paginate the admin order list",
+    "state": "open",
+    "area": "admin",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-11"
+  },
+  {
+    "number": 157,
+    "title": "Track partial shipments per line item",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-11"
+  },
+  {
+    "number": 159,
+    "title": "Add a dead letter queue for failed webhooks",
+    "state": "open",
+    "area": "payments",
+    "tier": "mid",
+    "labels": [
+      "feature",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-12"
+  },
+  {
+    "number": 161,
+    "title": "Support more than one gift card per order",
+    "state": "open",
+    "area": "checkout",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-12"
+  },
+  {
+    "number": 163,
+    "title": "Warn on low stock before checkout completes",
+    "state": "open",
+    "area": "inventory",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-13"
+  },
+  {
+    "number": 165,
+    "title": "Write an audit row for every status change",
+    "state": "open",
+    "area": "admin",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-14"
+  },
+  {
+    "number": 167,
+    "title": "Retry orders stuck in payment pending",
+    "state": "open",
+    "area": "payments",
+    "tier": "mid",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-17"
+  },
+  {
+    "number": 169,
+    "title": "Cache the shipping rate lookup for five minutes",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-18"
+  },
+  {
+    "number": 171,
+    "title": "Add order search by customer email",
+    "state": "open",
+    "area": "search",
+    "tier": "mid",
+    "labels": [
+      "feature",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-18"
+  },
+  {
+    "number": 173,
+    "title": "Expire abandoned carts after seven days",
+    "state": "open",
+    "area": "checkout",
+    "tier": "mid",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-19"
+  },
+  {
+    "number": 175,
+    "title": "Send a shipment digest instead of one email each",
+    "state": "open",
+    "area": "notifications",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-20"
+  },
+  {
+    "number": 177,
+    "title": "Require a reason code on every cancellation",
+    "state": "open",
+    "area": "admin",
+    "tier": "mid",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-21"
+  },
+  {
+    "number": 179,
+    "title": "Move order status to an explicit state machine",
+    "state": "open",
+    "area": "checkout",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-04"
+  },
+  {
+    "number": 181,
+    "title": "Split payments onto its own database",
+    "state": "open",
+    "area": "payments",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-05"
+  },
+  {
+    "number": 183,
+    "title": "Rewrite inventory reservation to stop oversell",
+    "state": "open",
+    "area": "inventory",
+    "tier": "complex",
+    "labels": [
+      "bug"
+    ],
+    "opened": "2026-08-06"
+  },
+  {
+    "number": 185,
+    "title": "Route fulfillment across multiple warehouses",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "complex",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-10"
+  },
+  {
+    "number": 187,
+    "title": "Replace the nightly reconciliation job with a stream",
+    "state": "open",
+    "area": "payments",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-12"
+  },
+  {
+    "number": 189,
+    "title": "Support split tender across two payment methods",
+    "state": "open",
+    "area": "payments",
+    "tier": "complex",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-13"
+  },
+  {
+    "number": 191,
+    "title": "Make the refund flow idempotent end to end",
+    "state": "open",
+    "area": "refunds",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-14"
+  },
+  {
+    "number": 193,
+    "title": "Add tenant isolation to the order service",
+    "state": "open",
+    "area": "admin",
+    "tier": "complex",
+    "labels": [
+      "feature"
+    ],
+    "opened": "2026-08-17"
+  },
+  {
+    "number": 195,
+    "title": "Rebuild order search on a real index",
+    "state": "open",
+    "area": "search",
+    "tier": "complex",
+    "labels": [
+      "chore",
+      "up-for-grabs"
+    ],
+    "opened": "2026-08-18"
+  },
+  {
+    "number": 197,
+    "title": "Migrate order events off the legacy queue",
+    "state": "open",
+    "area": "admin",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-19"
+  },
+  {
+    "number": 199,
+    "title": "Add saga rollback for a failed fulfillment",
+    "state": "open",
+    "area": "fulfillment",
+    "tier": "complex",
+    "labels": [
+      "chore"
+    ],
+    "opened": "2026-08-20"
+  }
+]

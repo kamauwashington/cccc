@@ -1,6 +1,6 @@
 ---
 name: concise
-description: Enforce the repository writing rules on any text before it is shown. No em dashes, no "not X, but Y", plain words, short sentences, no filler openers. Use when writing or editing a README, a comment, a commit message, a summary, or any prose that ships.
+description: Enforce the repository writing rules on any text before it is shown. No em dashes, no "not X, but Y", plain words, short sentences, no filler openers. Use when writing or editing a README, a comment, a commit message, a summary, or any answer that ships.
 ---
 
 # concise
@@ -47,6 +47,19 @@ Two more limits, so an answer stays an answer.
 
 Fenced code blocks do not count. Sample text can hold anything.
 
+## What to cut first
+
+These four eat most of the length in a normal answer.
+
+- The restatement of what was asked.
+- A walk through code that is already on screen.
+- A list of the options you considered and rejected.
+- The offer to keep going.
+
+A one line `You asked:` receipt is the exception. It quotes the request before
+you challenge it, so it earns its line. A paragraph explaining the request back
+to the person who wrote it does not.
+
 ## Quoting a banned phrase on purpose
 
 Put a marker on the line directly above it. In markdown:
@@ -61,18 +74,3 @@ example, so the word survives the linter:
 
 <!-- prose-lint-ignore -->
 Never write "at the end of the day" in a README.
-
-## Check your own work before you answer
-
-Write the draft to `.tmp/draft.txt`, then run:
-
-```
-npx tsx src/cli.ts concise .tmp/draft.txt
-```
-
-It prints the line number for every hit and exits 1. Fix each one and run it
-again. Return the text only after the command exits 0.
-
-The checker is plain code in `src/concise-check.ts`. It holds the same banned
-list, skips fenced blocks, and honors the ignore marker. No model grades this,
-so the same draft gets the same answer every time.

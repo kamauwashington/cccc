@@ -3,81 +3,91 @@
 Every other example changes what Claude does. This one changes how Claude
 hands the work back.
 
-## What you will see
+## The point
 
-A workspace where Claude ends every code turn with the same five headings,
-because `.claude/output-styles/report.md` is switched on. You never ask for
-the format. It arrives with the first answer and it is still there on the
-twentieth.
+`/start` shows the prompt, runs it, and the answer comes back in a shape you
+chose. That is the whole example.
 
-## The five headings
+The prompt builds a small Express API over static data. It is there so the
+answer has something to report on. One prompt, two styles, two shapes.
 
 ```
-Done.          What changed. One line per unit of work.
-Works.         What is green and verified, with the number.
-Doesn't work.  What is out of scope, unproven, blocked, or missing.
-Fixed.         Yes or no, per item. Never imply a partial fix.
-Suggestions.   What to do next. One line each.
+/start -report                    /start -terse
+──────────────────────────────    ──────────────────────────────
+Done. Built src/server.ts with    src/server.ts serves the six
+six routes.                       routes and typecheck is clean.
+Works. Typecheck clean,           No request has been made
+4 tests green.                    against them yet.
+Doesn't work. Nothing calls
+the routes. They are unproven.
+Suggestions. Add a smoke test
+before wiring a client.
 ```
 
-Two rules carry most of the weight.
+Same work. Same prompt. The style decided everything else.
 
-**Drop any heading that has nothing under it.** A heading followed by
-"nothing" is worse than no heading. A clean run reports Done and Works, and
-that is a complete report.
+Read the "Doesn't work" heading again. The build compiles, so it would be easy
+to call it done. The style is what makes the answer admit the routes were
+never called.
 
-**"Doesn't work" is about limits.** It is the place for the case you did not
-cover, the caller you left alone, the thing that will surface again next pass.
-A report that says "Works. 18 tests pass" and then "Doesn't work. It does not
-compile" is arguing with itself. If the build is broken, that belongs under
-Works, as the number that is red.
+## The build
+
+`PROMPT.md` asks for a catalog API in `src/server.ts`:
+
+| Route | Answer |
+| --- | --- |
+| `GET /health` | `{ "status": "ok", "service": "catalog" }` |
+| `GET /api/categories` | Every category |
+| `GET /api/products` | Every product |
+| `GET /api/products?category=tools` | That category, or `[]` |
+| `GET /api/products/:id` | One product, or 404 |
+| Anything else | 404 `{ "error": "not_found" }` |
+
+`src/catalog.ts` ships complete with six products in three categories.
+Express is already installed at the repository root, so there is nothing to
+add. The workspace starts green. `tests/catalog.test.ts` holds the data
+honest and stays off screen.
 
 ## How it works
 
-`.claude/output-styles/report.md` is the whole feature. Frontmatter carries a
-`name` and a `description`. The body augments the system prompt, so it applies
-to every turn in the session without being repeated in the conversation.
+A style file in `.claude/output-styles/` is appended to the system prompt, so
+it applies to every turn in the session without being repeated in the
+conversation. `.claude/settings.json` sets `"outputStyle": "report"`, which is
+why `report` is already on when you launch.
 
-`.claude/settings.json` sets `"outputStyle": "report"`, which is why the style
-is already on when you launch. `/output-style` switches it in session and
-writes the choice back to settings. A style file in `~/.claude/output-styles/`
-is available in every project. One in `.claude/output-styles/` belongs to the
-project, which is what this workspace uses.
+Two styles ship here:
 
-## The prompt
+| File | Shape |
+| --- | --- |
+| `.claude/output-styles/report.md` | Done, Works, Doesn't work, Fixed, Suggestions |
+| `.claude/output-styles/terse.md` | One line, no headings |
 
-```
-Implement src/report-check.ts so that npm test passes.
-```
+## Running it
 
-`src/report-check.ts` is a stub that throws. Finished, it takes a report as a
-string and answers whether the report followed the contract. Seven passes:
-preamble, per section rules, heading order, missing Done, evidence, and
-length. 23 tests, and 21 of them start red.
+Launch Claude Code from inside this folder, then:
 
-The exercise and the style are the same contract, written twice. The style
-asks a model for it. The checker proves it.
+1. `/start`. It resets the folder, builds the API, and answers in the session
+   style (`report`).
+2. `/start -terse`. Same prompt, same build, one line back.
+3. `/start -report`. The headings return.
+
+`/start` resets the workspace every time, so run it as often as you like. If
+the answers start echoing each other, run `/clear` first.
+
+The flag on `/start` changes one turn. `/output-style terse` changes the
+session, and writes the choice back to `.claude/settings.json`.
 
 ## What to watch for
 
-Run these yourself, in this order.
+Ask a follow-up question after `/start`, without any flag. The style is still
+on. It is on for every turn until you switch it, which is the difference
+between a style and a one-off instruction.
 
-1. Launch Claude Code here and ask anything about the code. The five headings
-   show up with no instruction from you.
-2. Run `/output-style default` and ask the same question. Prose comes back.
-3. Run `/output-style report` and ask again. The headings return.
-4. Ask a documentation question, such as "what does the README say the prompt
-   is". The style says it does not apply to prose, so a sentence comes back
-   instead of five headings. Watch whether that holds.
+A style shapes output. It does not enforce output. The model follows it most
+of the time and drifts on the edges, usually on turns that do not look like
+work.
 
-Step 4 is the honest part of this example. A style shapes output. It does not
-enforce output. The model follows it most of the time and drifts on the edges,
-which is why the checker exists as code and not as a second paragraph of
-instructions.
-
-## Speaker notes
-
-The comparison to draw on screen.
+## How it compares
 
 | Reach for | When | Applies to |
 | --- | --- | --- |
@@ -91,32 +101,27 @@ difference is switchability. `/output-style default` turns this off for one
 question and back on for the next. Editing `CLAUDE.md` mid session does not
 work that way.
 
-If `/output-style` is missing on the machine, check the version. This was
-built against 2.1.263 and the setting is `outputStyle` in
-`.claude/settings.json` either way.
-
 ## Try next
 
-- Write a second style called `terse` that answers in one line and no
-  headings. Switch between them mid conversation and watch how much of the
+- Write a third style and switch to it mid conversation. Watch how much of the
   answer was format all along.
-- Delete the "drop any empty heading" rule from the style, then ask for a
-  report on a clean run. Count how often "Doesn't work. Nothing." comes back.
-  That one line is why the rule is in there.
-- Point the checker at a real answer. Copy a report Claude gave you into
-  `.tmp/report.txt` and run it through `reportCheck`. The findings are the
-  gap between the style and what arrived.
-- Move the style file to `~/.claude/output-styles/` and launch from a
-  different project. The report follows you.
+- Delete the "drop any empty heading" rule from `report.md`, then restart the
+  CLI and run `/start` again. Count how often "Doesn't work. Nothing." comes
+  back. That one line is why the rule is in there. The style is read at
+  launch, so a reset alone does not undo the edit.
+- Hand the build to a subagent, then ask for the report. The tool calls stay
+  in the subagent and only the shaped answer reaches you.
+- Move a style file to `~/.claude/output-styles/` and launch from a different
+  project. The shape follows you.
 
 ## Files
 
 | Path | Purpose |
 | --- | --- |
-| `.claude/output-styles/report.md` | The style. This is the feature. |
+| `src/catalog.ts` | The static data. Ships complete. |
+| `tests/catalog.test.ts` | CI backstop over the data. Off screen. |
+| `.claude/output-styles/report.md` | The five-heading style. |
+| `.claude/output-styles/terse.md` | The one-line style. |
 | `.claude/settings.json` | Sets `outputStyle` to `report`. |
-| `CLAUDE.md` | The same contract as workspace context. |
-| `src/report-check.ts` | The stub the prompt asks you to write. |
-| `tests/report-check.test.ts` | 23 tests. The last three compare the checker against the shipped style. |
-| `fixtures/report-good-*.txt` | Reports that pass, including one with all five headings filled. |
-| `fixtures/report-bad-*.txt` | One file per way a report breaks the contract. |
+| `.claude/commands/start.md` | Resets and applies the flag. |
+| `PROMPT.md` | The route list. |

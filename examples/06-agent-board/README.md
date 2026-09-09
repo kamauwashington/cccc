@@ -74,25 +74,29 @@ PROACTIVELY when adding or changing endpoints.` Reset, run the same prompt, and
 Cottonmouth gets the job. Nothing else about the agent changed. The description
 is the trigger.
 
-## Speaker notes
+## Running it
 
-Say the joke first. We built a message board so the agents can talk to each
-other. Nobody asked for this. They have nothing to say to each other. They said
-it anyway, in OpenAPI 3.1, and then one of them reviewed it.
+1. Warm the machine first. Run `npm ci` and one throwaway run. A cold start
+   distorts every measurement here.
+2. Launch from inside this folder with `claude --model opus --effort low`.
+3. Run `/start`. It resets the workspace first. Four coloured lines come back
+   as the agents finish, one per agent, with the model and the token count.
+4. When the run ends, read `RESULT.md`, then `git diff --stat`, then open
+   `openapi/messages.openapi.json`.
 
-**The presenter writes the final wording of the joke. The paragraph above is a
-placeholder.**
+`git diff --stat` needs the repository initialised. If it is not, skip it.
+`RESULT.md` already carries the changed file count.
 
-Then start the run and cut to slides. Come back on the bell.
+The final wording of the joke in the header is still open. See
+`docs/decisions.md`.
 
 What can go wrong. Claude sometimes dispatches the four agents over two turns,
-which doubles the wall clock. If you see the first line land alone, say so out
-loud, that is the lesson about fan out. Sidewinder reads the three files while
-the other three are still writing, so its review can name a file that was empty
-a second ago. That is the price of a single fan out, and it is worth saying.
+which doubles the wall clock. A first line that lands alone is the lesson about
+fan out. Sidewinder reads the three files while the other three are still
+writing, so its review can name a file that was empty a second ago. That is the
+price of a single fan out.
 
-The fallback. `npm run solution -- 06` copies the finished files in. Keep
-talking through it.
+Fallback. `npm run solution -- 06` copies the finished files in.
 
 ## Try next
 
@@ -134,7 +138,7 @@ tokens and output tokens are wall clock time.
 4. **`claude --agent sidewinder`, or the `agent` key in settings.** The whole
    session runs as that agent.
 
-Say this out loud: `@agent-cottonmouth` controls WHICH agent runs. It does not
+Worth stating plainly: `@agent-cottonmouth` controls WHICH agent runs. It does not
 control the prompt that agent receives. Claude still writes the task prompt
 itself, from your whole message. People assume the mention is a direct pipe
 into the subagent. It is not.
@@ -154,17 +158,17 @@ into the subagent. It is not.
    edit and never a search followed by a write.
 5. **Push work down a tier.** Anything Haiku can do, Haiku does.
 6. **No tests inside the agents.** The Stop hook runs the suite once at the end.
-7. **Warm start.** Run `npm ci` and one throwaway run before you go on stage.
+7. **Warm start.** Run `npm ci` and one throwaway run before a timed run.
 
 ## Unattended safety
 
 - Every command the agents need is in `permissions.allow` in
-  `.claude/settings.json`. One permission prompt kills the bit.
+  `.claude/settings.json`. One permission prompt stops the run.
 - `permissionMode: acceptEdits` in each agent's frontmatter.
 - Start the segment on a fresh session, so an auto compact does not fire in the
   middle of the run.
 - The Stop hook writes `RESULT.md` and rings the terminal bell.
-- The return ritual, three fixed beats, rehearsed:
+- When the run ends, three commands, in this order:
 
 ```bash
 cat RESULT.md

@@ -1,9 +1,0 @@
-Done. Added parseDuration in src/duration.ts. It reads "15m", "2h" and "1d" and returns milliseconds. Wired it into the retry backoff in src/retry.ts.
-
-Works. 18 tests pass and npm run typecheck is clean. Parse then format returns the original string for every supported unit.
-
-Doesn't work. Weeks and months are not parsed. A month is not a fixed number of milliseconds, so anything above "d" throws a RangeError on purpose. Fractional input such as "1.5h" is rejected the same way. Retry is the only caller, so the timeout in src/server.ts still takes a raw number.
-
-Fixed. Yes for the three units in the request. Negative durations now throw instead of clamping to zero, which is a behavior change from the old helper.
-
-Suggestions. Let src/server.ts call the parser instead of holding a raw number. Decide whether "1.5h" should parse before someone puts it in a config file.

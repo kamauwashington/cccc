@@ -1,113 +1,122 @@
 #!/usr/bin/env node
-// board: a message board CLI over PGlite.
+// The tool.
 //
-// This is the version someone writes when they are thinking about the database
-// and not about the reader. It works. Every query is correct. And `list` on a
-// seeded board prints 320 lines straight into the context window.
+// A tool is a script. There is no server here, no protocol, and no MCP. Claude
+// runs this the same way you would, and reads what it prints.
 //
-// tests/output-discipline.test.ts describes where this file needs to land.
-// Run `npm test` and read the failures.
+// Every subcommand prints the same three part shape:
+//
+//   line 1   the headline. What was asked and how many matched.
+//   line 2   blank
+//   rest     fixed width rows, newest first
+//
+// That shape is the contract. Claude reads the headline for the count and the
+// rows for the detail, so the answer never depends on parsing prose.
+//
+//   node tools/board.mjs stats
+//   node tools/board.mjs list [--channel NAME] [--limit N]
+//   node tools/board.mjs search <text> [--limit N]
 
-import {
-  isoDay,
-  listMessages,
-  openBoard,
-  post,
-  searchMessages,
-  stats,
-} from '../src/board-db.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const HELP = `board: a small message board over PGlite
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const DATA = path.join(HERE, '..', 'data', 'board.json');
+const DEFAULT_LIMIT = 5;
 
-usage: node tools/board.mjs <command> [options]
+const messages = JSON.parse(fs.readFileSync(DATA, 'utf8'));
 
-commands:
-  post <body>        add a message. --author NAME --channel NAME
-  list               newest messages. --channel NAME --limit N
-  search <query>     match on body or author. --channel NAME --limit N
-
-options:
-  --limit N          how many rows to consider (default 500)
-  --channel NAME     restrict to one channel
-  --author NAME      author for post (default "you")
-  --help             this text`;
-
-// A small hand rolled parser. Flags with values, flags without, and the rest.
-function parseArgs(argv) {
-  const flags = { limit: 500, channel: null, author: 'you', help: false };
-  const rest = [];
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i];
-    if (arg === '--help' || arg === '-h') flags.help = true;
-    else if (arg === '--limit') flags.limit = Number(argv[++i]);
-    else if (arg.startsWith('--limit=')) flags.limit = Number(arg.slice(8));
-    else if (arg === '--channel') flags.channel = argv[++i];
-    else if (arg.startsWith('--channel=')) flags.channel = arg.slice(10);
-    else if (arg === '--author') flags.author = argv[++i];
-    else if (arg.startsWith('--author=')) flags.author = arg.slice(9);
-    else rest.push(arg);
-  }
-  if (!Number.isFinite(flags.limit) || flags.limit < 1) flags.limit = 500;
-  return { flags, rest };
+function flag(argv, name, fallback) {
+  const i = argv.indexOf('--' + name);
+  return i === -1 || i === argv.length - 1 ? fallback : argv[i + 1];
 }
 
-function oneLine(row) {
-  return `#${String(row.id).padStart(4)} ${isoDay(row.created_at)} ${row.author.padEnd(6)} #${row.channel.padEnd(10)} ${row.body}`;
+function day(iso) {
+  return String(iso).slice(0, 10);
 }
 
-function out(lines) {
-  process.stdout.write(lines.join('\n') + '\n');
+// Fixed width rows. The columns line up, so the shape is obvious on a
+// projector and cheap to read back.
+function rows(list, limit) {
+  const shown = list.slice(0, Number(limit));
+  return shown
+    .map((m) =>
+      [
+        '  #' + String(m.id).padEnd(5),
+        day(m.created_at),
+        m.channel.padEnd(10),
+        m.author.padEnd(8),
+        m.body.length > 52 ? m.body.slice(0, 49) + '...' : m.body,
+      ].join('  ')
+    )
+    .join('\n');
 }
 
-async function cmdPost(db, flags, rest) {
-  const body = rest.join(' ').trim();
-  if (!body) throw new Error('post needs a message body. See --help.');
-  const row = await post(db, {
-    channel: flags.channel || 'general',
-    author: flags.author,
-    body,
-  });
-  const { total } = await stats(db);
-  out([
-    `posted #${row.id} to #${row.channel} as ${row.author}`,
-    `board now holds ${total} messages`,
-  ]);
+function newestFirst(list) {
+  return [...list].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
 }
 
-async function cmdList(db, flags) {
-  const rows = await listMessages(db, { channel: flags.channel, limit: flags.limit });
-  out(rows.map(oneLine));
+function stats() {
+  const byChannel = new Map();
+  for (const m of messages) byChannel.set(m.channel, (byChannel.get(m.channel) || 0) + 1);
+  const newest = newestFirst(messages)[0];
+  const ranked = [...byChannel.entries()].sort((a, b) => b[1] - a[1]);
+
+  return [
+    'board  ' + messages.length + ' messages  ' + byChannel.size + ' channels  newest ' + day(newest.created_at),
+    '',
+    ...ranked.map(([name, n]) => '  ' + name.padEnd(12) + String(n).padStart(4)),
+  ].join('\n');
 }
 
-async function cmdSearch(db, flags, rest) {
-  const query = rest.join(' ').trim();
-  if (!query) throw new Error('search needs a query. See --help.');
-  const rows = await searchMessages(db, { query, channel: flags.channel, limit: flags.limit });
-  out(rows.map(oneLine));
+function list(argv) {
+  const channel = flag(argv, 'channel', null);
+  const limit = flag(argv, 'limit', DEFAULT_LIMIT);
+  const matched = newestFirst(channel ? messages.filter((m) => m.channel === channel) : messages);
+  const scope = channel ? 'channel=' + channel : 'all channels';
+
+  return [
+    'board list  ' + scope + '  showing ' + Math.min(matched.length, Number(limit)) + ' of ' + matched.length,
+    '',
+    rows(matched, limit),
+  ].join('\n');
 }
 
-async function main() {
-  const argv = process.argv.slice(2);
-  const { flags, rest } = parseArgs(argv);
-  const command = rest.shift();
+function search(argv) {
+  const query = argv.find((a) => !a.startsWith('--') && a !== flag(argv, 'limit', null));
+  if (!query) return 'board search  no query given  showing 0 of 0';
+  const limit = flag(argv, 'limit', DEFAULT_LIMIT);
+  const needle = query.toLowerCase();
+  const matched = newestFirst(
+    messages.filter(
+      (m) => m.body.toLowerCase().includes(needle) || m.author.toLowerCase().includes(needle)
+    )
+  );
 
-  if (flags.help || !command || command === 'help') {
-    process.stdout.write(HELP + '\n');
-    return;
-  }
-
-  const db = await openBoard();
-  try {
-    if (command === 'post') await cmdPost(db, flags, rest);
-    else if (command === 'list') await cmdList(db, flags);
-    else if (command === 'search') await cmdSearch(db, flags, rest);
-    else throw new Error(`unknown command "${command}". See --help.`);
-  } finally {
-    await db.close();
-  }
+  return [
+    'board search  query="' + query + '"  showing ' + Math.min(matched.length, Number(limit)) + ' of ' + matched.length,
+    '',
+    matched.length ? rows(matched, limit) : '  no matches',
+  ].join('\n');
 }
 
-main().catch((err) => {
-  process.stderr.write('board: ' + err.message + '\n');
-  process.exit(1);
-});
+const HELP = [
+  'board: read a message board from data/board.json',
+  '',
+  'usage: node tools/board.mjs <command> [options]',
+  '',
+  'commands:',
+  '  stats                    counts per channel, newest date',
+  '  list [--channel NAME]    newest messages. --limit N (default 5)',
+  '  search <text>            match on body or author. --limit N (default 5)',
+  '',
+  'Every command prints a headline, a blank line, then fixed width rows.',
+].join('\n');
+
+const [, , cmd, ...argv] = process.argv;
+
+const out =
+  cmd === 'stats' ? stats() : cmd === 'list' ? list(argv) : cmd === 'search' ? search(argv) : HELP;
+
+console.log(out);

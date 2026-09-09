@@ -37,6 +37,9 @@ npm run reset -- 01     # ground truth. Restores files, clears memory.
 Inside a session, `/rewind` is faster. It rolls code and conversation back
 together, so the model does not remember the previous attempt. Use `/rewind`
 mid example and `npm run reset` between sessions.
+Inside a workspace, `/start` resets before it runs the prompt. So `/clear` then
+`/start` is the whole loop between runs.
+
 
 **3. Read `PROMPT.md` before you type anything.**
 
@@ -80,7 +83,8 @@ Tested on Claude Code 2.1.263. The pinned floor is 2.1.0. Node 20.11 or newer.
 | `npm run solution -- 06` | Copies in the reference solution if a live run stalls |
 | `npm run solution` | Applies every solution, so the whole repository goes green |
 | `npm run check:solutions` | Applies each solution, verifies it, then resets |
-| `npm run site` | Rebuilds the documentation site into `site/index.html` |
+| `npm run build` | Builds the documentation site into `dist/` |
+| `npm run publish:web` | Copies `dist/index.html` into the publish repository and commits it |
 
 ## Red is the starting state
 
@@ -104,26 +108,30 @@ trusted.
 
 ## The documentation site
 
-`site/index.html` is a single self contained page covering what every recurring
+`dist/index.html` is a single self contained page covering what every recurring
 file does, what each Claude Code feature is, and what breaks. Open it straight
 from disk.
 
 ```bash
-npm run site         # rebuild after changing an example or a concept page
-open site/index.html
+npm run build        # rebuild after changing an example or a concept page
+open dist/index.html
 ```
+
+`site/` holds the sources. `dist/` holds the build and is gitignored.
 
 The eight example pages are generated from each example's own `README.md`, so
 they cannot drift. The concept pages are hand written in `site/content/`. Add a
 ninth example and its page appears with no edit to the build script.
 
-Two knobs sit next to the output. `site/logo.png` is inlined as a data URI, so
-swapping that file and rebuilding changes the mark. Delete it and the hero falls
-back to the title. `site/artifact-body.html` is the same page without the
-document wrapper, for publishing as an Artifact.
+Two knobs sit in `site/`. `site/logo.png` is inlined as a data URI, so swapping
+that file and rebuilding changes the mark. Delete it and the hero falls back to
+the title. `dist/artifact-body.html` is the same page without the document
+wrapper, for publishing as an Artifact.
 
-CI runs `node scripts/build-site.mjs --check`. It fails when `site/index.html`
-is older than the content it was built from, so rebuild before you commit.
+CI runs `npm run build`, so a change that breaks the generator fails the build.
+
+The published copy lives in a separate repository. `npm run publish:web` copies
+`dist/index.html` into a checkout of it and commits. The push is yours to run.
 
 ## Take this home
 

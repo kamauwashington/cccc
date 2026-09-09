@@ -20,17 +20,16 @@ Validation reads the same value list the rest of the code reads. Three rules.
 ## Deriving the schema
 
 ```ts
-export const orderStatusSchema = z.enum(ORDER_STATUSES);
-export const shipmentCarrierSchema = z.enum(SHIPMENT_CARRIERS);
+export const directionSchema = z.enum(DIRECTIONS);
 ```
 
-Both read the array that `Object.values` produced. `z.enum` accepts a plain
+It reads the array that `Object.values` produced. `z.enum` accepts a plain
 readonly string array, so no cast is needed here.
 
 ## Numeric sets
 
 ```ts
-export const prioritySchema = z.literal(PRIORITIES);
+export const levelSchema = z.literal(LEVELS);
 ```
 
 `z.enum` rejects numbers. `z.literal` takes the array and gives the same union

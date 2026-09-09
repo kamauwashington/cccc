@@ -28,10 +28,11 @@ jobs:
       - name: Lint prose
         run: node scripts/lint-prose.mjs
 
-      # The documentation site is generated from the repository. This fails
-      # when site/index.html is older than the content it was built from.
-      - name: Check site is built
-        run: node scripts/build-site.mjs --check
+      # The documentation site is generated from the repository. dist/ is
+      # gitignored, so this proves the build still runs rather than diffing
+      # a committed file.
+      - name: Build the site
+        run: npm run build
 
       # Each workspace starts broken on purpose, so a red test run here is the
       # expected state. This job proves the solutions compile and pass.

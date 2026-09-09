@@ -21,10 +21,10 @@ the database side.
 ## Deriving the column
 
 ```ts
-export const orderStatusEnum = pgEnum('order_status', ORDER_STATUSES);
+export const directionEnum = pgEnum('direction', DIRECTIONS);
 ```
 
-`ORDER_STATUSES` is the values array the TypeScript side exports. One list, one
+`DIRECTIONS` is the values array the TypeScript side exports. One list, one
 place.
 
 ## The tuple cast
@@ -34,7 +34,7 @@ place.
 the values array is declared:
 
 ```ts
-export const ORDER_STATUSES = Object.values(OrderStatus) as [OrderStatus, ...OrderStatus[]];
+export const DIRECTIONS = Object.values(Direction) as [Direction, ...Direction[]];
 ```
 
 That is the only cast in the pattern. Everything downstream is inferred.
@@ -45,7 +45,7 @@ Keeping the cast on the shared array means Drizzle and Zod read the same value.
 Postgres allows exactly one change to an existing enum type in practice:
 
 ```sql
-alter type order_status add value 'refunded';
+alter type direction add value 'diagonal';
 ```
 
 It appends. There is no `DROP VALUE`. Reordering means creating a new type,

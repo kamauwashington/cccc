@@ -32,7 +32,8 @@ tabs:
 | `npm run solution -- 06` | Copies in the reference solution if a live run stalls |
 | `npm run solution` | Applies every solution, so the whole repository goes green |
 | `npm run check:solutions` | Applies each solution, verifies it, then resets |
-| `npm run site` | Rebuilds this site into `site/index.html` |
+| `npm run build` | Builds this site into `dist/index.html` |
+| `npm run publish:web` | Copies the build into the publish repository and commits it |
 
 ## The gates
 
@@ -68,9 +69,10 @@ after the run.
 
 ## The stage helpers
 
-**`start.mjs`** is what `npm start` calls inside a workspace. It resets, shows
-the first red signal, and stops. It always exits 0, because a non zero exit
-makes npm print seven lines of its own error block over the output.
+**`start.mjs`** is what the `/start` command calls inside a workspace, through
+the `start` npm script. It resets, shows the first red signal, and stops. It
+always exits 0, because a non zero exit makes npm print seven lines of its own
+error block over the output.
 
 **`go.mjs`** changes into a workspace and launches Claude Code. It was kept and
 deliberately made loud: it prints the exact `cd` command it is about to run

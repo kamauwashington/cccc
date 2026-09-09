@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node ../../scripts/start.mjs 05",
     "reset": "node ../../scripts/reset.mjs 05",
-    "seed": "node tools/seed.mjs",
     "test": "vitest run --reporter=dot",
     "typecheck": "tsc --noEmit"
   }

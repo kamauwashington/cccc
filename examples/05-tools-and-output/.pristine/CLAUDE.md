@@ -1,31 +1,23 @@
 # 05-tools-and-output
 
-A message board CLI, an MCP server that does the same three things, and a hook
-that blocks the noisy form of the command.
+A message board. Three scripts in `tools/` read it, one per question.
 
-## Output discipline, in order of payoff
-
-1. Design the output of any tool in this repository. A CLI prints three lines
-   by default. Everything else sits behind `--json` or `--verbose`.
-2. Filter in the shell before the output exists. `curl -s`,
-   `git status --porcelain`, `npm test -- --reporter=dot`, `jq -r`,
-   `2>/dev/null`, `| head -20`.
-3. Redirect to a file and read a slice of it.
-   `cmd > /tmp/out.json 2>&1 && jq '.summary' /tmp/out.json`. The full output
-   is still there if you need it.
-4. Ask for the exit code when that is all that matters.
-   `npm test > /dev/null 2>&1 && echo PASS || echo FAIL`.
-5. Send noisy work to a subagent. A subagent has its own context window and
-   only its summary comes back. That is the right answer for reading logs and
-   for triaging test failures.
+| Question | Tool |
+| --- | --- |
+| what is on the board | `tools/board.mjs` |
+| who is posting | `tools/people.mjs` |
+| when it was busy | `tools/activity.mjs` |
 
 ## Rules for this workspace
 
-- `tools/board.mjs` is the tool. Run `node tools/board.mjs --help` to learn it.
-- The board seeds itself on first open. `npm run seed` wipes and refills it.
-- Run `npm run typecheck` and `npm test` to check your work.
-- `tests/output-discipline.test.ts` sets the contract. Default output stays
-  under 15 lines per subcommand and `--json` stays opt in.
+- Answer any question about the board by running one of those three. Pick the
+  one that matches the question. Run it with no arguments to see its commands.
+- Never read `data/board.json`. That file is the tool's business. 320 rows of
+  JSON in the transcript is the thing this example exists to avoid.
+- Answer from what the tool printed. The headline carries the counts and the
+  rows carry the detail, so nothing needs to be recounted.
+- A bucket marked `partial` in `activity.mjs` covers days outside the data.
+  Say so rather than reading it as a quiet stretch.
 - Never edit anything under `.pristine/`. That is the reset snapshot.
 
 ## Memory

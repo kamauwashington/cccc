@@ -63,10 +63,27 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   `.claude/output-styles/report.md`, its frontmatter `name` has to match the
   `outputStyle` value in `.claude/settings.json`, and the body augments the
   system prompt on every turn. Verified against 2.1.263.
-- 2026-09-08 The 08 test suite compares `src/report-check.ts` against the
-  shipped style file, including running the style's own worked example through
-  the checker. Editing `.claude/output-styles/report.md` without editing the
-  checker turns the suite red, which is intended.
+- 2026-09-08 08 was rebuilt. The `report-check.ts` checker, its fixtures, and
+  its 23 tests are gone, and so is the `greet.js` prompt that briefly replaced
+  them. `/start` now shows the prompt, runs it, and the answer comes back
+  shaped. That is the whole example.
+- 2026-09-08 08 starts green, the way 02, 05, and 07 do. The prompt builds a
+  small Express catalog API over the static data in `src/catalog.ts`.
+  `tests/catalog.test.ts` is the CI backstop over that data and stays off
+  screen. There is no red suite to repair, because a repair is not the lesson.
+- 2026-09-08 08's `.solution/src/server.ts` is the stall fallback, not a fix.
+  `check-solutions.mjs` skips `README.md` when it copies a solution in, so a
+  README only `.solution/` is the sanctioned "nothing to solve" shape.
+- 2026-09-08 08's prompt says to confirm with `npm run typecheck` and not to
+  start a server. Nothing calls the routes, so "Doesn't work. They are
+  unproven" is the honest line. That heading is the reason to run the example.
+- 2026-09-08 `express` and `@types/express` are root devDependencies and hoist
+  to the root `node_modules`, so any workspace can import express with no
+  install of its own. 06 and 08 both rely on this.
+- 2026-09-08 An output style is read at launch. `reset.json` restores
+  `.claude/output-styles`, so a file edit is undone on disk, and the session
+  keeps the old style until the CLI restarts. Say that out loud if anyone edits
+  `report.md` during a run.
 - 2026-09-08 Example 01's prompt is `Make sure the code follows our standards.`
   It never says "enum" and never names a file. `CLAUDE.md` plus the
   skill description carry the whole retrieval. Verified with three cold headless
@@ -75,10 +92,20 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
 - 2026-09-08 `permissions.deny` entries like `Read(./.solution/**)` do not stop
   Bash. With the rules loaded, `cat` and `sed` read the file. Keeping a demo run
   out of `.solution/` needs a PreToolUse hook on Bash.
-- 2026-09-08 `npm start` in any workspace is the demo one liner. It calls
-  `scripts/start.mjs NN`, which resets, then shows the first red signal and
-  stops. It always exits 0, because a non zero exit makes npm print seven lines
-  of its own error block over the output.
+- 2026-09-08 `/start` is the demo one liner in every workspace. It shells out to
+  the `start` npm script, which calls `scripts/start.mjs NN`. That resets and
+  shows the first red signal, then the command runs `PROMPT.md`. The script
+  always exits 0, because a non zero exit makes npm print seven lines of its own
+  error block over the output. No README tells anyone to run `npm start` by
+  hand. Every workspace allows `Bash(npm start)` so the command runs without a
+  permission prompt.
+- 2026-09-08 `/start` stops and asks for a `/clear` when the conversation
+  already holds an earlier run. Claude cannot clear its own context, so the
+  command says so rather than running the prompt on top of the old attempt.
+- 2026-09-08 04-progressive is the one `/start` that does not reset.
+  `/mode-lean` and `/mode-fat` reset the workspace and swap the root
+  `CLAUDE.md`. A reset inside `/start` would swap it back and lose the mode
+  under test.
 - 2026-09-08 The eight examples do not start red the same way. 01, 04, and 06
   are red on typecheck. 03, 05, 07, and 08 are red on tests only. 02 starts
   fully green, since its demo is about hooks firing and not about fixing code.
@@ -104,30 +131,24 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   `CLAUDE.md` to read all three made it three for three. The code came out
   correct in every run either way, so the tests do not catch this. Only the
   transcript does.
-- 2026-09-08 Example 03's prompt used to be "Implement src/sharpen-check.ts and
-  src/concise-check.ts so that npm test passes." That never exercised the two
-  skills, since naming the files is the opposite of a rough request. `PROMPT.md`
-  is now a bloated request about an orders endpoint, the checkers ship working,
-  and the red test is `tests/output.test.ts` over `OUTPUT.md`.
-- 2026-09-08 The skills in 03 end by running the checker on their own draft. A
-  checker that ships as a stub breaks that step, so any example whose demo is a
-  skill firing has to ship the code the skill calls in working order.
-- 2026-09-08 `.tmp/` is gitignored repo wide, so a draft written there cannot be
-  a test target and cannot live in a `.solution/`. Example 03 saves its block to
-  `OUTPUT.md` at the workspace root instead, and `OUTPUT.md` is in the 03
-  `reset.json` restore list.
 - 2026-09-08 03's `.claude/commands/start.md` adds `Skill` to `allowed-tools`,
   which is the one place it diverges from `template/`. The demo is a skill
   firing, so the allowance is stated rather than assumed.
 - 2026-09-08 The documentation site is generated by `scripts/build-site.mjs`
-  into one self contained `site/index.html`, plus `site/artifact-body.html`
+  into one self contained `dist/index.html`, plus `dist/artifact-body.html`
   which is the same page without the document wrapper for publishing as an
-  Artifact. Concept pages are hand written in `site/content/*.md`. Everything
+  Artifact. `npm run build` is the command. `site/` holds the sources and
+  `dist/` is generated and gitignored. Concept pages are hand written in `site/content/*.md`. Everything
   else is read off the repository, so a ninth example appears with no edit to
   the script.
-- 2026-09-08 `node scripts/build-site.mjs --check` is a CI gate. Editing a
-  content page, a workspace README, `MEMORY.md`, or the build script itself
-  turns it red until `npm run site` is run and the output is committed.
+- 2026-09-08 CI runs `npm run build` rather than diffing a committed file,
+  because `dist/` is gitignored. The `--check` flag still exists on the script
+  for a setup that does commit its output.
+- 2026-09-08 The site is published to a second repository,
+  `github.com/kamauwashington/cccc-web`, which holds only the built
+  `index.html` and a `.nojekyll` marker. `npm run publish:web` copies and
+  commits into a checkout of it. It never pushes, since it has no
+  credentials.
 - 2026-09-08 `site/logo.png` is inlined as a base64 data URI so the page stays
   one file. Swap the file and rebuild to change the mark. Delete it and the
   hero falls back to the title on its own.
@@ -137,3 +158,98 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   `**/.claude/settings.local.json`. A global ignore file on one machine can hide
   this, so test with
   `git -c core.excludesFile=/dev/null check-ignore -v <path>`.
+- 2026-09-08 Example 03 was rebuilt. The old design (five section block,
+  `OUTPUT.md`, two checker programs, a `/before` half) framed the lesson around
+  red and green. The demo is now one beat: a vague `PROMPT.md` goes in, the
+  `sharpen` skill asks three questions through `AskUserQuestion`, the answers
+  come back, and `listOrders` in `src/orders.ts` gets cursor pagination.
+- 2026-09-08 03 asks with the `AskUserQuestion` tool, never a numbered list in
+  the text. That needs `AskUserQuestion` in the `allowed-tools` of
+  `.claude/commands/start.md`. The tool supplies its own "Other" row, so the
+  skill says not to add one.
+- 2026-09-08 03 opens with a one line `You asked:` receipt quoting the request
+  word for word. It is the one restatement the `concise` skill allows, and it
+  puts the vague request and the questions in one frame.
+- 2026-09-08 `tests/orders.test.ts` in 03 is a CI backstop and stays off screen.
+  It pins the three answers (25, cursor, rows plus a next cursor), so answering
+  the picker differently leaves it red. That is fine, the conversation is the
+  lesson.
+- 2026-09-08 A reusable asset must never contain the solution verbatim. 01's
+  `postgres-enum` and `zod-schema` skills held the exact lines from
+  `.solution/src/domain/order-status.ts` and `.solution/src/api/validation.ts`,
+  and `typescript-enum/reference.md` held the `PRIORITY_NAMES` block. A run
+  could transcribe instead of applying the convention. Teach with a neutral set
+  (`Direction` and `DIRECTIONS`, `Level` and `LEVELS`) and keep file pointers
+  only to files the solution does not change.
+- 2026-09-08 06's `ts-conventions` skill said `Object.values(MessageKind)` while
+  the copperhead agent said an `as const` tuple. Copperhead loads that skill, so
+  it got both, and `Object.values` does not satisfy `pgEnum`, which wants
+  `[T, ...T[]]`. A skill and an agent that overlap have to agree.
+- 2026-09-08 To find a leaked answer, compare normalized lines of 32 characters
+  or more between each `.solution/` and that workspace's `.claude/**/*.md`. All
+  eight are at zero. A skill pointing at a file the solution rewrites is the
+  same bug in slower form, which is how `src/domain/priority.ts` got cited as an
+  example while being one of the files to fix.
+- 2026-09-08 Example 05 was rebuilt to one idea: a tool is a script in your
+  project. `tools/board.mjs` reads `data/board.json` and prints a headline, a
+  blank line, then fixed width rows. No server, no MCP, no protocol. The setup
+  is three files: the script, a rule in `CLAUDE.md`, and an allow rule in
+  `.claude/settings.json`.
+- 2026-09-08 05 starts green and stays green, the same way 02 does. There is
+  nothing to repair. `tests/format.test.ts` is a CI backstop that holds the tool
+  to the shape the README teaches, including the 320 and 6 the README quotes.
+- 2026-09-08 `Read(./data/**)` in 05's deny list is what forces the tool call.
+  Without it, reading `data/board.json` is the cheapest path and 320 rows of
+  JSON land in the transcript.
+- 2026-09-08 Never run `reset.mjs` against a workspace someone is editing. Reset
+  does `rmrf` then copy from `.pristine/`, so a stale snapshot silently replaces
+  newer files with older ones. That destroyed an uncommitted `tools/board.mjs`
+  in 05. Refresh the snapshot as part of changing a starting state, never after.
+- 2026-09-08 `check-solutions.mjs` ignores a workspace argument and always runs
+  all eight, which means it resets all eight. `snapshot.mjs` and `reset.mjs` do
+  honor theirs. Do not assume the argument works.
+- 2026-09-08 Example 07 was rebuilt. The changelog demo (`/ship`, `/explain`,
+  `/db:seed`, `/db:reset`, `src/changelog/`, `src/db/`, `src/orders/`, five test
+  files) is gone. It is now three commands over a 50 issue backlog for a
+  fictional order processing service: `/grab:next` returns the same 3 quick, 2
+  mid, 1 complex every run, `/grab:complex` asks with `AskUserQuestion`, and
+  `/grab:up-for-grabs [area]` shows `$1` reaching the shell command. Nothing is
+  ever assigned and no issue is worked.
+- 2026-09-08 07 now starts green, the way 02 and 05 do, so its `.solution/` is a
+  README stub. `tests/issues.test.ts` is the CI backstop and keeps the twenty
+  run repeatability check from the old `tests/repeatable.test.ts`.
+- 2026-09-08 07 ships its backlog ready in `data/issues.json`. Nothing seeds or
+  generates it. `/start` only resets and prints the backlog counts, and
+  `PROMPT.md` holds `/grab:next`. Both files stay because `scripts/verify.mjs`
+  requires them in every workspace and `scripts/build-site.mjs` renders
+  `PROMPT.md` as the verbatim prompt. Nothing injects `PROMPT.md` any more, so
+  the slash command in it is never expanded and never needs to be.
+- 2026-09-08 07's README carries the GitHub swap, since the fixture is standing
+  in for a real tracker. Two routes: `!`gh issue list --label "help wanted"`` in
+  the command file with no script at all, or `tools/issues.mjs` reading
+  `gh issue list --json` instead of the file. The command files do not change
+  either way, which is the point worth saying out loud.
+- 2026-09-08 07 assumes `$1` is substituted before a `!` shell injection line
+  runs, so `up-for-grabs.md` injects `node tools/issues.mjs up-for-grabs $1`.
+  That order has not been confirmed on 2.1.263 yet. `tools/issues.mjs` treats an
+  argument starting with `$` as no filter, so the command still prints the full
+  list if the substitution does not happen. Confirm it on the demo machine.
+- 2026-09-08 `scripts/verify.mjs` requires a `src/` directory in every
+  workspace. 07 keeps `src/issue.ts` (the `Issue` type and the `NEXT_MIX`
+  constant) so the directory holds something the tests actually import.
+- 2026-09-08 07 dropped `/start`, `/reset` and `/teardown`. The lesson is "run a
+  command and read what comes back", so an opener was one step in front of the
+  point. `scripts/verify.mjs` used to require `.claude/commands/start.md` in
+  every workspace, which would have failed CI, so start.md moved out of
+  `SKELETON_FILES` and into a warning. The other seven still have theirs.
+  `npm start` and `npm run reset -- 07` still work, since those are repository
+  scripts rather than slash commands.
+- 2026-09-08 All three of 07's grab commands now ask with `multiSelect: true`.
+  A morning is rarely one issue, and a single select picker forces a second
+  round trip. The command files carry the instruction and each one now prints
+  one line per issue picked, with a rule for an empty selection.
+- 2026-09-08 07's `tools/issues.mjs` keeps its `teardown` subcommand even though
+  `/teardown` is gone. `reset.json` restores `tools/`, so editing the script
+  would drift from `.pristine/` and be silently reverted by the next reset.
+  `.claude/commands/` and `README.md` are not in the restore list, which is why
+  those edits survive.

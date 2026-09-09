@@ -37,7 +37,7 @@ not pick it up. Copy from it so the workspaces do not drift.
 | `.claude/memory/` | Auto memory lands here. Gitignored. |
 | `.claude/hooks/complete.mjs` | Stop hook. Verifies, then writes `RESULT.md`. |
 | `.claude/hooks/bash-output-guard.mjs` | PreToolUse hook on Bash. Blocks unbounded output. |
-| `.claude/commands/start.md` | `/start` runs the contents of `PROMPT.md` |
+| `.claude/commands/start.md` | `/start` resets, then runs the contents of `PROMPT.md` |
 | `.claude/commands/reset.md` | `/reset` shells out to the npm script |
 | `.pristine/` | Reset snapshot. Created by `scripts/snapshot.mjs`. |
 | `.solution/` | The proven fix. Applied by `scripts/solution.mjs`. |
@@ -71,7 +71,7 @@ to the part they want.
 ## How it works            Which file does the work, and how Claude Code finds it.
 ## The prompt              The one prompt, copied from PROMPT.md.
 ## What to watch for       The one moment that carries the lesson.
-## Speaker notes           What to say. What can go wrong. The fallback.
+## Running it              How to run it. What can go wrong. The fallback.
 ## Try next                Two or three variations for someone reading at home.
 ```
 

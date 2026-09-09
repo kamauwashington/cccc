@@ -20,7 +20,8 @@
     "lint:prose": "node scripts/lint-prose.mjs",
     "check:solutions": "node scripts/check-solutions.mjs",
     "go": "node scripts/go.mjs",
-    "site": "node scripts/build-site.mjs",
+    "build": "node scripts/build-site.mjs",
+    "publish:web": "node scripts/publish-web.mjs",
     "solution": "node scripts/solution.mjs",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"

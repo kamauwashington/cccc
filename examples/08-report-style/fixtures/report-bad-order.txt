@@ -1,7 +1,0 @@
-Works. 18 tests pass and npm run typecheck is clean.
-
-Done. Added parseDuration in src/duration.ts.
-
-Suggestions. Let the server call the parser.
-
-Fixed. Yes for the three units in the request.

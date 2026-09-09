@@ -6,7 +6,7 @@ reads a file in that directory.
 ## What you will see
 
 Run the same one line prompt twice against the same code. Run fat first, then
-lean, so the room sees the expensive version before the cheap one.
+lean, so the expensive version comes before the cheap one.
 
 Fat is a 401 line root `CLAUDE.md` that describes every domain and names no
 file. It is large at launch and it still leaves Claude to search the tree,
@@ -55,12 +55,22 @@ Watch the Memory files line in `/context` before the first prompt. Then watch
 it again after the first edit to `src/orders/`. `src/orders/CLAUDE.md` and the
 money rule appear part way through the session, on demand, in the lean run.
 
-## Speaker notes
+## Running it
 
-The claim to make is about where the cost falls. A large root `CLAUDE.md` is
-paid on every session, whatever the task is. Exploration is paid once, and only
-when it is needed. So the root file should be a map of the project. It should
-not be a copy of the project.
+1. Launch Claude Code from inside this folder, then run `/reset`.
+2. Run `/mode-lean` to put the map in place as the root file, then `/clear` so
+   the new root file loads.
+3. Run `/context`. Record the Memory files line and the total.
+4. Run `/start` and let it finish. Count the tool calls before the first edit,
+   and record the session tokens at the end.
+5. Run `/mode-fat` to swap in the 470 line root file, then repeat steps 2 to 4.
+6. Compare the two. Ten runs per mode, median on the result, because a single
+   run of an agent is close to a coin flip.
+
+Where the cost falls. A large root `CLAUDE.md` is paid on every session,
+whatever the task is. Exploration is paid once, and only when it is needed. So
+the root file should be a map of the project. It should not be a copy of the
+project.
 
 The built in `/doctor` trim check uses the same heuristic. It removes content
 that can be derived from the codebase: directory layouts, dependency lists,
@@ -75,7 +85,7 @@ One more tell. `CLAUDE.fat.md` describes `OrderStatus` without a refunded
 member. The moment the task lands, the fat file is wrong. The map is still
 right, because it never claimed to know the enum members.
 
-What can go wrong: token counts move between model versions and between runs.
+What can go wrong. Token counts move between model versions and between runs.
 Do not quote a number you have not measured today.
 
 ## Why one tree and not two folders
@@ -113,6 +123,10 @@ root file, and prints what each mode costs at launch. It stops there. `/clear`
 has to come next, because the root `CLAUDE.md` is only read at launch and at
 `/clear`. Running the prompt before that would run it under the old mode.
 `/start` is the one that runs the prompt. Run fat first.
+
+`/start` here does not reset, and that makes it the one exception in the
+repository. In the other seven examples `/start` resets first. A reset in this
+one would swap the root `CLAUDE.md` back and lose the mode under test.
 
 ## The rules demo
 

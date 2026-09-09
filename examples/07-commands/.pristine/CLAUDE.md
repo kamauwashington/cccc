@@ -5,13 +5,13 @@ whole lesson.
 
 ## Rules for this workspace
 
+- `data/issues.json` is the backlog for a fictional order processing service.
+  Read it with `node tools/issues.mjs`. Never open the JSON directly, because
+  50 issues of it lands in the context window and none of it is readable.
+- `node tools/issues.mjs` with no argument prints its own usage.
+- Nobody works these issues. This example is about picking, so stop once the
+  issues are picked. Write no code and change no files.
 - Run `npm run typecheck` and `npm test` to check your work.
-- `CHANGELOG.md` is written by `/ship`. Do not hand write it outside that command.
-- `src/changelog/render.ts` exists for the repeatability test. `/ship` must not
-  call it. `/ship` writes the file from the commit list the command injects.
-- `fixtures/history.txt` stands in for `git log --oneline v1.3.0..HEAD`. These
-  examples ship without their own git repository, so the history comes from a
-  file.
 - Never edit anything under `.pristine/`. That is the reset snapshot.
 
 ## Memory

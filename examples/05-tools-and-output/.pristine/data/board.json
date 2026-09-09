@@ -1,0 +1,2242 @@
+[
+  {
+    "id": 1,
+    "channel": "support",
+    "author": "bo",
+    "body": "the nightly backup needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-01T09:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the onboarding doc shipped. No action needed from anyone else.",
+    "created_at": "2026-08-01T10:37:00.000Z"
+  },
+  {
+    "id": 3,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the nightly backup is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-01T12:14:00.000Z"
+  },
+  {
+    "id": 4,
+    "channel": "random",
+    "author": "chen",
+    "body": "the rate limiter is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-01T13:51:00.000Z"
+  },
+  {
+    "id": 5,
+    "channel": "general",
+    "author": "eli",
+    "body": "the queue backlog is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-01T15:28:00.000Z"
+  },
+  {
+    "id": 6,
+    "channel": "general",
+    "author": "dara",
+    "body": "the queue backlog is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-01T17:05:00.000Z"
+  },
+  {
+    "id": 7,
+    "channel": "hiring",
+    "author": "bo",
+    "body": "the search index is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-01T18:42:00.000Z"
+  },
+  {
+    "id": 8,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the flaky auth test is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-01T20:19:00.000Z"
+  },
+  {
+    "id": 9,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the search index is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-01T21:56:00.000Z"
+  },
+  {
+    "id": 10,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the search index is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-01T23:33:00.000Z"
+  },
+  {
+    "id": 11,
+    "channel": "support",
+    "author": "fern",
+    "body": "the invoice job shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-02T01:10:00.000Z"
+  },
+  {
+    "id": 12,
+    "channel": "random",
+    "author": "chen",
+    "body": "the queue backlog is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-02T02:47:00.000Z"
+  },
+  {
+    "id": 13,
+    "channel": "general",
+    "author": "bo",
+    "body": "the flaky auth test is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-02T04:24:00.000Z"
+  },
+  {
+    "id": 14,
+    "channel": "hiring",
+    "author": "gus",
+    "body": "the rate limiter is slower than yesterday. Filed as a follow up.",
+    "created_at": "2026-08-02T06:01:00.000Z"
+  },
+  {
+    "id": 15,
+    "channel": "hiring",
+    "author": "dara",
+    "body": "the queue backlog is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-02T07:38:00.000Z"
+  },
+  {
+    "id": 16,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the invoice job is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-02T09:15:00.000Z"
+  },
+  {
+    "id": 17,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the staging rollout shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-02T10:52:00.000Z"
+  },
+  {
+    "id": 18,
+    "channel": "random",
+    "author": "bo",
+    "body": "the rate limiter is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-02T12:29:00.000Z"
+  },
+  {
+    "id": 19,
+    "channel": "general",
+    "author": "bo",
+    "body": "the search index is green again. No action needed from anyone else.",
+    "created_at": "2026-08-02T14:06:00.000Z"
+  },
+  {
+    "id": 20,
+    "channel": "hiring",
+    "author": "gus",
+    "body": "the nightly backup is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-02T15:43:00.000Z"
+  },
+  {
+    "id": 21,
+    "channel": "deploys",
+    "author": "gus",
+    "body": "the queue backlog is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-02T17:20:00.000Z"
+  },
+  {
+    "id": 22,
+    "channel": "random",
+    "author": "eli",
+    "body": "the rate limiter is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-02T18:57:00.000Z"
+  },
+  {
+    "id": 23,
+    "channel": "general",
+    "author": "fern",
+    "body": "the invoice job is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-02T20:34:00.000Z"
+  },
+  {
+    "id": 24,
+    "channel": "random",
+    "author": "alice",
+    "body": "the rate limiter is green again. Numbers are in the thread.",
+    "created_at": "2026-08-02T22:11:00.000Z"
+  },
+  {
+    "id": 25,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the flaky auth test is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-02T23:48:00.000Z"
+  },
+  {
+    "id": 26,
+    "channel": "random",
+    "author": "eli",
+    "body": "the invoice job shipped. Numbers are in the thread.",
+    "created_at": "2026-08-03T01:25:00.000Z"
+  },
+  {
+    "id": 27,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the onboarding doc is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-03T03:02:00.000Z"
+  },
+  {
+    "id": 28,
+    "channel": "support",
+    "author": "dara",
+    "body": "the search index is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-03T04:39:00.000Z"
+  },
+  {
+    "id": 29,
+    "channel": "support",
+    "author": "gus",
+    "body": "the rate limiter is green again. Numbers are in the thread.",
+    "created_at": "2026-08-03T06:16:00.000Z"
+  },
+  {
+    "id": 30,
+    "channel": "random",
+    "author": "alice",
+    "body": "the onboarding doc is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-03T07:53:00.000Z"
+  },
+  {
+    "id": 31,
+    "channel": "general",
+    "author": "dara",
+    "body": "the queue backlog needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-03T09:30:00.000Z"
+  },
+  {
+    "id": 32,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the queue backlog is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-03T11:07:00.000Z"
+  },
+  {
+    "id": 33,
+    "channel": "general",
+    "author": "alice",
+    "body": "the staging rollout shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-03T12:44:00.000Z"
+  },
+  {
+    "id": 34,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the invoice job needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-03T14:21:00.000Z"
+  },
+  {
+    "id": 35,
+    "channel": "deploys",
+    "author": "alice",
+    "body": "the staging rollout is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-03T15:58:00.000Z"
+  },
+  {
+    "id": 36,
+    "channel": "general",
+    "author": "eli",
+    "body": "the staging rollout is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-03T17:35:00.000Z"
+  },
+  {
+    "id": 37,
+    "channel": "general",
+    "author": "dara",
+    "body": "the staging rollout shipped. Filed as a follow up.",
+    "created_at": "2026-08-03T19:12:00.000Z"
+  },
+  {
+    "id": 38,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the flaky auth test needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-03T20:49:00.000Z"
+  },
+  {
+    "id": 39,
+    "channel": "random",
+    "author": "fern",
+    "body": "the invoice job is rolled back. Numbers are in the thread.",
+    "created_at": "2026-08-03T22:26:00.000Z"
+  },
+  {
+    "id": 40,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the staging rollout shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-04T00:03:00.000Z"
+  },
+  {
+    "id": 41,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the staging rollout needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-04T01:40:00.000Z"
+  },
+  {
+    "id": 42,
+    "channel": "support",
+    "author": "hana",
+    "body": "the rate limiter needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T03:17:00.000Z"
+  },
+  {
+    "id": 43,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the rate limiter needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-04T04:54:00.000Z"
+  },
+  {
+    "id": 44,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the search index is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T06:31:00.000Z"
+  },
+  {
+    "id": 45,
+    "channel": "random",
+    "author": "hana",
+    "body": "the staging rollout is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T08:08:00.000Z"
+  },
+  {
+    "id": 46,
+    "channel": "support",
+    "author": "chen",
+    "body": "the invoice job shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-04T09:45:00.000Z"
+  },
+  {
+    "id": 47,
+    "channel": "general",
+    "author": "bo",
+    "body": "the rate limiter is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-04T11:22:00.000Z"
+  },
+  {
+    "id": 48,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the onboarding doc is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-04T12:59:00.000Z"
+  },
+  {
+    "id": 49,
+    "channel": "general",
+    "author": "alice",
+    "body": "the nightly backup shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T14:36:00.000Z"
+  },
+  {
+    "id": 50,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the nightly backup is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T16:13:00.000Z"
+  },
+  {
+    "id": 51,
+    "channel": "support",
+    "author": "dara",
+    "body": "the search index needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T17:50:00.000Z"
+  },
+  {
+    "id": 52,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the invoice job shipped. Filed as a follow up.",
+    "created_at": "2026-08-04T19:27:00.000Z"
+  },
+  {
+    "id": 53,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the staging rollout is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T21:04:00.000Z"
+  },
+  {
+    "id": 54,
+    "channel": "random",
+    "author": "bo",
+    "body": "the onboarding doc needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-04T22:41:00.000Z"
+  },
+  {
+    "id": 55,
+    "channel": "general",
+    "author": "dara",
+    "body": "the rate limiter needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-05T00:18:00.000Z"
+  },
+  {
+    "id": 56,
+    "channel": "random",
+    "author": "chen",
+    "body": "the search index is green again. Numbers are in the thread.",
+    "created_at": "2026-08-05T01:55:00.000Z"
+  },
+  {
+    "id": 57,
+    "channel": "random",
+    "author": "alice",
+    "body": "the staging rollout is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-05T03:32:00.000Z"
+  },
+  {
+    "id": 58,
+    "channel": "incidents",
+    "author": "bo",
+    "body": "the search index is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-05T05:09:00.000Z"
+  },
+  {
+    "id": 59,
+    "channel": "support",
+    "author": "eli",
+    "body": "the flaky auth test is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-05T06:46:00.000Z"
+  },
+  {
+    "id": 60,
+    "channel": "deploys",
+    "author": "gus",
+    "body": "the queue backlog is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-05T08:23:00.000Z"
+  },
+  {
+    "id": 61,
+    "channel": "support",
+    "author": "hana",
+    "body": "the onboarding doc is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-05T10:00:00.000Z"
+  },
+  {
+    "id": 62,
+    "channel": "random",
+    "author": "eli",
+    "body": "the onboarding doc shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-05T11:37:00.000Z"
+  },
+  {
+    "id": 63,
+    "channel": "deploys",
+    "author": "gus",
+    "body": "the invoice job is green again. Numbers are in the thread.",
+    "created_at": "2026-08-05T13:14:00.000Z"
+  },
+  {
+    "id": 64,
+    "channel": "support",
+    "author": "bo",
+    "body": "the flaky auth test is green again. No action needed from anyone else.",
+    "created_at": "2026-08-05T14:51:00.000Z"
+  },
+  {
+    "id": 65,
+    "channel": "random",
+    "author": "alice",
+    "body": "the flaky auth test is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-05T16:28:00.000Z"
+  },
+  {
+    "id": 66,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the invoice job is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-05T18:05:00.000Z"
+  },
+  {
+    "id": 67,
+    "channel": "general",
+    "author": "alice",
+    "body": "the queue backlog is rolled back. Filed as a follow up.",
+    "created_at": "2026-08-05T19:42:00.000Z"
+  },
+  {
+    "id": 68,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the nightly backup is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-05T21:19:00.000Z"
+  },
+  {
+    "id": 69,
+    "channel": "general",
+    "author": "gus",
+    "body": "the nightly backup shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-05T22:56:00.000Z"
+  },
+  {
+    "id": 70,
+    "channel": "general",
+    "author": "gus",
+    "body": "the staging rollout needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-06T00:33:00.000Z"
+  },
+  {
+    "id": 71,
+    "channel": "support",
+    "author": "chen",
+    "body": "the rate limiter shipped. No action needed from anyone else.",
+    "created_at": "2026-08-06T02:10:00.000Z"
+  },
+  {
+    "id": 72,
+    "channel": "support",
+    "author": "fern",
+    "body": "the invoice job is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-06T03:47:00.000Z"
+  },
+  {
+    "id": 73,
+    "channel": "random",
+    "author": "chen",
+    "body": "the onboarding doc is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-06T05:24:00.000Z"
+  },
+  {
+    "id": 74,
+    "channel": "general",
+    "author": "eli",
+    "body": "the flaky auth test is rolled back. Filed as a follow up.",
+    "created_at": "2026-08-06T07:01:00.000Z"
+  },
+  {
+    "id": 75,
+    "channel": "general",
+    "author": "fern",
+    "body": "the staging rollout is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-06T08:38:00.000Z"
+  },
+  {
+    "id": 76,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the staging rollout is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-06T10:15:00.000Z"
+  },
+  {
+    "id": 77,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the invoice job is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-06T11:52:00.000Z"
+  },
+  {
+    "id": 78,
+    "channel": "general",
+    "author": "chen",
+    "body": "the onboarding doc is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-06T13:29:00.000Z"
+  },
+  {
+    "id": 79,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the queue backlog is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-06T15:06:00.000Z"
+  },
+  {
+    "id": 80,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the flaky auth test is green again. Numbers are in the thread.",
+    "created_at": "2026-08-06T16:43:00.000Z"
+  },
+  {
+    "id": 81,
+    "channel": "general",
+    "author": "bo",
+    "body": "the flaky auth test is rolled back. Filed as a follow up.",
+    "created_at": "2026-08-06T18:20:00.000Z"
+  },
+  {
+    "id": 82,
+    "channel": "support",
+    "author": "hana",
+    "body": "the onboarding doc needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-06T19:57:00.000Z"
+  },
+  {
+    "id": 83,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the nightly backup needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-06T21:34:00.000Z"
+  },
+  {
+    "id": 84,
+    "channel": "general",
+    "author": "fern",
+    "body": "the onboarding doc is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-06T23:11:00.000Z"
+  },
+  {
+    "id": 85,
+    "channel": "support",
+    "author": "chen",
+    "body": "the queue backlog needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-07T00:48:00.000Z"
+  },
+  {
+    "id": 86,
+    "channel": "incidents",
+    "author": "bo",
+    "body": "the queue backlog is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-07T02:25:00.000Z"
+  },
+  {
+    "id": 87,
+    "channel": "support",
+    "author": "dara",
+    "body": "the search index is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-07T04:02:00.000Z"
+  },
+  {
+    "id": 88,
+    "channel": "random",
+    "author": "alice",
+    "body": "the flaky auth test is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-07T05:39:00.000Z"
+  },
+  {
+    "id": 89,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the rate limiter needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-07T07:16:00.000Z"
+  },
+  {
+    "id": 90,
+    "channel": "deploys",
+    "author": "gus",
+    "body": "the onboarding doc needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-07T08:53:00.000Z"
+  },
+  {
+    "id": 91,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the rate limiter is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-07T10:30:00.000Z"
+  },
+  {
+    "id": 92,
+    "channel": "support",
+    "author": "hana",
+    "body": "the invoice job is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-07T12:07:00.000Z"
+  },
+  {
+    "id": 93,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the invoice job is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-07T13:44:00.000Z"
+  },
+  {
+    "id": 94,
+    "channel": "random",
+    "author": "alice",
+    "body": "the flaky auth test is rolled back. Numbers are in the thread.",
+    "created_at": "2026-08-07T15:21:00.000Z"
+  },
+  {
+    "id": 95,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the queue backlog is rolled back. Numbers are in the thread.",
+    "created_at": "2026-08-07T16:58:00.000Z"
+  },
+  {
+    "id": 96,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the onboarding doc is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-07T18:35:00.000Z"
+  },
+  {
+    "id": 97,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the invoice job is green again. Numbers are in the thread.",
+    "created_at": "2026-08-07T20:12:00.000Z"
+  },
+  {
+    "id": 98,
+    "channel": "general",
+    "author": "fern",
+    "body": "the nightly backup needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-07T21:49:00.000Z"
+  },
+  {
+    "id": 99,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the queue backlog shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-07T23:26:00.000Z"
+  },
+  {
+    "id": 100,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the staging rollout needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-08T01:03:00.000Z"
+  },
+  {
+    "id": 101,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the queue backlog shipped. No action needed from anyone else.",
+    "created_at": "2026-08-08T02:40:00.000Z"
+  },
+  {
+    "id": 102,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the nightly backup is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-08T04:17:00.000Z"
+  },
+  {
+    "id": 103,
+    "channel": "support",
+    "author": "dara",
+    "body": "the invoice job is green again. Filed as a follow up.",
+    "created_at": "2026-08-08T05:54:00.000Z"
+  },
+  {
+    "id": 104,
+    "channel": "support",
+    "author": "alice",
+    "body": "the flaky auth test is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-08T07:31:00.000Z"
+  },
+  {
+    "id": 105,
+    "channel": "incidents",
+    "author": "bo",
+    "body": "the onboarding doc is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-08T09:08:00.000Z"
+  },
+  {
+    "id": 106,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the flaky auth test is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-08T10:45:00.000Z"
+  },
+  {
+    "id": 107,
+    "channel": "hiring",
+    "author": "dara",
+    "body": "the invoice job shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-08T12:22:00.000Z"
+  },
+  {
+    "id": 108,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the staging rollout is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-08T13:59:00.000Z"
+  },
+  {
+    "id": 109,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the invoice job shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-08T15:36:00.000Z"
+  },
+  {
+    "id": 110,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the staging rollout is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-08T17:13:00.000Z"
+  },
+  {
+    "id": 111,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the nightly backup needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-08T18:50:00.000Z"
+  },
+  {
+    "id": 112,
+    "channel": "support",
+    "author": "dara",
+    "body": "the onboarding doc needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-08T20:27:00.000Z"
+  },
+  {
+    "id": 113,
+    "channel": "support",
+    "author": "chen",
+    "body": "the queue backlog is rolled back. Filed as a follow up.",
+    "created_at": "2026-08-08T22:04:00.000Z"
+  },
+  {
+    "id": 114,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the staging rollout is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-08T23:41:00.000Z"
+  },
+  {
+    "id": 115,
+    "channel": "support",
+    "author": "gus",
+    "body": "the flaky auth test is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-09T01:18:00.000Z"
+  },
+  {
+    "id": 116,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the staging rollout is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-09T02:55:00.000Z"
+  },
+  {
+    "id": 117,
+    "channel": "general",
+    "author": "gus",
+    "body": "the flaky auth test is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-09T04:32:00.000Z"
+  },
+  {
+    "id": 118,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the staging rollout shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-09T06:09:00.000Z"
+  },
+  {
+    "id": 119,
+    "channel": "support",
+    "author": "chen",
+    "body": "the invoice job is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-09T07:46:00.000Z"
+  },
+  {
+    "id": 120,
+    "channel": "general",
+    "author": "alice",
+    "body": "the rate limiter is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-09T09:23:00.000Z"
+  },
+  {
+    "id": 121,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the queue backlog is green again. Numbers are in the thread.",
+    "created_at": "2026-08-09T11:00:00.000Z"
+  },
+  {
+    "id": 122,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the rate limiter shipped. No action needed from anyone else.",
+    "created_at": "2026-08-09T12:37:00.000Z"
+  },
+  {
+    "id": 123,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the rate limiter is slower than yesterday. Filed as a follow up.",
+    "created_at": "2026-08-09T14:14:00.000Z"
+  },
+  {
+    "id": 124,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the search index is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-09T15:51:00.000Z"
+  },
+  {
+    "id": 125,
+    "channel": "random",
+    "author": "eli",
+    "body": "the invoice job is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-09T17:28:00.000Z"
+  },
+  {
+    "id": 126,
+    "channel": "support",
+    "author": "chen",
+    "body": "the invoice job is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-09T19:05:00.000Z"
+  },
+  {
+    "id": 127,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the queue backlog is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-09T20:42:00.000Z"
+  },
+  {
+    "id": 128,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the onboarding doc is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-09T22:19:00.000Z"
+  },
+  {
+    "id": 129,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the search index shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-09T23:56:00.000Z"
+  },
+  {
+    "id": 130,
+    "channel": "random",
+    "author": "eli",
+    "body": "the queue backlog is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-10T01:33:00.000Z"
+  },
+  {
+    "id": 131,
+    "channel": "general",
+    "author": "alice",
+    "body": "the rate limiter is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-10T03:10:00.000Z"
+  },
+  {
+    "id": 132,
+    "channel": "random",
+    "author": "eli",
+    "body": "the rate limiter is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-10T04:47:00.000Z"
+  },
+  {
+    "id": 133,
+    "channel": "support",
+    "author": "eli",
+    "body": "the rate limiter shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-10T06:24:00.000Z"
+  },
+  {
+    "id": 134,
+    "channel": "general",
+    "author": "bo",
+    "body": "the staging rollout shipped. Numbers are in the thread.",
+    "created_at": "2026-08-10T08:01:00.000Z"
+  },
+  {
+    "id": 135,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the queue backlog needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-10T09:38:00.000Z"
+  },
+  {
+    "id": 136,
+    "channel": "general",
+    "author": "chen",
+    "body": "the flaky auth test is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-10T11:15:00.000Z"
+  },
+  {
+    "id": 137,
+    "channel": "support",
+    "author": "fern",
+    "body": "the flaky auth test shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-10T12:52:00.000Z"
+  },
+  {
+    "id": 138,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the flaky auth test shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-10T14:29:00.000Z"
+  },
+  {
+    "id": 139,
+    "channel": "random",
+    "author": "chen",
+    "body": "the onboarding doc is green again. No action needed from anyone else.",
+    "created_at": "2026-08-10T16:06:00.000Z"
+  },
+  {
+    "id": 140,
+    "channel": "general",
+    "author": "gus",
+    "body": "the queue backlog needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-10T17:43:00.000Z"
+  },
+  {
+    "id": 141,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the flaky auth test is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-10T19:20:00.000Z"
+  },
+  {
+    "id": 142,
+    "channel": "support",
+    "author": "hana",
+    "body": "the staging rollout needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-10T20:57:00.000Z"
+  },
+  {
+    "id": 143,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the staging rollout shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-10T22:34:00.000Z"
+  },
+  {
+    "id": 144,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the queue backlog is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-11T00:11:00.000Z"
+  },
+  {
+    "id": 145,
+    "channel": "support",
+    "author": "bo",
+    "body": "the queue backlog shipped. Numbers are in the thread.",
+    "created_at": "2026-08-11T01:48:00.000Z"
+  },
+  {
+    "id": 146,
+    "channel": "general",
+    "author": "hana",
+    "body": "the rate limiter is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-11T03:25:00.000Z"
+  },
+  {
+    "id": 147,
+    "channel": "support",
+    "author": "hana",
+    "body": "the queue backlog is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-11T05:02:00.000Z"
+  },
+  {
+    "id": 148,
+    "channel": "general",
+    "author": "dara",
+    "body": "the onboarding doc is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-11T06:39:00.000Z"
+  },
+  {
+    "id": 149,
+    "channel": "support",
+    "author": "chen",
+    "body": "the rate limiter is slower than yesterday. Filed as a follow up.",
+    "created_at": "2026-08-11T08:16:00.000Z"
+  },
+  {
+    "id": 150,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the staging rollout is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-11T09:53:00.000Z"
+  },
+  {
+    "id": 151,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the queue backlog shipped. Filed as a follow up.",
+    "created_at": "2026-08-11T11:30:00.000Z"
+  },
+  {
+    "id": 152,
+    "channel": "random",
+    "author": "hana",
+    "body": "the staging rollout is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-11T13:07:00.000Z"
+  },
+  {
+    "id": 153,
+    "channel": "support",
+    "author": "hana",
+    "body": "the flaky auth test is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-11T14:44:00.000Z"
+  },
+  {
+    "id": 154,
+    "channel": "general",
+    "author": "chen",
+    "body": "the rate limiter shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-11T16:21:00.000Z"
+  },
+  {
+    "id": 155,
+    "channel": "random",
+    "author": "dara",
+    "body": "the staging rollout is green again. Filed as a follow up.",
+    "created_at": "2026-08-11T17:58:00.000Z"
+  },
+  {
+    "id": 156,
+    "channel": "hiring",
+    "author": "alice",
+    "body": "the flaky auth test shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-11T19:35:00.000Z"
+  },
+  {
+    "id": 157,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the search index shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-11T21:12:00.000Z"
+  },
+  {
+    "id": 158,
+    "channel": "random",
+    "author": "gus",
+    "body": "the nightly backup shipped. No action needed from anyone else.",
+    "created_at": "2026-08-11T22:49:00.000Z"
+  },
+  {
+    "id": 159,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the onboarding doc needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-12T00:26:00.000Z"
+  },
+  {
+    "id": 160,
+    "channel": "random",
+    "author": "dara",
+    "body": "the onboarding doc is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-12T02:03:00.000Z"
+  },
+  {
+    "id": 161,
+    "channel": "general",
+    "author": "fern",
+    "body": "the rate limiter is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-12T03:40:00.000Z"
+  },
+  {
+    "id": 162,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the staging rollout is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-12T05:17:00.000Z"
+  },
+  {
+    "id": 163,
+    "channel": "general",
+    "author": "gus",
+    "body": "the flaky auth test is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-12T06:54:00.000Z"
+  },
+  {
+    "id": 164,
+    "channel": "general",
+    "author": "eli",
+    "body": "the search index is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-12T08:31:00.000Z"
+  },
+  {
+    "id": 165,
+    "channel": "random",
+    "author": "hana",
+    "body": "the rate limiter is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-12T10:08:00.000Z"
+  },
+  {
+    "id": 166,
+    "channel": "general",
+    "author": "bo",
+    "body": "the search index is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-12T11:45:00.000Z"
+  },
+  {
+    "id": 167,
+    "channel": "general",
+    "author": "bo",
+    "body": "the invoice job needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-12T13:22:00.000Z"
+  },
+  {
+    "id": 168,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the flaky auth test is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-12T14:59:00.000Z"
+  },
+  {
+    "id": 169,
+    "channel": "random",
+    "author": "bo",
+    "body": "the nightly backup is green again. Numbers are in the thread.",
+    "created_at": "2026-08-12T16:36:00.000Z"
+  },
+  {
+    "id": 170,
+    "channel": "general",
+    "author": "alice",
+    "body": "the nightly backup shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-12T18:13:00.000Z"
+  },
+  {
+    "id": 171,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the search index is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-12T19:50:00.000Z"
+  },
+  {
+    "id": 172,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the rate limiter is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-12T21:27:00.000Z"
+  },
+  {
+    "id": 173,
+    "channel": "hiring",
+    "author": "alice",
+    "body": "the onboarding doc needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-12T23:04:00.000Z"
+  },
+  {
+    "id": 174,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the rate limiter shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-13T00:41:00.000Z"
+  },
+  {
+    "id": 175,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the flaky auth test is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-13T02:18:00.000Z"
+  },
+  {
+    "id": 176,
+    "channel": "support",
+    "author": "chen",
+    "body": "the staging rollout is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-13T03:55:00.000Z"
+  },
+  {
+    "id": 177,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the search index is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-13T05:32:00.000Z"
+  },
+  {
+    "id": 178,
+    "channel": "general",
+    "author": "eli",
+    "body": "the queue backlog shipped. Filed as a follow up.",
+    "created_at": "2026-08-13T07:09:00.000Z"
+  },
+  {
+    "id": 179,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the staging rollout needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-13T08:46:00.000Z"
+  },
+  {
+    "id": 180,
+    "channel": "general",
+    "author": "dara",
+    "body": "the search index is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-13T10:23:00.000Z"
+  },
+  {
+    "id": 181,
+    "channel": "support",
+    "author": "dara",
+    "body": "the rate limiter is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-13T12:00:00.000Z"
+  },
+  {
+    "id": 182,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the nightly backup is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-13T13:37:00.000Z"
+  },
+  {
+    "id": 183,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the onboarding doc is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-13T15:14:00.000Z"
+  },
+  {
+    "id": 184,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the onboarding doc is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-13T16:51:00.000Z"
+  },
+  {
+    "id": 185,
+    "channel": "hiring",
+    "author": "alice",
+    "body": "the search index shipped. No action needed from anyone else.",
+    "created_at": "2026-08-13T18:28:00.000Z"
+  },
+  {
+    "id": 186,
+    "channel": "support",
+    "author": "eli",
+    "body": "the onboarding doc is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-13T20:05:00.000Z"
+  },
+  {
+    "id": 187,
+    "channel": "general",
+    "author": "alice",
+    "body": "the nightly backup shipped. No action needed from anyone else.",
+    "created_at": "2026-08-13T21:42:00.000Z"
+  },
+  {
+    "id": 188,
+    "channel": "random",
+    "author": "fern",
+    "body": "the invoice job shipped. Filed as a follow up.",
+    "created_at": "2026-08-13T23:19:00.000Z"
+  },
+  {
+    "id": 189,
+    "channel": "support",
+    "author": "fern",
+    "body": "the nightly backup needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-14T00:56:00.000Z"
+  },
+  {
+    "id": 190,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the search index is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-14T02:33:00.000Z"
+  },
+  {
+    "id": 191,
+    "channel": "support",
+    "author": "dara",
+    "body": "the staging rollout is rolled back. Filed as a follow up.",
+    "created_at": "2026-08-14T04:10:00.000Z"
+  },
+  {
+    "id": 192,
+    "channel": "hiring",
+    "author": "bo",
+    "body": "the flaky auth test shipped. No action needed from anyone else.",
+    "created_at": "2026-08-14T05:47:00.000Z"
+  },
+  {
+    "id": 193,
+    "channel": "deploys",
+    "author": "alice",
+    "body": "the nightly backup shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-14T07:24:00.000Z"
+  },
+  {
+    "id": 194,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the onboarding doc needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-14T09:01:00.000Z"
+  },
+  {
+    "id": 195,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the nightly backup is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-14T10:38:00.000Z"
+  },
+  {
+    "id": 196,
+    "channel": "support",
+    "author": "bo",
+    "body": "the flaky auth test is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-14T12:15:00.000Z"
+  },
+  {
+    "id": 197,
+    "channel": "general",
+    "author": "gus",
+    "body": "the onboarding doc is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-14T13:52:00.000Z"
+  },
+  {
+    "id": 198,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the invoice job is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-14T15:29:00.000Z"
+  },
+  {
+    "id": 199,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the queue backlog needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-14T17:06:00.000Z"
+  },
+  {
+    "id": 200,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the search index is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-14T18:43:00.000Z"
+  },
+  {
+    "id": 201,
+    "channel": "random",
+    "author": "hana",
+    "body": "the invoice job is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-14T20:20:00.000Z"
+  },
+  {
+    "id": 202,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the nightly backup is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-14T21:57:00.000Z"
+  },
+  {
+    "id": 203,
+    "channel": "random",
+    "author": "fern",
+    "body": "the flaky auth test is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-14T23:34:00.000Z"
+  },
+  {
+    "id": 204,
+    "channel": "hiring",
+    "author": "gus",
+    "body": "the flaky auth test is rolled back. Numbers are in the thread.",
+    "created_at": "2026-08-15T01:11:00.000Z"
+  },
+  {
+    "id": 205,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the search index is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-15T02:48:00.000Z"
+  },
+  {
+    "id": 206,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the queue backlog is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-15T04:25:00.000Z"
+  },
+  {
+    "id": 207,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the rate limiter is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-15T06:02:00.000Z"
+  },
+  {
+    "id": 208,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the nightly backup is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-15T07:39:00.000Z"
+  },
+  {
+    "id": 209,
+    "channel": "random",
+    "author": "dara",
+    "body": "the invoice job is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-15T09:16:00.000Z"
+  },
+  {
+    "id": 210,
+    "channel": "support",
+    "author": "fern",
+    "body": "the search index shipped. Numbers are in the thread.",
+    "created_at": "2026-08-15T10:53:00.000Z"
+  },
+  {
+    "id": 211,
+    "channel": "random",
+    "author": "fern",
+    "body": "the flaky auth test needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-15T12:30:00.000Z"
+  },
+  {
+    "id": 212,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the nightly backup is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-15T14:07:00.000Z"
+  },
+  {
+    "id": 213,
+    "channel": "deploys",
+    "author": "alice",
+    "body": "the queue backlog shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-15T15:44:00.000Z"
+  },
+  {
+    "id": 214,
+    "channel": "hiring",
+    "author": "bo",
+    "body": "the nightly backup is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-15T17:21:00.000Z"
+  },
+  {
+    "id": 215,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the invoice job is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-15T18:58:00.000Z"
+  },
+  {
+    "id": 216,
+    "channel": "random",
+    "author": "dara",
+    "body": "the search index is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-15T20:35:00.000Z"
+  },
+  {
+    "id": 217,
+    "channel": "support",
+    "author": "alice",
+    "body": "the staging rollout is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-15T22:12:00.000Z"
+  },
+  {
+    "id": 218,
+    "channel": "general",
+    "author": "alice",
+    "body": "the search index needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-15T23:49:00.000Z"
+  },
+  {
+    "id": 219,
+    "channel": "general",
+    "author": "dara",
+    "body": "the search index is green again. Filed as a follow up.",
+    "created_at": "2026-08-16T01:26:00.000Z"
+  },
+  {
+    "id": 220,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the invoice job is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-16T03:03:00.000Z"
+  },
+  {
+    "id": 221,
+    "channel": "general",
+    "author": "bo",
+    "body": "the flaky auth test is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-16T04:40:00.000Z"
+  },
+  {
+    "id": 222,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the flaky auth test is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-16T06:17:00.000Z"
+  },
+  {
+    "id": 223,
+    "channel": "random",
+    "author": "alice",
+    "body": "the invoice job needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-16T07:54:00.000Z"
+  },
+  {
+    "id": 224,
+    "channel": "support",
+    "author": "dara",
+    "body": "the onboarding doc shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-16T09:31:00.000Z"
+  },
+  {
+    "id": 225,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the queue backlog is green again. No action needed from anyone else.",
+    "created_at": "2026-08-16T11:08:00.000Z"
+  },
+  {
+    "id": 226,
+    "channel": "support",
+    "author": "eli",
+    "body": "the rate limiter is rolled back. I will pick it up in the morning.",
+    "created_at": "2026-08-16T12:45:00.000Z"
+  },
+  {
+    "id": 227,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the flaky auth test is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-16T14:22:00.000Z"
+  },
+  {
+    "id": 228,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the onboarding doc is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-16T15:59:00.000Z"
+  },
+  {
+    "id": 229,
+    "channel": "support",
+    "author": "eli",
+    "body": "the search index is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-16T17:36:00.000Z"
+  },
+  {
+    "id": 230,
+    "channel": "general",
+    "author": "gus",
+    "body": "the search index is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-16T19:13:00.000Z"
+  },
+  {
+    "id": 231,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the onboarding doc needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-16T20:50:00.000Z"
+  },
+  {
+    "id": 232,
+    "channel": "deploys",
+    "author": "alice",
+    "body": "the onboarding doc shipped. Filed as a follow up.",
+    "created_at": "2026-08-16T22:27:00.000Z"
+  },
+  {
+    "id": 233,
+    "channel": "random",
+    "author": "alice",
+    "body": "the search index is green again. Numbers are in the thread.",
+    "created_at": "2026-08-17T00:04:00.000Z"
+  },
+  {
+    "id": 234,
+    "channel": "hiring",
+    "author": "hana",
+    "body": "the onboarding doc is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-17T01:41:00.000Z"
+  },
+  {
+    "id": 235,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the invoice job shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-17T03:18:00.000Z"
+  },
+  {
+    "id": 236,
+    "channel": "random",
+    "author": "gus",
+    "body": "the search index is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-17T04:55:00.000Z"
+  },
+  {
+    "id": 237,
+    "channel": "support",
+    "author": "gus",
+    "body": "the flaky auth test shipped. Numbers are in the thread.",
+    "created_at": "2026-08-17T06:32:00.000Z"
+  },
+  {
+    "id": 238,
+    "channel": "random",
+    "author": "bo",
+    "body": "the invoice job shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-17T08:09:00.000Z"
+  },
+  {
+    "id": 239,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the nightly backup needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-17T09:46:00.000Z"
+  },
+  {
+    "id": 240,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the nightly backup needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-17T11:23:00.000Z"
+  },
+  {
+    "id": 241,
+    "channel": "general",
+    "author": "chen",
+    "body": "the nightly backup needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-17T13:00:00.000Z"
+  },
+  {
+    "id": 242,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the nightly backup shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-17T14:37:00.000Z"
+  },
+  {
+    "id": 243,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the flaky auth test needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-17T16:14:00.000Z"
+  },
+  {
+    "id": 244,
+    "channel": "general",
+    "author": "chen",
+    "body": "the nightly backup is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-17T17:51:00.000Z"
+  },
+  {
+    "id": 245,
+    "channel": "support",
+    "author": "alice",
+    "body": "the invoice job is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-17T19:28:00.000Z"
+  },
+  {
+    "id": 246,
+    "channel": "deploys",
+    "author": "fern",
+    "body": "the flaky auth test is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-17T21:05:00.000Z"
+  },
+  {
+    "id": 247,
+    "channel": "support",
+    "author": "hana",
+    "body": "the rate limiter needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-17T22:42:00.000Z"
+  },
+  {
+    "id": 248,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the staging rollout needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-18T00:19:00.000Z"
+  },
+  {
+    "id": 249,
+    "channel": "incidents",
+    "author": "bo",
+    "body": "the nightly backup is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-18T01:56:00.000Z"
+  },
+  {
+    "id": 250,
+    "channel": "hiring",
+    "author": "eli",
+    "body": "the search index shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-18T03:33:00.000Z"
+  },
+  {
+    "id": 251,
+    "channel": "random",
+    "author": "alice",
+    "body": "the queue backlog is green again. Numbers are in the thread.",
+    "created_at": "2026-08-18T05:10:00.000Z"
+  },
+  {
+    "id": 252,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the queue backlog shipped. No action needed from anyone else.",
+    "created_at": "2026-08-18T06:47:00.000Z"
+  },
+  {
+    "id": 253,
+    "channel": "support",
+    "author": "alice",
+    "body": "the flaky auth test shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-18T08:24:00.000Z"
+  },
+  {
+    "id": 254,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the invoice job is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-18T10:01:00.000Z"
+  },
+  {
+    "id": 255,
+    "channel": "random",
+    "author": "chen",
+    "body": "the onboarding doc shipped. Filed as a follow up.",
+    "created_at": "2026-08-18T11:38:00.000Z"
+  },
+  {
+    "id": 256,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the invoice job is slower than yesterday. I will pick it up in the morning.",
+    "created_at": "2026-08-18T13:15:00.000Z"
+  },
+  {
+    "id": 257,
+    "channel": "deploys",
+    "author": "hana",
+    "body": "the search index is green again. Numbers are in the thread.",
+    "created_at": "2026-08-18T14:52:00.000Z"
+  },
+  {
+    "id": 258,
+    "channel": "random",
+    "author": "alice",
+    "body": "the invoice job needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-18T16:29:00.000Z"
+  },
+  {
+    "id": 259,
+    "channel": "hiring",
+    "author": "dara",
+    "body": "the queue backlog needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-18T18:06:00.000Z"
+  },
+  {
+    "id": 260,
+    "channel": "general",
+    "author": "gus",
+    "body": "the search index is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-18T19:43:00.000Z"
+  },
+  {
+    "id": 261,
+    "channel": "hiring",
+    "author": "chen",
+    "body": "the search index is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-18T21:20:00.000Z"
+  },
+  {
+    "id": 262,
+    "channel": "hiring",
+    "author": "dara",
+    "body": "the onboarding doc is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-18T22:57:00.000Z"
+  },
+  {
+    "id": 263,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the staging rollout is green again. Filed as a follow up.",
+    "created_at": "2026-08-19T00:34:00.000Z"
+  },
+  {
+    "id": 264,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the invoice job is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-19T02:11:00.000Z"
+  },
+  {
+    "id": 265,
+    "channel": "random",
+    "author": "hana",
+    "body": "the onboarding doc is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-19T03:48:00.000Z"
+  },
+  {
+    "id": 266,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the nightly backup is blocked on review. Adding a metric so we see it next time.",
+    "created_at": "2026-08-19T05:25:00.000Z"
+  },
+  {
+    "id": 267,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the flaky auth test needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-19T07:02:00.000Z"
+  },
+  {
+    "id": 268,
+    "channel": "random",
+    "author": "chen",
+    "body": "the nightly backup is slower than yesterday. Filed as a follow up.",
+    "created_at": "2026-08-19T08:39:00.000Z"
+  },
+  {
+    "id": 269,
+    "channel": "random",
+    "author": "alice",
+    "body": "the rate limiter is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-19T10:16:00.000Z"
+  },
+  {
+    "id": 270,
+    "channel": "general",
+    "author": "dara",
+    "body": "the invoice job is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-19T11:53:00.000Z"
+  },
+  {
+    "id": 271,
+    "channel": "incidents",
+    "author": "gus",
+    "body": "the flaky auth test is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-19T13:30:00.000Z"
+  },
+  {
+    "id": 272,
+    "channel": "support",
+    "author": "bo",
+    "body": "the nightly backup is green again. Adding a metric so we see it next time.",
+    "created_at": "2026-08-19T15:07:00.000Z"
+  },
+  {
+    "id": 273,
+    "channel": "support",
+    "author": "chen",
+    "body": "the invoice job shipped. Adding a metric so we see it next time.",
+    "created_at": "2026-08-19T16:44:00.000Z"
+  },
+  {
+    "id": 274,
+    "channel": "support",
+    "author": "chen",
+    "body": "the nightly backup is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-19T18:21:00.000Z"
+  },
+  {
+    "id": 275,
+    "channel": "support",
+    "author": "dara",
+    "body": "the onboarding doc is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-19T19:58:00.000Z"
+  },
+  {
+    "id": 276,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the queue backlog is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-19T21:35:00.000Z"
+  },
+  {
+    "id": 277,
+    "channel": "random",
+    "author": "alice",
+    "body": "the invoice job is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-19T23:12:00.000Z"
+  },
+  {
+    "id": 278,
+    "channel": "general",
+    "author": "alice",
+    "body": "the onboarding doc shipped. I will pick it up in the morning.",
+    "created_at": "2026-08-20T00:49:00.000Z"
+  },
+  {
+    "id": 279,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the staging rollout is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-20T02:26:00.000Z"
+  },
+  {
+    "id": 280,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the flaky auth test is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-20T04:03:00.000Z"
+  },
+  {
+    "id": 281,
+    "channel": "general",
+    "author": "eli",
+    "body": "the flaky auth test is slower than yesterday. Filed as a follow up.",
+    "created_at": "2026-08-20T05:40:00.000Z"
+  },
+  {
+    "id": 282,
+    "channel": "general",
+    "author": "fern",
+    "body": "the queue backlog is rolled back. No action needed from anyone else.",
+    "created_at": "2026-08-20T07:17:00.000Z"
+  },
+  {
+    "id": 283,
+    "channel": "support",
+    "author": "gus",
+    "body": "the nightly backup is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-20T08:54:00.000Z"
+  },
+  {
+    "id": 284,
+    "channel": "general",
+    "author": "hana",
+    "body": "the queue backlog is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-20T10:31:00.000Z"
+  },
+  {
+    "id": 285,
+    "channel": "support",
+    "author": "eli",
+    "body": "the onboarding doc is slower than yesterday. Numbers are in the thread.",
+    "created_at": "2026-08-20T12:08:00.000Z"
+  },
+  {
+    "id": 286,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the invoice job needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-20T13:45:00.000Z"
+  },
+  {
+    "id": 287,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the search index is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-20T15:22:00.000Z"
+  },
+  {
+    "id": 288,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the flaky auth test needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-20T16:59:00.000Z"
+  },
+  {
+    "id": 289,
+    "channel": "incidents",
+    "author": "eli",
+    "body": "the invoice job shipped. Reverting was the cheap option.",
+    "created_at": "2026-08-20T18:36:00.000Z"
+  },
+  {
+    "id": 290,
+    "channel": "hiring",
+    "author": "dara",
+    "body": "the search index needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-20T20:13:00.000Z"
+  },
+  {
+    "id": 291,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the rate limiter is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-20T21:50:00.000Z"
+  },
+  {
+    "id": 292,
+    "channel": "deploys",
+    "author": "gus",
+    "body": "the onboarding doc is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-20T23:27:00.000Z"
+  },
+  {
+    "id": 293,
+    "channel": "random",
+    "author": "chen",
+    "body": "the queue backlog is green again. I will pick it up in the morning.",
+    "created_at": "2026-08-21T01:04:00.000Z"
+  },
+  {
+    "id": 294,
+    "channel": "random",
+    "author": "fern",
+    "body": "the search index is blocked on review. I will pick it up in the morning.",
+    "created_at": "2026-08-21T02:41:00.000Z"
+  },
+  {
+    "id": 295,
+    "channel": "general",
+    "author": "eli",
+    "body": "the search index needs a second pair of eyes. Adding a metric so we see it next time.",
+    "created_at": "2026-08-21T04:18:00.000Z"
+  },
+  {
+    "id": 296,
+    "channel": "random",
+    "author": "dara",
+    "body": "the staging rollout is rolled back. Reverting was the cheap option.",
+    "created_at": "2026-08-21T05:55:00.000Z"
+  },
+  {
+    "id": 297,
+    "channel": "incidents",
+    "author": "chen",
+    "body": "the search index needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-21T07:32:00.000Z"
+  },
+  {
+    "id": 298,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the nightly backup needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-21T09:09:00.000Z"
+  },
+  {
+    "id": 299,
+    "channel": "hiring",
+    "author": "fern",
+    "body": "the rate limiter needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-21T10:46:00.000Z"
+  },
+  {
+    "id": 300,
+    "channel": "support",
+    "author": "hana",
+    "body": "the flaky auth test is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-21T12:23:00.000Z"
+  },
+  {
+    "id": 301,
+    "channel": "deploys",
+    "author": "eli",
+    "body": "the flaky auth test is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-21T14:00:00.000Z"
+  },
+  {
+    "id": 302,
+    "channel": "general",
+    "author": "eli",
+    "body": "the staging rollout is green again. Reverting was the cheap option.",
+    "created_at": "2026-08-21T15:37:00.000Z"
+  },
+  {
+    "id": 303,
+    "channel": "deploys",
+    "author": "dara",
+    "body": "the nightly backup needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-21T17:14:00.000Z"
+  },
+  {
+    "id": 304,
+    "channel": "support",
+    "author": "gus",
+    "body": "the nightly backup needs a second pair of eyes. I will pick it up in the morning.",
+    "created_at": "2026-08-21T18:51:00.000Z"
+  },
+  {
+    "id": 305,
+    "channel": "random",
+    "author": "eli",
+    "body": "the rate limiter needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-21T20:28:00.000Z"
+  },
+  {
+    "id": 306,
+    "channel": "random",
+    "author": "alice",
+    "body": "the onboarding doc is blocked on review. Filed as a follow up.",
+    "created_at": "2026-08-21T22:05:00.000Z"
+  },
+  {
+    "id": 307,
+    "channel": "general",
+    "author": "chen",
+    "body": "the flaky auth test is rolled back. Adding a metric so we see it next time.",
+    "created_at": "2026-08-21T23:42:00.000Z"
+  },
+  {
+    "id": 308,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the flaky auth test needs a second pair of eyes. Numbers are in the thread.",
+    "created_at": "2026-08-22T01:19:00.000Z"
+  },
+  {
+    "id": 309,
+    "channel": "general",
+    "author": "alice",
+    "body": "the queue backlog is slower than yesterday. Adding a metric so we see it next time.",
+    "created_at": "2026-08-22T02:56:00.000Z"
+  },
+  {
+    "id": 310,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the nightly backup needs a second pair of eyes. No action needed from anyone else.",
+    "created_at": "2026-08-22T04:33:00.000Z"
+  },
+  {
+    "id": 311,
+    "channel": "random",
+    "author": "gus",
+    "body": "the queue backlog is blocked on review. No action needed from anyone else.",
+    "created_at": "2026-08-22T06:10:00.000Z"
+  },
+  {
+    "id": 312,
+    "channel": "incidents",
+    "author": "alice",
+    "body": "the rate limiter is slower than yesterday. No action needed from anyone else.",
+    "created_at": "2026-08-22T07:47:00.000Z"
+  },
+  {
+    "id": 313,
+    "channel": "deploys",
+    "author": "bo",
+    "body": "the search index needs a second pair of eyes. Reverting was the cheap option.",
+    "created_at": "2026-08-22T09:24:00.000Z"
+  },
+  {
+    "id": 314,
+    "channel": "incidents",
+    "author": "hana",
+    "body": "the queue backlog needs a second pair of eyes. Filed as a follow up.",
+    "created_at": "2026-08-22T11:01:00.000Z"
+  },
+  {
+    "id": 315,
+    "channel": "random",
+    "author": "alice",
+    "body": "the onboarding doc is green again. No action needed from anyone else.",
+    "created_at": "2026-08-22T12:38:00.000Z"
+  },
+  {
+    "id": 316,
+    "channel": "general",
+    "author": "hana",
+    "body": "the onboarding doc is blocked on review. Reverting was the cheap option.",
+    "created_at": "2026-08-22T14:15:00.000Z"
+  },
+  {
+    "id": 317,
+    "channel": "deploys",
+    "author": "chen",
+    "body": "the rate limiter is green again. Numbers are in the thread.",
+    "created_at": "2026-08-22T15:52:00.000Z"
+  },
+  {
+    "id": 318,
+    "channel": "incidents",
+    "author": "dara",
+    "body": "the flaky auth test is slower than yesterday. Reverting was the cheap option.",
+    "created_at": "2026-08-22T17:29:00.000Z"
+  },
+  {
+    "id": 319,
+    "channel": "incidents",
+    "author": "fern",
+    "body": "the nightly backup is blocked on review. Numbers are in the thread.",
+    "created_at": "2026-08-22T19:06:00.000Z"
+  },
+  {
+    "id": 320,
+    "channel": "support",
+    "author": "bo",
+    "body": "the search index is green again. No action needed from anyone else.",
+    "created_at": "2026-08-22T20:43:00.000Z"
+  }
+]

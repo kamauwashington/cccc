@@ -55,9 +55,9 @@ without a cast.
 
 ## Numeric sets
 
-A numeric TypeScript enum gives you a reverse map for free, so `Priority[2]`
-returns `'High'`. A const object does not. Build the reverse map once and
-export a small helper. `src/domain/priority.ts` shows it.
+A numeric TypeScript enum gives you a reverse map for free, so `Level[2]`
+returns `'Warn'`. A const object does not. Build the reverse map once, from the
+same object, and export a small helper beside it. `reference.md` has the shape.
 
 ## Further reading
 

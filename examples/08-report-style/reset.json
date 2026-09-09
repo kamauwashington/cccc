@@ -1,18 +1,18 @@
 {
   "restore": [
-    "fixtures",
     "src",
     "tests",
     "package.json",
     "tsconfig.json",
     "vitest.config.ts",
     "CLAUDE.md",
+    "PROMPT.md",
     ".claude/output-styles",
     ".claude/memory"
   ],
   "delete": [
+    "src/server.ts",
     "RESULT.md",
-    "dist",
     ".tmp",
     ".claude/.complete-state.json"
   ],

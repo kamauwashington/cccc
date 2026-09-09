@@ -50,24 +50,30 @@ nothing in the prompt asked for any of them.
 The numeric enum is the tell. Nothing in the prompt hints that losing the
 reverse mapping is a problem.
 
-One honest note for the room. An earlier version of `CLAUDE.md` said to read
+One honest note. An earlier version of `CLAUDE.md` said to read
 the skills that apply, and three cold runs loaded all three only twice. The
 line now says to read all three, which made it three for three. Description
 matching alone got the right code every time. It did not reliably open all
 three files.
 
-## Speaker notes
+## Running it
 
-Open with `npm start`. It resets the workspace and runs `tsc`, so the room sees
-TS1294 three times at the top of the output. Then launch Claude Code and paste
-the prompt. The run takes a couple of minutes because `src/domain/priority.ts`
-touches `describeOrder` and the Drizzle column type.
+1. Launch Claude Code from inside this folder.
+2. Run `/start`. It resets the workspace and runs `tsc` first, so TS1294 shows
+   up three times at the top of the output. Then it reads `PROMPT.md` and runs
+   that prompt verbatim, so every run begins from the same words.
+3. Let it finish. It takes a couple of minutes, because `src/domain/priority.ts`
+   touches `describeOrder` and the Drizzle column type.
+4. Run `npm run typecheck` and `npm test`. Both have to pass, at 26 tests.
+5. To go again, run `/clear` then `/start`.
 
-What can go wrong: the first PGlite test on a cold machine takes a few seconds
+What can go wrong. The first PGlite test on a cold machine takes a few seconds
 to boot Postgres, so the dot reporter sits still for a moment. That is normal.
-If the model stops early with tests still red, say "run npm test again and fix
-what is failing" and let it finish. Fallback: `npm run solution -- 01` copies the
-finished `src/` in from `.solution/`, and you can talk through the diff.
+If the model stops early with tests still red, tell it to run `npm test` again
+and fix what is failing.
+
+Fallback. `npm run solution -- 01` copies the finished `src/` in from
+`.solution/`. The diff is worth reading either way.
 
 ## Try next
 

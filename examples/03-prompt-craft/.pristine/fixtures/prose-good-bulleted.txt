@@ -1,8 +1,0 @@
-The reset script restores four things.
-
-- `src/` and `tests/` come back from the snapshot.
-- `RESULT.md` is deleted.
-- The memory folder is emptied.
-- Settings and hooks are left alone.
-
-Run it, then run `/clear` so the conversation forgets the last attempt.

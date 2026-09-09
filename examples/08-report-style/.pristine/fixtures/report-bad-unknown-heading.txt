@@ -1,5 +1,0 @@
-**Done.** Added parseDuration in src/duration.ts.
-
-**Summary.** The helper now covers minutes, hours and days.
-
-**Works.** 18 tests pass and npm run typecheck is clean.

@@ -1,3 +1,0 @@
-Done. Added a units table to src/duration.ts.
-
-Doesn’t work. Weeks are still missing.

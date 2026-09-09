@@ -1,1 +1,0 @@
-The description is not decoration, but the trigger the model reads.

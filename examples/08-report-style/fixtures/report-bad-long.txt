@@ -1,9 +1,0 @@
-Done. Added parseDuration in src/duration.ts, which reads a compact duration string and returns a count of milliseconds. Added formatDuration next to it so a stored number can go back out as the same string a person typed in. Wired both into the retry backoff in src/retry.ts, replaced the three hand rolled multipliers that were sitting in that file, and deleted the old millisFromMinutes helper that only one call site was using. Updated the two callers in src/queue.ts to pass a string instead of a number.
-
-Works. 18 tests pass and npm run typecheck is clean across the workspace. The round trip property holds for every supported unit, so parse then format returns the original string. The retry suite was already covering backoff growth and it still passes untouched, which is the signal that the swap was behavior preserving.
-
-Doesn't work. Weeks and months are not parsed, because a month is not a fixed number of milliseconds and guessing one would be worse than refusing. Fractional input such as one and a half hours is rejected for the same reason. The timeout value in src/server.ts still holds a raw number and was left alone, so there are now two ways to spell a duration in this repository.
-
-Fixed. Yes for the three units that were asked for. Negative durations now throw where the old helper quietly clamped them to zero, so anyone relying on that will see a new error.
-
-Suggestions. Let src/server.ts call the parser so the second spelling goes away. Decide whether fractional hours should parse before someone puts one in a config file and files a bug.

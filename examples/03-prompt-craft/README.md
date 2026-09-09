@@ -1,138 +1,114 @@
 # 03-prompt-craft
 
 Two skills that work on the conversation instead of on files. Take home. This
-README is the whole lesson, no presenter needed.
+README is the whole lesson, no walkthrough needed.
 
 ## What you will see
 
 Every other example in this repository ships a skill that edits code. These two
-change no source file at all. They change the answer you get back.
+change no source file on their own. They change how the work starts and how the
+answer comes back.
 
-Type something rough and `sharpen` fires on its own. It turns the request into a
-five section checklist instead of starting the work. `concise` then rewrites
-that checklist until it passes the same rules the CI linter enforces. You can
-also call either one by hand, `/sharpen <text>` or `/concise <text>`.
+You type something vague. Instead of guessing and writing 200 lines, Claude
+stops and asks three questions. You answer in one line. It builds the small
+thing. The write up is two sentences.
+
+You already know what the other version looks like.
 
 ## Run it
 
-```
-npm start
-```
-
-That resets the workspace and shows the starting state. One test fails.
-`OUTPUT.md` ships as a copy of the rough request in `PROMPT.md`, so the checkers
-report five missing sections.
-
-Then launch Claude Code here and run the two halves back to back.
-
-```
-/before
-```
-
-That answers the same rough request with the skill switched off. `Skill` is
-missing from the command's `allowed-tools`, so `sharpen` cannot fire, and the
-command suspends the workspace rule that would have called it. You get a normal
-prose write up in `OUTPUT.md`. The two checkers run over it and print what is
-wrong, five sections missing. The Stop hook runs the suite and the line comes
-back red.
+Launch Claude Code here and run one command.
 
 ```
 /start
 ```
 
-Same prompt, skill on. `sharpen` fires on its own, rewrites the request as the
-five section block, checks the draft against both checkers, and writes the block
-over `OUTPUT.md`. The Stop hook line comes back green and `npm test` shows 26
-passed.
+That resets the workspace, shows the starting state, then sends the request in
+`PROMPT.md`, exactly as written:
 
-Two runs, one file, one pair of checkers. The difference on screen is the whole
-lesson.
+```
+make the orders list paginated somehow, it is slow right now and the frontend
+team keeps complaining. thanks
+```
 
-`/start` never asks you a question, and that is deliberate. `PROMPT.md` is
-bloated, so the decision rule at the top of the skill says rewrite it. Run
-`/rough` to see the other branch. That one sends a request too vague to answer,
-so three questions come back instead of a block. Answer them and the block
-follows.
+The `sharpen` skill fires on its own. Nobody types its name. Back comes the
+request as a receipt, then a picker with three questions in it:
+
+```
+You asked: make the orders list paginated somehow, it is slow right now and
+the frontend team keeps complaining. thanks
+
+  Page size        > Caller passes one     A limit argument, default 25.
+                     Fixed at 25           The function decides.
+
+  Paging style     > Cursor                Stays correct when rows move.
+                     Offset and limit      Simple. Can repeat or skip rows.
+
+  Response shape   > Rows plus next token  The caller knows when to stop.
+                     Bare rows             The caller guesses.
+```
+
+The questions come from the `AskUserQuestion` tool, so they arrive as a picker
+and not as text. Arrow keys and enter, or pick "Other" and type your own. Every
+question carries that escape hatch and the tool adds it on its own.
+
+The receipt line puts the vague request and the questions in one frame, which is
+the whole comparison. It is the one restatement `concise` allows.
+
+Pick the first option in each. Then `listOrders` in `src/orders.ts` grows a
+cursor and a page size, and the answer that comes back is two sentences.
 
 ## How it works
 
-Six files carry the example.
+Four files carry the example.
 
 | File | Job |
 | --- | --- |
-| `.claude/commands/before.md` | The same prompt with `Skill` left out of `allowed-tools`. The before half. |
-| `.claude/skills/sharpen/SKILL.md` | Decision rule first. Ambiguous means ask, bloated means rewrite. |
-| `.claude/skills/concise/SKILL.md` | The five writing rules and the banned phrase list. |
-| `src/sharpen-check.ts` | Counts the five sections, looks for a testable success criterion, counts words. |
-| `src/concise-check.ts` | Counts lines, measures the bullet ratio, matches the banned list. |
-| `tests/output.test.ts` | Runs both checkers over `OUTPUT.md`. This is the red one. |
+| `.claude/skills/sharpen/SKILL.md` | The decision rule. Vague means ask, clear means build. Three questions, one turn, no second round. |
+| `.claude/skills/concise/SKILL.md` | The writing rules, and the four things to cut from an answer. |
+| `CLAUDE.md` | Says a vague request goes through `sharpen` first. Backs up the skill description. |
+| `src/orders.ts` | 137 orders and a `listOrders()` that hands back all of them. |
 
 Claude Code lists every `SKILL.md` name and `description` at launch and loads
 the body only when one looks relevant. The `description` is the trigger, which
 is what example 06 takes apart in detail. Read those two description lines
-first, they are doing the routing.
+first. They are doing the routing.
 
-The `CLAUDE.md` in this folder backs the description up. It says a rough request
-goes through `sharpen` first. Description matching alone fires most of the time.
-The two together fire every time.
-
-The `/sharpen` and `/concise` commands in `.claude/commands/` are three line
-wrappers. They point at the skill and pass `$ARGUMENTS` through. `/rough` is the
-same wrapper with the vague request in `fixtures/prompt-rough.txt` baked in.
-`/before` is the odd one. It leaves `Skill` out of its `allowed-tools` so the
-skill cannot fire at all.
-
-Each skill ends the same way. Write the draft to `.tmp/draft.txt`, run
-`npx tsx src/cli.ts sharpen .tmp/draft.txt`, fix what it names, answer only when
-the command exits 0.
+`CLAUDE.md` backs the description up. Description matching alone fires most of
+the time. The two together fire every time.
 
 ## What to watch for
 
-The forcing function is structural lint, never a model as a judge. A judge would
-score the same draft differently on two runs, and a rule you cannot reproduce is
-not a rule. `sharpenCheck` and `conciseCheck` are plain functions over a string.
-Same input, same findings, every time.
+**The questions are the feature.** The default move is to guess and write code.
+Three questions cost ten seconds and remove the rewrite. The cap matters as
+much as the questions. Three, in one turn, then it commits. A skill that asks
+five questions across three turns is worse than one that guesses.
 
-Watch the second thing too. The banned list in `src/concise-check.ts` matches
-`scripts/lint-prose.mjs` at the repository root line for line. The skill is the
-half that runs while the text is being written. The linter is the machine half
-that gates CI. A test in `tests/concise-check.test.ts` reads the linter and
-fails if the two lists drift apart.
+**The skill picks a path, and it can pick the other one.** Paste something
+clear, such as `add a limit argument to listOrders that defaults to 25`, and it
+skips the questions and builds. Vague is the trigger, questions are the
+response.
 
-Watch the third thing. `sharpen` runs `concise` over its own draft before it
-answers, so a tight checklist written in bloated prose still fails. One skill
-calls the other.
+**The answer is short because a rule says so.** No summary of the conversation,
+no walk through the code you just watched get written, no offer to iterate.
+`concise` names those four things and cuts them.
 
-## Speaker notes
+## About the tests
 
-Run `/before` first, every time. On its own, `/start` prints a finished block
-and the room has nothing to compare it to. `/before` gives them the comparison,
-in the same file, judged by the same two checkers.
-
-`.claude/settings.json` denies reads of `.solution/`. Without that line the
-finished block sits in the workspace and the run can copy it.
-
-The trap is editing `src/` to make the red test pass. The checkers are already
-correct and their 25 tests prove it. The only file the run should touch is
-`OUTPUT.md`.
-
-The second trap is doing the work the prompt describes. `PROMPT.md` asks for
-pagination on an orders endpoint. There is no orders endpoint in this workspace.
-The job is to sharpen the request, not to satisfy it.
-
-If the fixtures leave a rule ambiguous, the limits are named as exported
-constants: 400 words, 40 lines, 70 percent bullets.
+`tests/orders.test.ts` is a backstop for CI. It is not part of the demo and it
+does not belong on screen. It pins the same three answers (25, cursor, rows
+plus a next cursor), so the suite goes green when the built code matches. Answer
+the questions differently and the suite stays red. That is fine. The
+conversation is the lesson.
 
 ## Try next
 
-- Run `/rough`, or `/sharpen make the orders endpoint faster`, and count the
-  questions. The cap is three, asked once. Then run `/start` and watch the same
-  skill skip the questions entirely.
-- Open `.claude/commands/before.md` and read the `allowed-tools` line. That is
-  the whole off switch. Drop `Skill` from any command and the skills stop
-  firing inside it.
-- Add a sixth rule to `concise`, such as a cap on sentence length. Add the
-  fixture first, then the check.
-- Delete the `description` line from `.claude/skills/sharpen/SKILL.md` and paste
-  a rough request. The skill stops firing and Claude starts the work instead.
-  Put it back.
+- Delete the `description` line from `.claude/skills/sharpen/SKILL.md` and send
+  the same request. The skill stops firing and Claude starts guessing. Put it
+  back.
+- Change the cap in `sharpen` from three questions to one. Watch which question
+  it keeps. That tells you which unknown it thinks is most expensive.
+- Add a rule to `concise` that bans the word "comprehensive". Send a request
+  that invites it.
+- Send a request that is vague in a way the questions cannot fix, such as
+  `make it better`. Watch what it asks.

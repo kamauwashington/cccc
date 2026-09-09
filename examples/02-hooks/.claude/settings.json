@@ -16,6 +16,8 @@
       "Bash(npm run typecheck)",
       "Bash(npm run codegen)",
       "Bash(npm run codegen:*)",
+      "Bash(npm start)",
+      "Bash(npm start:*)",
       "Bash(npm run reset:*)",
       "Bash(node ../../scripts/reset.mjs:*)",
       "Bash(npx tsc:*)",

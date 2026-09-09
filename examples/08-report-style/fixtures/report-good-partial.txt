@@ -1,3 +1,0 @@
-Done. Renamed the Channel type to BoardChannel across src/ and tests/.
-
-Works. 24 tests pass and npm run typecheck is clean. No behavior changed, so the fixtures are untouched.

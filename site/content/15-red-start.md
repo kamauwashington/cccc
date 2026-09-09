@@ -36,9 +36,10 @@ Example 02 is the exception on purpose. Its demo is about hooks firing rather
 than about fixing code, so the workspace ships working and the beats are about
 what the harness does when the model reaches for the wrong file.
 
-`npm start` inside a workspace shows the first red signal and stops. It always
-exits 0, because a non zero exit makes npm print seven lines of its own error
-block over the output.
+`/start` inside a workspace shows the first red signal before it runs the
+prompt. It shells out to `scripts/start.mjs`, which always exits 0, because a
+non zero exit makes npm print seven lines of its own error block over the
+output.
 
 ## Why CI cannot just run the tests
 

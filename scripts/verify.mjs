@@ -24,8 +24,13 @@ const SKELETON_FILES = [
   '.claude/settings.json',
   'CLAUDE.md',
   '.claude/hooks/complete.mjs',
-  '.claude/commands/start.md',
 ];
+
+// Most workspaces open with `/start`. 07 does not, because its whole lesson is
+// that you run a command and read what comes back, so an opener would be one
+// more thing between the attendee and the point. A missing start.md is a
+// warning, never a failure.
+const OPENER = '.claude/commands/start.md';
 
 const SKELETON_DIRS = ['src', 'tests', '.claude', '.pristine'];
 
@@ -66,6 +71,10 @@ function checkWorkspaceSkeleton(ws) {
     if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
       problems.push(ws.name + ': missing directory ' + rel + '/');
     }
+  }
+
+  if (!fs.existsSync(path.join(ws.dir, OPENER))) {
+    warnings.push(ws.name + ': no ' + OPENER + ', so it has no /start opener');
   }
 
   const manifest = readJson(path.join(ws.dir, 'reset.json'));
