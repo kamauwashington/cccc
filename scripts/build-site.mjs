@@ -30,6 +30,15 @@ const DIST_DIR = path.join(REPO_ROOT, 'dist');
 const OUT_PAGE = path.join(DIST_DIR, 'index.html');
 const OUT_BODY = path.join(DIST_DIR, 'artifact-body.html');
 
+// The talk itself. The PDF is copied into dist/ beside the page and linked,
+// not inlined: half a megabyte of slides does not belong in the HTML. Its
+// cover is a rendered still, committed next to it, so the build stays plain
+// Node and does not need a PDF renderer on the machine that runs it.
+const DECK_FILE = 'claude-code-crash-course.pdf';
+const DECK_SRC = path.join(SITE_DIR, DECK_FILE);
+const DECK_COVER = path.join(SITE_DIR, 'deck-cover.jpg');
+const DECK_SLIDES = 22;
+
 const SECTION_ORDER = [
   'Start here',
   'Repo staples',
@@ -40,6 +49,11 @@ const SECTION_ORDER = [
 ];
 
 const DOCS_ROOT = 'https://code.claude.com/docs/en/';
+
+// The repository this site documents. Every page carries a link back to the
+// file or directory it was built from, so a reader can go straight to the code.
+const REPO_URL = 'https://github.com/kamauwashington/cccc';
+const REPO_BRANCH = 'main';
 
 /* ------------------------------------------------------------------ *
  * Small markdown renderer. No dependency, on purpose. The workspaces
@@ -426,6 +440,7 @@ function handWrittenPages() {
         facts: (meta.facts || []).map(splitPair),
         docs: (meta.docs || []).map(splitPair).map((d) => ({ label: d.label, value: docHref(d.value) })),
         source: 'site/content/' + name,
+        repo: 'site/content/' + name,
         generated: false,
         html,
         toc,
@@ -548,6 +563,7 @@ function examplePages() {
       facts,
       docs: (EXAMPLE_DOCS[ws.name] || []).map(([label, v]) => ({ label, value: docHref(v) })),
       source: 'examples/' + ws.name + '/README.md',
+      repo: 'examples/' + ws.name,
       generated: true,
       html,
       toc,
@@ -585,6 +601,7 @@ function fieldNotePages() {
         facts: [],
         docs: [],
         source: s.file,
+        repo: s.file,
         generated: true,
         html,
         toc,
@@ -793,6 +810,13 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 .docs a:hover{border-left-color:var(--accent);color:var(--accent)}
 .docs .host{display:block;font-family:var(--mono);font-size:10px;color:var(--muted-text)}
 .srcnote{font-family:var(--mono);font-size:10.5px;color:var(--muted-text);margin:44px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+/* Inline, not inline-flex: the note continues in text after this link, and a
+   flex box would sit on its own baseline and step out of the line. */
+.srcnote .srclink{color:var(--muted-text);border-bottom:1px solid transparent}
+.srcnote .srclink:hover{color:var(--accent);border-bottom-color:var(--accent-line)}
+.srcnote .gmark{width:12px;height:12px;vertical-align:-2px;margin-right:5px}
+.btn.repo{display:inline-flex;align-items:center;gap:8px}
+.btn.repo .gmark{width:15px;height:15px;flex:none}
 
 /* ---------- home ---------- */
 .home-wrap{max-width:920px;margin:0 auto;padding:88px 40px 110px}
@@ -835,6 +859,29 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 .srow .who .lbl{margin-top:6px;display:block;padding-left:30px}
 .srow .what{flex:1;font-size:14.5px;color:var(--ink-2);line-height:1.5;min-width:0}
 .srow .go{flex:none;font-size:13px;color:var(--accent)}
+/* ---------- the deck ---------- */
+.deck{
+  display:flex;align-items:center;gap:38px;margin-top:56px;padding:30px 32px;
+  border:1px solid var(--line);border-radius:6px;background:var(--surface);
+  color:var(--ink);
+}
+.deck:hover{border-color:var(--accent-line)}
+/* The cover is lifted off the card, not framed by it. The shadow does the
+   lifting, and it deepens on hover so the whole row reads as one target. */
+.deckframe{flex:none;width:300px;line-height:0}
+.deckshot{
+  width:100%;height:auto;border-radius:3px;
+  box-shadow:0 1px 2px rgba(19,24,32,.10), 0 10px 22px -6px rgba(19,24,32,.22);
+  transition:box-shadow .18s ease, transform .18s ease;
+}
+.deck:hover .deckshot{
+  transform:translateY(-2px);
+  box-shadow:0 2px 4px rgba(19,24,32,.12), 0 20px 38px -8px rgba(19,24,32,.30);
+}
+.decktext{min-width:0}
+.decktext h2{font-family:var(--cond);font-weight:600;font-size:21px;margin:8px 0 0}
+.decktext p{font-size:14.5px;color:var(--ink-2);line-height:1.5;margin:8px 0 0;text-wrap:pretty}
+.deckgo{display:inline-block;margin-top:14px;font-size:13px;color:var(--accent)}
 .homefoot{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-text);margin-top:40px}
 
 /* ---------- search ---------- */
@@ -859,6 +906,8 @@ mark{background:var(--accent-soft);color:var(--accent);padding:0 1px}
   .spec > div:first-child{border-top:0}
   .srow{flex-wrap:wrap;gap:12px}
   .srow .who{width:100%}
+  .deck{flex-direction:column;align-items:flex-start;gap:22px;padding:24px}
+  .deckframe{width:100%}
   .docs{grid-template-columns:1fr}
   #q{width:140px}
 }
@@ -925,6 +974,11 @@ function readLogoAsset() {
   };
 }
 
+function readDeckCover() {
+  if (!fs.existsSync(DECK_COVER)) return '';
+  return 'data:image/jpeg;base64,' + fs.readFileSync(DECK_COVER).toString('base64');
+}
+
 function readLogo() {
   const asset = readLogoAsset();
   return asset ? asset.dataUri : '';
@@ -957,6 +1011,8 @@ function buildFavicon() {
 
 function buildBody(pages, meta) {
   const logo = readLogo();
+  const deckCover = readDeckCover();
+  const deckFile = fs.existsSync(DECK_SRC) ? DECK_FILE : '';
   const bySection = SECTION_ORDER.map((name) => ({
     name,
     pages: pages.filter((p) => p.section === name).sort((a, b) => a.order - b.order),
@@ -1007,6 +1063,7 @@ function buildBody(pages, meta) {
     related: p.related || [],
     tabs: p.tabs || null,
     source: p.source,
+    repo: p.repo || '',
     generated: p.generated,
     html: p.html,
     text: p.text,
@@ -1038,6 +1095,19 @@ const PAGES = ${JSON.stringify(data)};
 const SECTIONS = ${JSON.stringify(sections)};
 const BUILT = ${JSON.stringify(meta)};
 const LOGO = ${JSON.stringify(logo)};
+const REPO = ${JSON.stringify(REPO_URL)};
+const DECK_HREF = ${JSON.stringify(deckFile)};
+const DECK_COVER_SRC = ${JSON.stringify(deckCover)};
+const DECK_SLIDES = ${JSON.stringify(DECK_SLIDES)};
+const REPO_BRANCH = ${JSON.stringify(REPO_BRANCH)};
+function repoHref(rel){
+  const isFile = /\\.[a-z0-9]+$/i.test(rel);
+  return REPO + '/' + (isFile ? 'blob' : 'tree') + '/' + REPO_BRANCH + '/' + rel;
+}
+const GIT_MARK = '<svg class="gmark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" ' +
+  'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+  '<circle cx="7" cy="5.5" r="2.3"/><circle cx="7" cy="18.5" r="2.3"/><circle cx="17" cy="9.5" r="2.3"/>' +
+  '<path d="M7 7.8v8.4"/><path d="M17 11.8c0 3.2-2.4 4.6-5.6 5.2"/></svg>';
 const START_ID = ${JSON.stringify(startId)};
 const EXAMPLE_ID = ${JSON.stringify(exampleId)};
 const byId = Object.fromEntries(PAGES.map(p => [p.id, p]));
@@ -1057,6 +1127,26 @@ function docsHtml(p){
   return '<div class="docs">' + p.docs.map(d =>
     '<a href="' + d.value + '" target="_blank" rel="noopener">' + esc(d.label) +
     '<span class="host">code.claude.com</span></a>').join('') + '</div>';
+}
+
+// The deck sits on the page rather than under it: the cover is lifted off the
+// ground with a shadow, so it reads as an object you can pick up. It is a
+// still of slide one, not an embed, and the link hands over the PDF itself.
+function deckCard(){
+  if(!DECK_HREF) return '';
+  const shot = DECK_COVER_SRC
+    ? '<img class="deckshot" src="' + DECK_COVER_SRC + '" alt="The first slide of the deck" ' +
+      'width="1120" height="630" loading="lazy" />'
+    : '';
+  return '<a class="deck" href="' + DECK_HREF + '" target="_blank" rel="noopener">' +
+    '<div class="deckframe">' + shot + '</div>' +
+    '<div class="decktext">' +
+      '<span class="lbl">The talk</span>' +
+      '<h2>Claude Code Crash Course</h2>' +
+      '<p>The slides the session runs on. ' + DECK_SLIDES + ' of them, as a PDF.</p>' +
+      '<span class="deckgo">Open the deck &rarr;</span>' +
+    '</div>' +
+  '</a>';
 }
 
 function renderHome(){
@@ -1083,8 +1173,11 @@ function renderHome(){
       '<div class="actions">' +
         '<a class="btn primary" href="#/' + START_ID + '">Start here</a>' +
         '<a class="btn" href="#/' + EXAMPLE_ID + '">The eight examples</a>' +
+        '<a class="btn repo" href="' + REPO + '" target="_blank" rel="noopener">' +
+          GIT_MARK + 'The repository</a>' +
       '</div>' +
       '<div class="srows">' + rows + '</div>' +
+      deckCard() +
       '<div class="homefoot">Built from the repository &middot; ' + BUILT.pages +
         ' pages &middot; ' + BUILT.examples + ' examples &middot; tested on ' + esc(BUILT.version) + '</div>' +
       (p.html ? '<div class="srcnote" style="margin-top:56px"></div>' + p.html : '') +
@@ -1148,7 +1241,11 @@ function renderDoc(p){
       '<h1 class="title">' + num + esc(shortTitle(p)) + '</h1>' +
       (p.summary ? '<p class="lead">' + md(p.summary) + '</p>' : '') +
       chips + strip + more + bodyHtml +
-      '<div class="srcnote">' + esc(p.source) +
+      '<div class="srcnote">' +
+        (p.repo
+          ? '<a class="srclink" href="' + repoHref(p.repo) + '" target="_blank" rel="noopener">' +
+            GIT_MARK + esc(p.repo) + '</a>'
+          : esc(p.source)) +
         (p.generated ? ' &middot; generated by npm run build' : ' &middot; edit and rebuild') + '</div>' +
     '</article></div>';
 
@@ -1286,6 +1383,10 @@ function main() {
   fs.mkdirSync(DIST_DIR, { recursive: true });
   fs.writeFileSync(OUT_PAGE, page, 'utf8');
   fs.writeFileSync(OUT_BODY, body, 'utf8');
+
+  // The deck rides along beside the page, so the link on the home page
+  // resolves both in dist/ and on the published site.
+  if (fs.existsSync(DECK_SRC)) fs.copyFileSync(DECK_SRC, path.join(DIST_DIR, DECK_FILE));
 
   console.log(
     c.green(c.bold('site built')) +

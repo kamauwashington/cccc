@@ -1,7 +1,12 @@
 # Claude Code Crash Course
 
 Eight small projects. Each one teaches a single Claude Code feature. Each one
-starts broken, has one prompt, and ends somewhere a test can check.
+has one prompt, and ends somewhere a test can check. Four start red and get
+fixed. The other four start green and show you a difference instead.
+
+The slides live at `site/claude-code-crash-course.pdf` and ship with the site,
+linked from the home page. `site/deck-cover.jpg` is a still of slide one, kept
+next to it so the build does not need a PDF renderer.
 
 The session is 60 minutes. Four examples get demoed live. Four are take home.
 This repository is the take home part, so every example has a README and a
@@ -27,6 +32,12 @@ claude
 `.claude/settings.json` is read from the directory you launch in. It is never
 inherited from a parent. Launching from the repository root gives you none of
 the example's configuration and all of the wrong context.
+
+Type that `cd` by hand the first couple of times, because it teaches the rule.
+After that, `./go 01` does the same thing and sends `/start` with it. Each
+workspace holds its own `launch.json` with the flags and the opening prompt that
+its demo needs. 04-progressive ships without a prompt on purpose, since its demo
+starts with `/mode-fat` or `/mode-lean`.
 
 **2. Reset between runs.**
 
@@ -79,7 +90,8 @@ Tested on Claude Code 2.1.263. The pinned floor is 2.1.0. Node 20.11 or newer.
 | `npm run verify` | Checks the root `.claude/` is bare and every workspace has the skeleton |
 | `npm run preflight` | Pre talk checks. Run this before you go on stage. |
 | `npm run lint:prose` | Fails on em dashes and banned phrases |
-| `npm run go 02` | Optional. Changes into a workspace and launches Claude Code. |
+| `./go 02` | Changes into a workspace, launches Claude Code, and sends `/start`. |
+| `npm run go 02` | The same thing through npm. |
 | `npm run solution -- 06` | Copies in the reference solution if a live run stalls |
 | `npm run solution` | Applies every solution, so the whole repository goes green |
 | `npm run check:solutions` | Applies each solution, verifies it, then resets |

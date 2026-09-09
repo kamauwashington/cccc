@@ -23,6 +23,11 @@ import { REPO_ROOT, c } from './lib.mjs';
 const DIST = path.join(REPO_ROOT, 'dist');
 const SOURCE = path.join(DIST, 'index.html');
 
+// Anything else in dist/ that the page links to and the publish repository
+// therefore has to serve. The page itself stays one self contained file; the
+// deck is a download beside it.
+const EXTRAS = ['claude-code-crash-course.pdf'];
+
 function resolveTarget() {
   const arg = process.argv[2];
   if (arg) return path.resolve(arg);
@@ -52,6 +57,12 @@ function main() {
   fs.mkdirSync(outDir, { recursive: true });
   fs.copyFileSync(SOURCE, path.join(outDir, 'index.html'));
 
+  for (const name of EXTRAS) {
+    const from = path.join(DIST, name);
+    if (fs.existsSync(from)) fs.copyFileSync(from, path.join(outDir, name));
+    else console.warn(c.dim('publish:web') + ': ' + name + ' is not in dist/, skipping.');
+  }
+
   const status = git(target, ['status', '--porcelain']);
   if (!status) {
     console.log(c.dim('publish:web') + ': ' + target + ' is already up to date. Nothing to commit.');
@@ -71,7 +82,9 @@ function main() {
       ' KB, one self contained page.',
   ]);
 
+  const copied = EXTRAS.filter((n) => fs.existsSync(path.join(outDir, n)));
   console.log(c.green(c.bold('published')) + ': ' + path.join(outDir, 'index.html'));
+  for (const name of copied) console.log(c.dim('          plus: ') + path.join(outDir, name));
   console.log(c.dim('Now push it:'));
   console.log(c.dim('  cd ' + target + ' && git push'));
 }

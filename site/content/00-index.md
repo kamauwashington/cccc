@@ -2,7 +2,7 @@
 title: The field manual
 section: Start here
 order: 1
-summary: Eight small projects. Each one teaches a single Claude Code feature, starts broken, has one prompt, and ends somewhere a test can check. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
+summary: Eight small projects. Each one teaches a single Claude Code feature, has one prompt, and ends somewhere a test can check. Four start red and get fixed. The other four start green and show you a difference instead. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
 ---
 
 ## How this site is built
