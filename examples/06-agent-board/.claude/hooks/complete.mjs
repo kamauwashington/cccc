@@ -25,6 +25,7 @@ const STATE = path.join(WS, '.claude', '.complete-state.json');
 const PRISTINE = path.join(WS, '.pristine');
 const VERIFY_TIMEOUT_MS = Number(process.env.CCC_VERIFY_TIMEOUT_MS || 180000);
 const BELL = '\u0007'; // terminal bell
+const MAX_LISTED = 12; // cap the printed file list so a big change cannot flood
 
 const name = path.basename(WS);
 const started = Date.now();
@@ -64,36 +65,65 @@ function fingerprint(targets) {
   return out.join('|');
 }
 
-// Count files that differ from the snapshot. `git diff --no-index` works with
-// no repository at all, so this keeps working inside a copied out folder.
-function changedFiles(targets) {
-  let count = 0;
-  for (const t of targets) {
-    const a = path.join(PRISTINE, t);
-    const b = path.join(WS, t);
-    if (!fs.existsSync(a) || !fs.existsSync(b)) continue;
-    try {
-      execSync(
-        'git diff --no-index --name-only -- ' + JSON.stringify(a) + ' ' + JSON.stringify(b),
-        { stdio: ['ignore', 'pipe', 'ignore'], timeout: 10000 }
-      );
-    } catch (err) {
-      const text = err.stdout ? String(err.stdout) : '';
-      count += text.split('\n').filter(Boolean).length;
-    }
+// Collect every file under a restore target, as a workspace relative path.
+function listFiles(target, out) {
+  const abs = path.join(WS, target);
+  let st;
+  try {
+    st = fs.statSync(abs);
+  } catch {
+    return;
   }
-  return count;
+  if (st.isDirectory()) {
+    for (const entry of fs.readdirSync(abs)) {
+      if (entry === 'node_modules' || entry === '.git') continue;
+      listFiles(path.join(target, entry), out);
+    }
+    return;
+  }
+  out.push(target);
+}
+
+// Which files differ from the snapshot, and how long each one is now.
+// Byte compare rather than git, so this works with no repository at all.
+function changedFiles(targets) {
+  const live = [];
+  for (const t of targets) listFiles(t, live);
+
+  const changed = [];
+  for (const rel of live) {
+    const b = path.join(WS, rel);
+    let now;
+    try {
+      now = fs.readFileSync(b);
+    } catch {
+      continue;
+    }
+    let before = null;
+    try {
+      before = fs.readFileSync(path.join(PRISTINE, rel));
+    } catch {
+      // A file the snapshot does not have counts as changed.
+    }
+    if (before && before.equals(now)) continue;
+    const lines = now.toString('utf8').replace(/\n$/, '').split('\n').length;
+    changed.push({ rel, lines });
+  }
+  changed.sort((a, b) => a.rel.localeCompare(b.rel));
+  return changed;
 }
 
 function run(cmd) {
   try {
-    execSync(cmd, {
+    // Keep stdout on the pass path too. The test score lives in it, and
+    // "tests 24/24" is the number the room wants to see.
+    const out = execSync(cmd, {
       cwd: WS,
       stdio: ['ignore', 'pipe', 'pipe'],
       timeout: VERIFY_TIMEOUT_MS,
       env: { ...process.env, CI: '1', FORCE_COLOR: '0' },
     });
-    return { ok: true, output: '' };
+    return { ok: true, output: String(out || '') };
   } catch (err) {
     // Keep the whole thing. The score lives in the vitest summary, which sits
     // at the end of stdout and therefore in the middle once stderr is appended.
@@ -127,6 +157,7 @@ function main() {
   }
 
   const changed = changedFiles(targets);
+  const changedCount = changed.length;
   let status = 'ok';
   let detail = 'no verify command in reset.json';
   let body = '';
@@ -144,7 +175,7 @@ function main() {
   }
 
   const secs = Math.round((Date.now() - started) / 1000);
-  const line = '[' + status + '] ' + name + '  ' + secs + 's  ' + changed + ' files  ' + detail;
+  const line = '[' + status + '] ' + name + '  ' + secs + 's  ' + changedCount + ' files  ' + detail;
 
   fs.writeFileSync(
     path.join(WS, 'RESULT.md'),
@@ -153,11 +184,16 @@ function main() {
       '',
       '- status: ' + status,
       '- elapsed: ' + secs + 's',
-      '- files changed vs .pristine: ' + changed,
+      '- files changed vs .pristine: ' + changedCount,
       '- verify: `' + (verifyCmd || '(none)') + '`',
       '- detail: ' + detail,
       '- checked: ' + new Date().toISOString(),
       '',
+      '## Files written',
+      '',
+      changed.length
+        ? changed.map((f) => '- `' + f.rel + '` ' + f.lines + ' lines').join('\n') + '\n'
+        : 'None.\n',
       body ? '## Output tail\n\n```\n' + body.slice(-4000) + '\n```\n' : '',
     ].join('\n'),
     'utf8'
@@ -165,7 +201,16 @@ function main() {
 
   fs.writeFileSync(STATE, JSON.stringify({ fingerprint: fp, at: Date.now() }), 'utf8');
 
+  // Print the summary here so nobody has to type `cat RESULT.md` on stage.
+  // A Stop hook runs after the turn ends, so the model cannot read RESULT.md
+  // in the same turn. The hook is the only thing that can show it.
   process.stdout.write(line + '\n');
+  for (const f of changed.slice(0, MAX_LISTED)) {
+    process.stdout.write('  ' + f.rel.padEnd(34) + String(f.lines).padStart(5) + ' lines\n');
+  }
+  if (changed.length > MAX_LISTED) {
+    process.stdout.write('  and ' + (changed.length - MAX_LISTED) + ' more\n');
+  }
   process.stdout.write(BELL);
 }
 

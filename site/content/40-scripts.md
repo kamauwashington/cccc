@@ -28,7 +28,8 @@ tabs:
 | `npm run verify` | Checks the root `.claude/` is bare and every workspace has the skeleton |
 | `npm run preflight` | Pre talk checks. Run this before you go on stage. |
 | `npm run lint:prose` | Fails on em dashes and banned phrases |
-| `npm run go 02` | Optional. Changes into a workspace and launches Claude Code. |
+| `./go 02` | Optional. Changes into a workspace and launches Claude Code. |
+| `npm run go 02` | The same thing through npm. |
 | `npm run solution -- 06` | Copies in the reference solution if a live run stalls |
 | `npm run solution` | Applies every solution, so the whole repository goes green |
 | `npm run check:solutions` | Applies each solution, verifies it, then resets |

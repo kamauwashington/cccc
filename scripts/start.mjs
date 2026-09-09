@@ -7,11 +7,17 @@
 // errors. A workspace that typechecks clean goes on to the tests. A workspace
 // that passes both is green on purpose, and the script says so.
 //
+// A workspace can also have nothing to run. 03 is one, since its lesson is the
+// conversation and it writes no code. Those declare no `typecheck` and no
+// `test` script, and this script skips both steps rather than failing on a
+// missing config.
+//
 // It always exits 0. A non zero exit would make npm print seven lines of its
 // own error block on top of the output, which is noise on a projector.
 
 import { spawnSync } from 'node:child_process';
-import { resolveWorkspace, listWorkspaces, c } from './lib.mjs';
+import path from 'node:path';
+import { resolveWorkspace, listWorkspaces, readJson, c } from './lib.mjs';
 
 const MAX_LINES = 12;
 
@@ -40,14 +46,25 @@ const reset = run('node', [new URL('reset.mjs', import.meta.url).pathname, ws.na
 process.stdout.write(reset.out);
 if (reset.code !== 0) process.exit(0);
 
-const tc = run('npx', ['tsc', '--noEmit'], ws.dir);
-if (tc.code !== 0) {
-  const count = (tc.out.match(/error TS/g) || []).length;
-  console.log(c.red(c.bold('typecheck')) + ': ' + count + ' errors');
-  printCapped(tc.out);
+const scripts = (readJson(path.join(ws.dir, 'package.json')) || {}).scripts || {};
+
+if (!scripts.typecheck && !scripts.test) {
+  console.log(c.dim('Nothing to run here. This workspace ships no code to check.'));
   process.exit(0);
 }
-console.log(c.green(c.bold('typecheck')) + ': clean');
+
+if (scripts.typecheck) {
+  const tc = run('npx', ['tsc', '--noEmit'], ws.dir);
+  if (tc.code !== 0) {
+    const count = (tc.out.match(/error TS/g) || []).length;
+    console.log(c.red(c.bold('typecheck')) + ': ' + count + ' errors');
+    printCapped(tc.out);
+    process.exit(0);
+  }
+  console.log(c.green(c.bold('typecheck')) + ': clean');
+}
+
+if (!scripts.test) process.exit(0);
 
 const tt = run('npx', ['vitest', 'run', '--reporter=dot'], ws.dir);
 const summary = (tt.out.match(/^\s*Tests\s+\d+.*\(\d+\)\s*$/gm) || []).pop();

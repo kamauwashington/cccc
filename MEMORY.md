@@ -106,9 +106,10 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   `/mode-lean` and `/mode-fat` reset the workspace and swap the root
   `CLAUDE.md`. A reset inside `/start` would swap it back and lose the mode
   under test.
-- 2026-09-08 The eight examples do not start red the same way. 01, 04, and 06
-  are red on typecheck. 03, 05, 07, and 08 are red on tests only. 02 starts
-  fully green, since its demo is about hooks firing and not about fixing code.
+- 2026-09-09 Three examples start red and four start green. 01, 04, and 06 are
+  red on both `typecheck` and `test`. 02, 05, 07, and 08 are green on both, since
+  their demos are about a feature firing and not about fixing code. 03 runs
+  neither, since it writes no code.
 - 2026-09-08 `package.json` is in every `reset.json` restore list, so a new
   script has to be snapshotted before it is tested. Running the script first
   lets its own reset strip it out of the live file, and the next snapshot then
@@ -170,10 +171,8 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
 - 2026-09-08 03 opens with a one line `You asked:` receipt quoting the request
   word for word. It is the one restatement the `concise` skill allows, and it
   puts the vague request and the questions in one frame.
-- 2026-09-08 `tests/orders.test.ts` in 03 is a CI backstop and stays off screen.
-  It pins the three answers (25, cursor, rows plus a next cursor), so answering
-  the picker differently leaves it red. That is fine, the conversation is the
-  lesson.
+- 2026-09-08 `tests/orders.test.ts` in 03 was a CI backstop that stayed off
+  screen. Removed on 2026-09-09 with the rest of the build step.
 - 2026-09-08 A reusable asset must never contain the solution verbatim. 01's
   `postgres-enum` and `zod-schema` skills held the exact lines from
   `.solution/src/domain/order-status.ts` and `.solution/src/api/validation.ts`,
@@ -253,3 +252,64 @@ One line per durable fact. Add the date. Delete anything that goes wrong.
   would drift from `.pristine/` and be silently reverted by the next reset.
   `.claude/commands/` and `README.md` are not in the restore list, which is why
   those edits survive.
+- 2026-09-09 06 is one command on stage. `npm run go 06` reads
+  `examples/06-agent-board/launch.json` (`args` plus `prompt`) and launches
+  `claude --model opus --effort low /start`. `go.mjs` reads that file for any
+  workspace, appends anything typed after `--`, and takes `--no-prompt` to skip
+  the opening prompt. `launch.json` is not in `reset.json`, so a reset leaves it
+  alone. Whether a slash command passed as the initial prompt expands is not
+  confirmed on 2.1.263. Check it on the demo machine, and fall back to typing
+  `/start` if it does not.
+- 2026-09-09 06's `SubagentStart` used to print nothing, so the screen sat blank
+  until the first agent finished. `subagent-line.mjs` now prints an in character
+  opener per agent from an `OPENERS` table on start. The hook says it, so it
+  costs zero output tokens and lands at dispatch time. The gap between the four
+  openers and the four closing lines is the fan out made visible.
+- 2026-09-09 06's Stop hook now prints the summary and the changed file list
+  with line counts, which replaces `cat RESULT.md` and `git diff --stat` after
+  the run. A Stop hook runs after the turn ends, so the model cannot read
+  `RESULT.md` in the same turn. The hook is the only thing that can show it.
+- 2026-09-09 `complete.mjs` threw away stdout on the pass path, so `testScore`
+  never matched and a green run read `verify ok` instead of `typecheck ok tests
+  36/36`. It keeps stdout on both paths now. `changedFiles` also byte compares
+  against `.pristine/` instead of shelling out to `git diff --no-index`, so it
+  returns paths and line counts and needs no repository.
+- 2026-09-09 The warm up advice for 06 was wrong and is gone from the README,
+  `docs/before-the-talk.md`, and `site/content/24-subagents.md`. Two green runs
+  of `npm test` in 06 came back at 4.6s and 5.1s, slowest last, so a throwaway
+  run buys nothing. `npm install` at the root is the only bootstrap, once per
+  clone. Demos have to be runnable immediately with no setup step.
+- 2026-09-09 Confirmed on 2.1.263: a slash command passed as the initial prompt
+  expands. A scratch workspace with `.claude/commands/ping.md` returned `PONG`
+  from `claude -p "/ping"`. That is what makes `npm run go NN` a one command
+  demo.
+- 2026-09-09 Seven of the eight workspaces now ship a `launch.json`. Six hold
+  `{ "prompt": "/start" }`, 06 also holds its model and effort flags, and
+  04-progressive holds a note and no prompt, because its demo starts with
+  `/mode-fat` or `/mode-lean` and firing one would pick the comparison.
+- 2026-09-09 07 does have `.claude/commands/start.md`. The earlier bullet saying
+  07 dropped `/start` is wrong about the file. What 07 dropped is `/reset` and
+  `/teardown`, and `start.md` is out of `SKELETON_FILES` in `verify.mjs`.
+- 2026-09-09 A nested headless `claude -p` run inside a workspace can reach the
+  whole repository. One launched in 07 appears to have run an unscoped
+  `npm run reset`, which reset all eight workspaces and deleted four tracked
+  files. Run throwaway sessions in a scratch directory outside the repository.
+- 2026-09-09 Three `.claude/.complete-state.json` files are committed (05, 07,
+  08) even though every reset deletes them, so `git status` goes dirty after a
+  demo. A `.gitignore` entry would fix it. Not done yet.
+- 2026-09-09 03 builds nothing. It used to end by writing cursor pagination
+  into `src/orders.ts` and had a test suite pinning the three answers. Both
+  are gone. The run now ends at the sharpened request, two sentences naming the
+  change, and `src/orders.ts` is read only by a deny rule. A workspace opts out
+  of code checks by leaving `verify` out of `reset.json`. `start.mjs`,
+  `verify.mjs`, and `check-solutions.mjs` all read that signal.
+- 2026-09-09 A command file in the root `.claude/commands/` loads into the
+  example sessions. Confirmed on 2.1.266: a scratch `ping.md` at the root
+  answered `PONG` from `claude -p "/ping"` run inside `examples/01-ts-conventions`.
+  Commands behave like skills and `CLAUDE.md`, not like `settings.json`. That is
+  why the stage launcher is a shell script and not a slash command, and why
+  `verify.mjs` keeps the root `.claude/` bare.
+- 2026-09-09 `./go NN` at the repository root is the launcher. It is a three
+  line `sh` wrapper around `scripts/go.mjs`, so `npm run go NN` still works and
+  the logic lives in one place. A slash command could not do this job anyway,
+  since it runs inside a session that has already picked its launch directory.

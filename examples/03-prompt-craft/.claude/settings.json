@@ -6,18 +6,15 @@
       "Read(./.pristine/**)",
       "Edit(./.pristine/**)",
       "Read(./.solution/**)",
-      "Edit(./.solution/**)"
+      "Edit(./.solution/**)",
+      "Edit(./src/**)",
+      "Write(./src/**)"
     ],
     "allow": [
-      "Bash(npm test)",
-      "Bash(npm test:*)",
-      "Bash(npm run typecheck)",
       "Bash(npm start)",
       "Bash(npm start:*)",
       "Bash(npm run reset:*)",
-      "Bash(node ../../scripts/reset.mjs:*)",
-      "Bash(npx vitest run:*)",
-      "Edit(./src/**)"
+      "Bash(node ../../scripts/reset.mjs:*)"
     ]
   },
   "hooks": {

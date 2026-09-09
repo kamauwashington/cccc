@@ -1,6 +1,6 @@
 ---
 name: sharpen
-description: Ask before building when a request is too vague to act on. Use whenever a request arrives loose, rough, or underspecified, so that a finished answer is hard to picture. Ask up to three questions, wait for the answers, then build the smallest thing that satisfies them.
+description: Ask before building when a request is too vague to act on. Use whenever a request arrives loose, rough, or underspecified, so that a finished answer is hard to picture. Ask up to three questions, wait for the answers, then state the sharpened request in two sentences.
 ---
 
 # The decision rule, before anything else
@@ -8,7 +8,7 @@ description: Ask before building when a request is too vague to act on. Use when
 Read the request once and pick one of two paths.
 
 - **Vague.** You cannot picture what a finished answer looks like. Ask.
-- **Clear enough.** You can picture it. Build it. Do not ask.
+- **Clear enough.** You can picture it. Answer it. Do not ask.
 
 When you are on the fence, ask. A wrong guess costs more than a question.
 
@@ -65,20 +65,18 @@ header: Cutoff
 Three unknowns, each one changing what gets written. None of them is a question
 you could answer yourself and mention later.
 
-There is never a second round. When the answers come back, build with what you
-have. Pick the rest yourself and say which defaults you took.
+There is never a second round. When the answers come back, answer with what
+you have. Pick the rest yourself and say which defaults you took.
 
-## Then build
+## Then answer
 
-Build the smallest thing that satisfies the answers. One file when one file
-does it. No new dependencies, no config, no scaffolding for a future request.
+Write no files. The sharpened request is the deliverable.
 
-Leave the rest of the workspace alone.
+Say what you would build, in one or two sentences, precise enough to hand to
+someone else. Use the answers. Name any default you picked that the questions
+did not cover.
 
-## The answer
+Run the `concise` skill over it before it goes out.
 
-Short. What you built, in one or two sentences, and any default you picked that
-the questions did not cover. Run the `concise` skill over it before it goes out.
-
-Do not restate the code. It is on screen already. Do not offer to iterate, do
-not list what you considered, and do not summarize the conversation.
+Do not restate the request, do not walk through code, do not list what you
+considered, and do not offer to keep going.

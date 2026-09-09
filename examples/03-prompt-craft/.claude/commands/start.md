@@ -1,6 +1,6 @@
 ---
 description: Reset this workspace, then run its prompt from PROMPT.md
-allowed-tools: Skill, AskUserQuestion, Read, Edit, Write, Bash, Glob, Grep
+allowed-tools: Skill, AskUserQuestion, Read, Bash, Glob, Grep
 ---
 
 !`npm start`

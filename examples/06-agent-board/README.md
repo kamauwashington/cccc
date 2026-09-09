@@ -21,10 +21,13 @@ The `ts-conventions` skill bans the TypeScript `enum` keyword and asks for a
 teaches. `erasableSyntaxOnly` in `tsconfig.json` enforces it mechanically, so
 an agent that reaches for `enum` fails the typecheck.
 
-The coloured line is not the model talking. `.claude/hooks/subagent-line.mjs`
-runs on `SubagentStart` and `SubagentStop`, reads the numbers out of the session
-transcript, prints the line, and appends a row to `TRANSCRIPT.md`. It costs zero
-model tokens.
+Neither the opener nor the coloured line is the model talking.
+`.claude/hooks/subagent-line.mjs` runs on `SubagentStart` and `SubagentStop`. On
+start it prints that agent's opener in character, so the room sees four agents
+pick up work the moment they are dispatched. On stop it reads the model, the
+elapsed time, and the token count out of the session transcript, prints the
+line, and appends a row to `TRANSCRIPT.md`. All of it costs zero model tokens.
+The openers live in the `OPENERS` table in that file. Edit them there.
 
 The database is PGlite, real Postgres compiled to WebAssembly, running inside
 the Node process. `CREATE TYPE ... AS ENUM` works and `pg_enum` is there to read
@@ -35,12 +38,15 @@ Tests use an in memory database and throw it away. To keep one between runs and
 poke at it, point `BOARD_DATA_DIR` at a folder. `npm run dev` defaults to
 `.tmp/board`, which is gitignored.
 
-Launch the session as Bill:
+Launch the session as Bill. One command from the repository root:
 
 ```bash
-cd examples/06-agent-board
-claude --model opus --effort low
+./go 06
 ```
+
+`launch.json` in this folder holds the flags and the opening prompt, so that is
+the same as typing `cd examples/06-agent-board && claude --model opus --effort
+low /start`. Nothing else gets typed during the demo.
 
 ## The prompt
 
@@ -76,16 +82,26 @@ is the trigger.
 
 ## Running it
 
-1. Warm the machine first. Run `npm ci` and one throwaway run. A cold start
-   distorts every measurement here.
-2. Launch from inside this folder with `claude --model opus --effort low`.
-3. Run `/start`. It resets the workspace first. Four coloured lines come back
-   as the agents finish, one per agent, with the model and the token count.
-4. When the run ends, read `RESULT.md`, then `git diff --stat`, then open
-   `openapi/messages.openapi.json`.
+One command from the repository root, and then nothing:
 
-`git diff --stat` needs the repository initialised. If it is not, skip it.
-`RESULT.md` already carries the changed file count.
+```bash
+./go 06
+```
+
+There is no warm up step and no setup step. Dependencies are installed once when
+the repository is cloned, with `npm install` at the root. After that this example
+is runnable from a cold machine at any time.
+
+That launches Claude Code in this folder and sends `/start`, which resets the
+workspace and runs `PROMPT.md`. Then watch. Four agents announce themselves in
+character as they pick up their files. Four coloured lines come back as they
+finish, one per agent, with the model, the elapsed time, and the token count.
+When the turn ends the Stop hook prints the verdict and the file list.
+
+Two beats worth knowing. The openers come from `SubagentStart` and the closing
+lines come from `SubagentStop`, so the gap between them is the fan out you can
+point at. The summary is printed by the Stop hook because a Stop hook runs after
+the turn ends, which means the model cannot read `RESULT.md` in the same turn.
 
 The final wording of the joke in the header is still open. See
 `docs/decisions.md`.
@@ -158,7 +174,9 @@ into the subagent. It is not.
    edit and never a search followed by a write.
 5. **Push work down a tier.** Anything Haiku can do, Haiku does.
 6. **No tests inside the agents.** The Stop hook runs the suite once at the end.
-7. **Warm start.** Run `npm ci` and one throwaway run before a timed run.
+7. **Ignore warm up.** Measured on this workspace, a second test run is no
+   faster than the first. Two green runs came back at 4.6s and 5.1s, slowest
+   last. Do not spend stage time on a throwaway run.
 
 ## Unattended safety
 
@@ -167,17 +185,14 @@ into the subagent. It is not.
 - `permissionMode: acceptEdits` in each agent's frontmatter.
 - Start the segment on a fresh session, so an auto compact does not fire in the
   middle of the run.
-- The Stop hook writes `RESULT.md` and rings the terminal bell.
-- When the run ends, three commands, in this order:
+- The Stop hook writes `RESULT.md`, prints the summary, and rings the terminal
+  bell. Nothing has to be typed after the run.
+- One command is worth opening by hand at the end, since the file is the point:
 
 ```bash
-cat RESULT.md
-git diff --stat
 $EDITOR openapi/messages.openapi.json
 ```
 
-- `git diff --stat` needs the repository initialised. If it is not, skip that
-  beat. `RESULT.md` already carries the changed file count.
 - If the run stalls: `npm run solution -- 06`.
 
 ## Verify before the talk
@@ -220,7 +235,9 @@ Sidewinder first, then drop the `limit` parameter from the spec.
 | `REVIEW.md` | Sidewinder writes this. |
 | `.claude/agents/*.md` | One file per agent. |
 | `.claude/skills/*/SKILL.md` | Preloaded by the `skills:` frontmatter. |
-| `.claude/hooks/subagent-line.mjs` | The coloured line and `TRANSCRIPT.md`. |
+| `launch.json` | The flags and the opening prompt for `./go 06`. |
+| `.claude/hooks/subagent-line.mjs` | The openers, the coloured lines, and `TRANSCRIPT.md`. |
+| `.claude/hooks/complete.mjs` | Runs verify, writes `RESULT.md`, prints the summary. |
 | `.claude/hooks/review-only.mjs` | Wired from Sidewinder's own frontmatter. |
 | `tools/sharpen.mjs` | Swaps Cottonmouth's description. `npm run sharpen`. |
 | `.solution/` | The fallback copy. `npm run solution -- 06`. |

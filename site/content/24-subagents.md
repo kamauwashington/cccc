@@ -59,7 +59,8 @@ The rest of that example's speed list, in order of payoff:
    search followed by a write.
 5. Push work down a tier. Anything Haiku can do, Haiku does.
 6. No tests inside the agents. The Stop hook runs the suite once at the end.
-7. Warm start. One throwaway run before you go on stage.
+7. Ignore warm up. A second run is no faster than the first. Measured at 4.6s
+   then 5.1s in example 06, slowest last.
 
 Personality is output tokens, and output tokens are wall clock time. Each agent
 in example 06 prints one line in character, under ten words, then emits its

@@ -1,0 +1,4 @@
+{
+  "args": ["--model", "opus", "--effort", "low"],
+  "prompt": "/start"
+}

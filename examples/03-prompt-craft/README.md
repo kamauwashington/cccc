@@ -6,12 +6,12 @@ README is the whole lesson, no walkthrough needed.
 ## What you will see
 
 Every other example in this repository ships a skill that edits code. These two
-change no source file on their own. They change how the work starts and how the
+change no source file at all. They change how the work starts and how the
 answer comes back.
 
 You type something vague. Instead of guessing and writing 200 lines, Claude
-stops and asks three questions. You answer in one line. It builds the small
-thing. The write up is two sentences.
+stops and asks three questions. You answer in one line. Back comes the request
+you meant, in two sentences.
 
 You already know what the other version looks like.
 
@@ -23,8 +23,8 @@ Launch Claude Code here and run one command.
 /start
 ```
 
-That resets the workspace, shows the starting state, then sends the request in
-`PROMPT.md`, exactly as written:
+That resets the workspace, then sends the request in `PROMPT.md`, exactly as
+written:
 
 ```
 make the orders list paginated somehow, it is slow right now and the frontend
@@ -55,8 +55,10 @@ question carries that escape hatch and the tool adds it on its own.
 The receipt line puts the vague request and the questions in one frame, which is
 the whole comparison. It is the one restatement `concise` allows.
 
-Pick the first option in each. Then `listOrders` in `src/orders.ts` grows a
-cursor and a page size, and the answer that comes back is two sentences.
+Pick an option in each. What comes back is two sentences naming the exact
+change to `listOrders` in `src/orders.ts`. No file is written. The vague
+request went in and a precise one came out, which is the only thing this
+example makes.
 
 ## How it works
 
@@ -64,10 +66,10 @@ Four files carry the example.
 
 | File | Job |
 | --- | --- |
-| `.claude/skills/sharpen/SKILL.md` | The decision rule. Vague means ask, clear means build. Three questions, one turn, no second round. |
+| `.claude/skills/sharpen/SKILL.md` | The decision rule. Vague means ask, clear means answer. Three questions, one turn, no second round. |
 | `.claude/skills/concise/SKILL.md` | The writing rules, and the four things to cut from an answer. |
 | `CLAUDE.md` | Says a vague request goes through `sharpen` first. Backs up the skill description. |
-| `src/orders.ts` | 137 orders and a `listOrders()` that hands back all of them. |
+| `src/orders.ts` | 137 orders and a `listOrders()` that hands back all of them. Read only. It is what the questions point at. |
 
 Claude Code lists every `SKILL.md` name and `description` at launch and loads
 the body only when one looks relevant. The `description` is the trigger, which
@@ -84,22 +86,18 @@ Three questions cost ten seconds and remove the rewrite. The cap matters as
 much as the questions. Three, in one turn, then it commits. A skill that asks
 five questions across three turns is worse than one that guesses.
 
+**Nothing gets built.** There is no code to review here and no suite to run.
+Strip the writing out and what is left is the part that decides whether the
+code would have been right. That part fits in two sentences.
+
 **The skill picks a path, and it can pick the other one.** Paste something
 clear, such as `add a limit argument to listOrders that defaults to 25`, and it
-skips the questions and builds. Vague is the trigger, questions are the
+skips the questions and answers. Vague is the trigger, questions are the
 response.
 
 **The answer is short because a rule says so.** No summary of the conversation,
-no walk through the code you just watched get written, no offer to iterate.
-`concise` names those four things and cuts them.
-
-## About the tests
-
-`tests/orders.test.ts` is a backstop for CI. It is not part of the demo and it
-does not belong on screen. It pins the same three answers (25, cursor, rows
-plus a next cursor), so the suite goes green when the built code matches. Answer
-the questions differently and the suite stays red. That is fine. The
-conversation is the lesson.
+no walk through code, no offer to iterate. `concise` names those four things
+and cuts them.
 
 ## Try next
 
@@ -112,3 +110,5 @@ conversation is the lesson.
   that invites it.
 - Send a request that is vague in a way the questions cannot fix, such as
   `make it better`. Watch what it asks.
+- Answer the three questions a different way and read the two sentences again.
+  That is the diff this example has instead of a diff.

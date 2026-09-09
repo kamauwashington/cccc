@@ -110,8 +110,8 @@ the ones only a human can confirm.
 - [ ] Check that nothing else in `~/.claude/skills/` changes the demos.
       `npm run preflight` warns when that folder is not empty.
 - [ ] Check that `~/.claude/CLAUDE.md` does not change the demos.
-- [ ] Warm start: run `npm ci` and one throwaway run of example 06 before going
-      on stage.
+- [ ] Install once per machine with `npm install` at the root. No warm up run.
+      A second test run in example 06 is no faster than the first.
 
 ## Timing
 

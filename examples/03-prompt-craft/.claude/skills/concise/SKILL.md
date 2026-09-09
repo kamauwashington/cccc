@@ -1,6 +1,6 @@
 ---
 name: concise
-description: Enforce the repository writing rules on any text before it is shown. No em dashes, no "not X, but Y", plain words, short sentences, no filler openers. Use when writing or editing a README, a comment, a commit message, a summary, or any answer that ships.
+description: Enforce the repository writing rules on any text before it is shown. No em dashes, no "not X, but Y", plain words, short sentences, no filler openers. Work to be done ships under a "The Plan" heading with an estimate per bullet. Use when writing or editing a README, a comment, a commit message, a summary, or any answer that ships.
 ---
 
 # concise
@@ -46,6 +46,27 @@ Two more limits, so an answer stays an answer.
   are sentences.
 
 Fenced code blocks do not count. Sample text can hold anything.
+
+## The Plan block
+
+An answer that says what will be built ships under one heading, so it reads as
+a deliverable instead of more chat.
+
+```
+## The Plan 🚀
+```
+
+The heading and the rocket stay the same every time. That is what makes the
+answer findable in a scrollback.
+
+Under it, one bullet per piece of work.
+
+- Say what changes. Name the file, the type, or the function it touches.
+- End with a rough estimate. `~15 min` is enough. Round to five minutes.
+- Three to seven bullets. Merge the small ones.
+
+Then one line for the defaults you picked. Then one line for anything you did
+not do, and why.
 
 ## What to cut first
 

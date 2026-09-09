@@ -32,7 +32,15 @@ const SKELETON_FILES = [
 // warning, never a failure.
 const OPENER = '.claude/commands/start.md';
 
-const SKELETON_DIRS = ['src', 'tests', '.claude', '.pristine'];
+const SKELETON_DIRS = ['src', '.claude', '.pristine'];
+
+// Most workspaces ship code and a test suite that proves it. 03 does not. Its
+// lesson is the conversation, it writes no files, and a tests/ directory there
+// would be a suite with nothing to test. A workspace opts out by leaving
+// `verify` out of reset.json, and then these checks do not apply to it.
+const CODE_FILES = ['vitest.config.ts'];
+const CODE_DIRS = ['tests'];
+const CODE_SCRIPTS = ['test', 'typecheck'];
 
 const problems = [];
 const warnings = [];
@@ -78,12 +86,30 @@ function checkWorkspaceSkeleton(ws) {
   }
 
   const manifest = readJson(path.join(ws.dir, 'reset.json'));
+  const runsCode = Boolean(manifest && manifest.verify);
+
+  if (runsCode) {
+    for (const rel of CODE_FILES) {
+      if (!fs.existsSync(path.join(ws.dir, rel))) {
+        problems.push(ws.name + ': missing ' + rel);
+      }
+    }
+    for (const rel of CODE_DIRS) {
+      const abs = path.join(ws.dir, rel);
+      if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
+        problems.push(ws.name + ': missing directory ' + rel + '/');
+      }
+    }
+  }
+
   if (manifest) {
     if (!Array.isArray(manifest.restore) || manifest.restore.length === 0) {
       problems.push(ws.name + ': reset.json has no restore list');
     }
     if (!manifest.verify) {
-      warnings.push(ws.name + ': reset.json has no verify command, so the Stop hook stays quiet');
+      warnings.push(
+        ws.name + ': reset.json has no verify command, so this workspace runs nothing'
+      );
     }
     for (const target of manifest.restore || []) {
       const snap = path.join(ws.dir, '.pristine', target);
@@ -105,7 +131,8 @@ function checkWorkspaceSkeleton(ws) {
         ws.name + ': package.json name is "' + pkg.name + '", expected "' + expected + '"'
       );
     }
-    for (const script of ['reset', 'test', 'typecheck']) {
+    const required = runsCode ? ['reset', ...CODE_SCRIPTS] : ['reset'];
+    for (const script of required) {
       if (!pkg.scripts || !pkg.scripts[script]) {
         problems.push(ws.name + ': package.json has no "' + script + '" script');
       }

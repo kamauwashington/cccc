@@ -6,7 +6,8 @@
 // output tokens, and output tokens are wall clock time. A hook reads the same
 // facts from outside the model for free.
 //
-// SubagentStart stashes a start time keyed by agent id.
+// SubagentStart prints the agent's opener in character and stashes a start
+// time keyed by agent id.
 // SubagentStop prints one coloured line and appends a row to TRANSCRIPT.md.
 //
 // Two rules this file has to keep:
@@ -29,6 +30,15 @@ const COLORS = {
   'black-mamba': '\u001b[33m',
   sidewinder: '\u001b[38;5;208m',
 };
+// What each agent says when it picks up its file. The hook says it, so the
+// line costs zero output tokens and lands the moment the agent starts.
+const OPENERS = {
+  copperhead: 'Copperhead here. The schema is mine.',
+  cottonmouth: 'Cottonmouth here. I will take the spec.',
+  'black-mamba': 'Black Mamba here. Routes. Stand back.',
+  sidewinder: 'Sidewinder here. I read. I judge. I leave.',
+};
+
 const CYAN = '\u001b[36m';
 const RESET = '\u001b[0m';
 const DIM = '\u001b[2m';
@@ -125,7 +135,13 @@ function fmtSecs(ms) {
 }
 
 function onStart(payload) {
-  const id = payload.agent_id || payload.agent_type || 'unknown';
+  const name = payload.agent_type || payload.subagent_type || 'subagent';
+  const id = payload.agent_id || name;
+
+  const colour = COLORS[name] || CYAN;
+  const opener = OPENERS[name] || 'On it.';
+  process.stdout.write(colour + '  [' + name + ']' + RESET + ' ' + opener + '\n');
+
   const starts = readJson(STARTS, {});
   starts[id] = Date.now();
   try {

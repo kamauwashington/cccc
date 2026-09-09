@@ -9,12 +9,14 @@ Two skills that work on the conversation instead of on files.
   then ask up to three questions with the `AskUserQuestion` tool and stop
   there. Do not write the questions out as a numbered list. Do not guess and do
   not start the work.
-- Once the answers are in, build the smallest thing that satisfies them. One
-  file is usually enough.
-- Run the `concise` skill over the answer before it goes out. What you built,
-  in a sentence or two. No restatement, no walk through the code.
-- `src/orders.ts` is the only file this example asks you to change.
-- Run `npm run typecheck` and `npm test` to check your work.
+- Once the answers are in, say what you would build. One or two sentences,
+  precise enough to hand to someone else. Write no files.
+- Run the `concise` skill over the answer before it goes out. No restatement,
+  no walk through code.
+- `src/orders.ts` is read only. It is the thing the questions point at, and
+  nothing in this example edits it.
+- Nothing to run here. There are no tests and no typecheck. The answer is the
+  whole deliverable.
 - Never edit anything under `.pristine/`. That is the reset snapshot.
 
 ## Memory

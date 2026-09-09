@@ -1,11 +1,9 @@
 {
   "restore": [
     "src",
-    "tests",
     "PROMPT.md",
     "package.json",
     "tsconfig.json",
-    "vitest.config.ts",
     "CLAUDE.md",
     ".claude/memory"
   ],
@@ -16,6 +14,5 @@
     ".tmp",
     ".claude/.complete-state.json"
   ],
-  "verify": "npm run typecheck && npm test",
   "postReset": "node ../../scripts/setup.mjs"
 }

@@ -60,7 +60,16 @@ function checkOne(ws) {
   }
 
   const manifest = readJson(path.join(ws.dir, 'reset.json'), {});
-  const verify = manifest.verify || 'npm run typecheck && npm test';
+  const verify = manifest.verify;
+
+  // No verify command means the workspace runs nothing, so there is no green to
+  // earn. A leftover .solution/ there is stale, and this says so.
+  if (!verify) {
+    console.log(
+      '  ' + c.dim('skip  ' + ws.name.padEnd(22) + 'no verify command, nothing to prove')
+    );
+    return null;
+  }
 
   try {
     for (const entry of fs.readdirSync(solution)) {
