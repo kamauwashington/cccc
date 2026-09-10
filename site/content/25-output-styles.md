@@ -8,6 +8,7 @@ facts:
   Switched on by | `"outputStyle"` in `.claude/settings.json`
   Frontmatter | `name` and `description`. The `name` has to match the setting.
   Switch in session | `/output-style`, which writes the choice back to settings
+  Switch for one turn | an argument the command reads, like example 08's `/start -terse`
   Personal scope | `~/.claude/output-styles/` applies to every project
   Shown here by | 08
 docs:
@@ -15,7 +16,7 @@ docs:
   Settings | settings
   Memory and CLAUDE.md | memory
 tabs:
-  Mechanism | The mechanism | What example 08 sets
+  Mechanism | The mechanism | Two styles, one prompt
   In context | Against the other three mechanisms | The honest part
   What breaks | What breaks
 ---
@@ -27,22 +28,30 @@ in the session and never appears in the conversation. Frontmatter carries a
 `name` and a `description`, and the picker reads the `name`, which has to match
 the `outputStyle` value in settings or the style will not list.
 
-## What example 08 sets
+## Two styles, one prompt
 
-Every code turn ends with the same five headings.
+Example 08 builds a small catalog API and hands it back twice. The work does
+not change. The shape does.
 
+```term
+  /start -report                    /start -terse
+  ──────────────────────────────    ──────────────────────────────
+  Done. Built src/server.ts with    src/server.ts serves the six
+  six routes.                       routes and typecheck is clean.
+  Works. Typecheck clean,           No request has been made
+  4 tests green.                    against them yet.
+  Doesn't work. Nothing calls
+  the routes. They are unproven.
+  Suggestions. Add a smoke test
+  before wiring a client.
 ```
-Done.          What changed. One line per unit of work.
-Works.         What is green and verified, with the number.
-Doesn't work.  What is out of scope, unproven, blocked, or missing.
-Fixed.         Yes or no, per item. Never imply a partial fix.
-Suggestions.   What to do next. One line each.
-```
 
-Two rules carry most of the weight. Drop any heading that has nothing under it,
-because a heading followed by "nothing" is worse than no heading. And "Doesn't
-work" is about limits, scope, and unproven ground. A report that says "Works. 18
-tests pass" and then "Doesn't work. It does not compile" is arguing with itself.
+```legend
+`report.md` | Five fixed headings: Done, Works, Doesn't work, Fixed, Suggestions. Drop any heading with nothing under it.
+`terse.md` | One line. Two if the second carries a fact the first cannot. No headings, no preamble, no offer to help.
+On at launch | `"outputStyle": "report"` in `.claude/settings.json`, so the report shape is on before anyone types.
+The heading that earns its keep | The build compiles, so it would be easy to call it done. "Doesn't work" is what makes the answer admit the routes were never called.
+```
 
 ## Against the other three mechanisms
 
@@ -61,13 +70,13 @@ that way.
 ## The honest part
 
 A style shapes output. It does not enforce output. The model follows it most of
-the time and drifts on the edges. Example 08's style says it does not apply to
-prose, so a documentation question should come back as a sentence. Whether that
-holds is one of the things the example asks you to check with your own eyes.
+the time and drifts on the edges. It drifts most on turns that do
+not look like work, which is why example 08 asks you to put a follow-up
+question in after `/start` and watch whether the shape holds.
 
-That drift is why the checker in example 08 exists as code and never as a
-second paragraph of instructions. The exercise and the style are the same
-contract, written twice. The style asks a model for it. The checker proves it.
+The other half of the honesty is scope. `/start -terse` changes one turn.
+`/output-style terse` changes the session and writes the choice back to
+`.claude/settings.json`, where it stays until someone changes it again.
 
 ## What breaks
 
@@ -75,7 +84,8 @@ contract, written twice. The style asks a model for it. The checker proves it.
   project style.
 - **A personal style in `~/.claude/output-styles/`.** It competes with the
   project one. Check that folder is empty before a demo.
-- **Editing the style without editing the checker.** Example 08's suite
-  compares `src/report-check.ts` against the shipped style file, including
-  running the style's own worked example through the checker. The suite turns
-  red, which is intended.
+- **Editing a style mid session and expecting it to take.** Styles are read at
+  launch. Example 08's own experiment, deleting the empty heading rule from
+  `report.md`, says to restart the CLI, because a reset alone does not undo it.
+- **Reading a green build as a finished one.** The style is what makes an
+  answer name what is unproven. Nothing in the test suite does that job.

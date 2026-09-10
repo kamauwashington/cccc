@@ -79,9 +79,9 @@ line, and appends a row to `TRANSCRIPT.md`. It costs zero model tokens.
 
 A subagent has its own context window and only its summary comes back. That is
 the right answer for reading logs, triaging test failures, and any command
-whose full output you do not need. Example 05 suggests pointing a subagent at
-a 69,000 character JSON dump and asking it for the three busiest channels. The
-dump lands in the subagent's window and one sentence comes back to yours.
+whose full output you do not need. Example 08 puts it to work: hand the build to a subagent, then ask for the
+report. The tool calls stay in the subagent's window and only the shaped answer
+reaches yours.
 
 ## What breaks
 

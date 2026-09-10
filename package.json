@@ -21,6 +21,7 @@
     "check:solutions": "node scripts/check-solutions.mjs",
     "go": "node scripts/go.mjs",
     "build": "node scripts/build-site.mjs",
+    "capture": "python3 scripts/capture-console.py",
     "publish:web": "node scripts/publish-web.mjs",
     "solution": "node scripts/solution.mjs",
     "test": "npm run test --workspaces --if-present",

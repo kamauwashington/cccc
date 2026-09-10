@@ -70,7 +70,7 @@ the right hand rail. A bare value in `docs` is appended to
 `https://code.claude.com/docs/en/`, and a full URL is used as written.
 
 Sections are fixed, in this order: Start here, Repo staples, Claude Code
-concepts, The eight examples, Scripts, Field notes. A page with an unknown
+concepts, The examples, Scripts, Field notes. A page with an unknown
 section will not appear, so use one of those six.
 
 ## The two sections every concept page has

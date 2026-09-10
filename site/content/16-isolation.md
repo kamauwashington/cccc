@@ -2,7 +2,7 @@
 title: Isolation and leakage
 section: Repo staples
 order: 7
-summary: Eight examples in one repository, on a machine with personal skills and a personal CLAUDE.md. Keeping them from contaminating each other is the hardest constraint in the build, and one of the leaks is real and still on the presenter's machine.
+summary: Many examples in one repository, on a machine with personal skills and a personal CLAUDE.md. Keeping them from contaminating each other is the hardest constraint in the build, and one of the leaks is real and still on the presenter's machine.
 facts:
   Enforced by | `scripts/verify.mjs` and `scripts/preflight.mjs`
   Root `.claude/` may hold | `settings.json` and the generated local file, nothing else
@@ -35,7 +35,7 @@ holds writing rules and nothing that would change a demo.
 
 `scripts/verify.mjs` fails the build if anything other than `settings.json`
 appears in the root `.claude/`. A skill or a `CLAUDE.md` placed there loads into
-all eight examples and ruins the isolation story.
+every example and ruins the isolation story.
 
 There is no setting that excludes skills from a parent directory or from
 `~/.claude/skills/`. `claudeMdExcludes` covers `CLAUDE.md` files and
@@ -99,7 +99,7 @@ appeared.
 
 ## What breaks
 
-- **A skill in the root `.claude/`.** It loads into all eight examples.
+- **A skill in the root `.claude/`.** It loads into every example.
   `verify.mjs` fails the build.
 - **A personal skill that contradicts an example.** No setting excludes it.
   Move the folder.

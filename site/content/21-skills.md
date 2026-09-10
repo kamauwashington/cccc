@@ -8,14 +8,14 @@ facts:
   Read at launch | name and description only
   Body loads | on demand, when the work matches
   Nesting | flat folders only. One level.
-  Shown here by | 01, 03, 05, 06
+  Shown here by | 01, 03, 06
 docs:
   Skills | skills
   Memory and CLAUDE.md | memory
   Subagents | sub-agents
 tabs:
   Mechanism | The mechanism | Split by owner, never by topic
-  In this repo | Skills that work on the conversation | Pointing at a tool instead of describing it | Preloading into a subagent
+  In this repo | Skills that work on the conversation | Five skills, four agents
   What breaks | What breaks
 ---
 
@@ -46,27 +46,41 @@ in the prompt asked for any of them.
 
 ## Skills that work on the conversation
 
-Every other example ships a skill that edits code. Example 03 ships two that
-change no project file at all. `sharpen` turns a rough prompt into a five
-section checklist. `concise` rewrites text until it passes the same rules the
-CI linter enforces.
+Most skills here edit code. Example 03 ships two that change no project file at
+all, and no command to invoke them with. `sharpen` stops on a vague request and
+asks up to three questions before building. `concise` rewrites text until it
+passes the repository's writing rules.
 
-Both end the same way. Write the draft to a file, run a checker over it, fix
-what it names, and answer only when the checker exits 0. The forcing function
-is structural lint, never a model as a judge, because a judge scores the same
-draft differently on two runs.
+Nothing types those names. The prompt in example 03 is a rough request written
+the way a real one arrives:
 
-## Pointing at a tool instead of describing it
+```term
+  › make the orders list paginated somehow, it is slow right now
+    and the frontend team keeps complaining. thanks
+```
 
-Example 05's `board` skill does not list the CLI flags. It tells Claude to run
-`node tools/board.mjs --help`, the same way a person would. The skill carries
-the procedure. The tool carries its own interface.
+```legend
+What fires | `sharpen`, on its description alone, because the request is too loose to act on.
+What comes back | Questions first, then the sharpened request in two sentences. No code until the answers land.
+Why no command | A command would prove nothing. The whole claim is that the description is enough.
+```
 
-## Preloading into a subagent
+## Five skills, four agents
 
 Subagent frontmatter takes a `skills:` list, which hands the conventions over
-instead of letting the agent search for them. Example 06 uses it on all four
-agents, and removing the line is one of that example's suggested experiments.
+instead of letting the agent search for them. Example 06 carries five skills
+and gives each agent only the ones it needs.
+
+| Agent | Skills it carries |
+| --- | --- |
+| `copperhead` | `ts-conventions`, `json-schema` |
+| `cottonmouth` | `oas-3-1`, `api-design` |
+| `black-mamba` | `express-conventions` |
+| `sidewinder` | `ts-conventions` |
+
+Removing that line from one agent is one of the example's suggested
+experiments. The work still gets done. It just stops matching the conventions
+nobody restated in the prompt.
 
 ## What breaks
 
@@ -83,3 +97,5 @@ agents, and removing the line is one of that example's suggested experiments.
   the tests never caught it. Only the transcript did.
 - **A skill in `~/.claude/skills/` that contradicts the project.** No setting
   excludes it. See [Isolation and leakage](#/isolation).
+- **Listing a tool's flags in the skill body.** They drift. Point at `--help`
+  instead, the same way a person would.

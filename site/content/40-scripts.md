@@ -2,9 +2,9 @@
 title: Repository scripts
 section: Scripts
 order: 1
-summary: Ten scripts under scripts/. Setup and reset run automatically. Verify, preflight, prose lint, and check solutions are the gates. Go, start, and solution are for the stage.
+summary: Thirteen scripts under scripts/, twelve in Node and one in Python. Setup and reset run automatically. Verify, preflight, prose lint, and check solutions are the gates. Go, start, and solution are for the stage.
 facts:
-  Live at | `scripts/*.mjs`
+  Live at | `scripts/*.mjs`, plus `scripts/capture-console.py`
   Shared helpers | `scripts/lib.mjs`
   Run in CI | `verify`, `lint-prose`, `check-solutions`
   Run by npm | `setup` through `postinstall`, `reset` through `postReset`
@@ -33,7 +33,10 @@ tabs:
 | `npm run solution -- 06` | Copies in the reference solution if a live run stalls |
 | `npm run solution` | Applies every solution, so the whole repository goes green |
 | `npm run check:solutions` | Applies each solution, verifies it, then resets |
+| `npm test` | Runs every workspace suite that has one |
+| `npm run typecheck` | Typechecks every workspace that has a config |
 | `npm run build` | Builds this site into `dist/index.html` |
+| `npm run capture` | Records real Claude Code screens into `site/captures/` |
 | `npm run publish:web` | Copies the build into the publish repository and commits it |
 
 ## The gates
@@ -82,6 +85,13 @@ teaches the launch directory rule better than a script that hides it.
 
 **`solution.mjs`** copies a workspace's `.solution/` over the live files. With
 no argument it greens the whole repository.
+
+**`capture-console.py`** drives `claude` inside a pseudo terminal at the width
+the site's console panes render at, lets each screen settle, and writes exactly
+what the terminal showed to `site/captures/<name>.txt`. The build prefers those
+files over the approximations written inline in the markdown, so a recording
+replaces an approximation with no edit to the page. It needs `pyte` and a
+machine where `claude` is signed in. See [Terminal captures](#/captures).
 
 ## What breaks
 

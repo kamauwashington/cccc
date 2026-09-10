@@ -26,7 +26,7 @@ repository. `.solution/` is the proof that the red state is solvable.
 
 ```bash
 npm run solution          # apply every solution. Everything goes green.
-npm test                  # all eight workspaces pass
+npm test                  # every workspace passes
 npm run reset             # back to the broken starting state
 ```
 

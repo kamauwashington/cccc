@@ -1,7 +1,7 @@
 ---
 title: Install and run
-section: Start here
-order: 2
+section: Getting started with Claude
+order: 3
 summary: Clone, install, preflight, then launch Claude Code from inside one example folder. A fresh clone is red on purpose.
 facts:
   Needs | Node 20.11 or newer, and Claude Code

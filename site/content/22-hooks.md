@@ -9,7 +9,7 @@ facts:
   Payload arrives | as JSON on stdin
   Exit 2 | blocks the call, sends stderr to the model
   Any other exit | lets the call through
-  Shown here by | 02, 05, 06, and every workspace
+  Shown here by | 02 and 06. Every workspace ships the `Stop` hook.
 docs:
   Hooks guide | hooks-guide
   Hooks reference | hooks
@@ -54,13 +54,28 @@ Claude Code reads `.claude/settings.json` when it launches, so a change there
 needs a restart. That is why a demo may only change files Claude Code does not
 read at startup.
 
+## Four hooks in one workspace
+
+Example 02 wires all four events it has to teach, in one `settings.json`.
+
+| Script | Event | What it does |
+| --- | --- | --- |
+| `bash-output-guard.mjs` | `PreToolUse` on `Bash` | Blocks an unbounded command before its output exists |
+| `protect-generated.mjs` | `PreToolUse` on `Write` and `Edit` | Refuses a hand edit to a generated file |
+| `typecheck-after-edit.mjs` | `PostToolUse` on `Write`, `Edit`, `Bash` | Runs `tsc --noEmit` and hands the first error back |
+| `complete.mjs` | `Stop` | Verifies the work and writes `RESULT.md` |
+
+The run is one prompt and one follow up. `/start` asks for a status field on
+`Message`, which walks into the codegen rule. `/followup-1` asks for a hand
+edit to the generated file, which is what puts the blocking hook on screen.
+
 ## What a hook does in this repository
 
 | Job | Event | Where |
 | --- | --- | --- |
 | Guard a file the model must not hand edit | `PreToolUse` on `Write` and `Edit` | 02 |
 | Hand a compiler error back so Claude fixes its own work | `PostToolUse` on `Write`, `Edit`, `Bash` | 02 |
-| Block an unbounded command before its output exists | `PreToolUse` on `Bash` | every workspace |
+| Block an unbounded command before its output exists | `PreToolUse` on `Bash` | every workspace except 05, which uses an allow list instead |
 | Verify the work and write `RESULT.md` | `Stop` | every workspace |
 | Print a coloured line per subagent, at zero model tokens | `SubagentStart`, `SubagentStop` | 06 |
 | Block every write whose target is not one file | `PreToolUse`, declared in one agent's own frontmatter | 06 |
@@ -96,11 +111,12 @@ hook blocks every write whose target is not that file.
 ## What breaks
 
 - **False positives.** The failure mode that kills hooks is blocking something
-  legitimate. Example 05's hook test spawns the hook with a JSON payload on
-  stdin and checks ten commands that must not be blocked.
+  legitimate. A hook is a command with an exit code, so it can be tested
+  directly: example 02's `protect-generated-hook.test.ts` spawns the hook with
+  a payload on stdin and asserts what it blocks and what it lets through.
 - **A hook on every edit that runs the full suite.** Time it before you commit
-  to it. Example 05 suggests pointing the typecheck hook at `npm test` and then
-  deciding whether you still want it.
+  to it. Example 02 suggests pointing `typecheck-after-edit.mjs` at `npm test`
+  instead of `tsc`, then deciding whether you still want it on every edit.
 - **Editing settings mid session.** Claude Code read the file at launch.
   Restart the CLI.
 - **Turning hooks off with the wrong flag.** On 2.1.263 there is no

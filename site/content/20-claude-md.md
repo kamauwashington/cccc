@@ -45,7 +45,7 @@ project, write it here.
 
 Claude Code walks up, never down. A `CLAUDE.md` deeper in the tree is read
 later, when a tool call touches a file in that folder. Progressive disclosure
-is the default behaviour, and most people fight it by pushing everything up
+is the default behavior, and most people fight it by pushing everything up
 into the root file. Example 04 measures what that costs.
 
 Both `./CLAUDE.md` and `./.claude/CLAUDE.md` load. Verified with a probe holding
@@ -54,8 +54,8 @@ one of each. This repository puts the workspace file at the root.
 ## Write a map, never a copy
 
 The root file should be a map of the project. It should not be a copy of the
-project. Example 04 ships two versions of the same file, a 25 line map and a
-470 line copy, and swaps between them with one script so the code, the tests,
+project. Example 04 ships two versions of the same file, a 32 line map and a
+401 line copy, and swaps between them with one script so the code, the tests,
 and the subdirectory memory stay byte identical across both runs.
 
 The built in `/doctor` trim check uses the same heuristic. It removes content

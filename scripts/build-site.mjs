@@ -40,10 +40,10 @@ const DECK_COVER = path.join(SITE_DIR, 'deck-cover.jpg');
 const DECK_SLIDES = 22;
 
 const SECTION_ORDER = [
-  'Start here',
+  'Getting started with Claude',
   'Repo staples',
   'Claude Code concepts',
-  'The eight examples',
+  'The examples',
   'Scripts',
   'Field notes',
 ];
@@ -101,6 +101,9 @@ function inline(text) {
   return out;
 }
 
+// Fences in any of these render as a console pane rather than a code block.
+const SHELL_LANGS = new Set(['bash', 'sh', 'shell', 'zsh', 'console', 'term', 'terminal']);
+
 function stripIndent(lines) {
   const width = lines
     .filter((l) => l.trim())
@@ -139,9 +142,10 @@ function renderBlocks(src, toc, depth) {
 
     // Fenced code.
     const fence = line.match(/^\s*(```|~~~)(.*)$/);
+    // A shell fence renders as a console pane. Authors keep writing bash.
     if (fence) {
       const marker = fence[1];
-      const lang = fence[2].trim().split(/\s+/)[0] || '';
+      let lang = fence[2].trim().split(/\s+/)[0] || '';
       const body = [];
       i++;
       while (i < lines.length && !lines[i].trim().startsWith(marker)) {
@@ -149,11 +153,107 @@ function renderBlocks(src, toc, depth) {
         i++;
       }
       i++;
+
+      // A switch fence is one console with a pane per platform. Bodies are
+      // split on [Label] lines, and the first pane is the one on show.
+      if (lang === 'switch') {
+        const panes = [];
+        let pane = null;
+        for (const raw of body) {
+          const head = raw.match(/^\s*\[(.+?)\]\s*$/);
+          if (head) {
+            pane = { name: head[1].trim(), lines: [] };
+            panes.push(pane);
+            continue;
+          }
+          if (pane) pane.lines.push(raw);
+        }
+        if (panes.length) {
+          out.push(
+            '<div class="switch"><div class="switch-bar" role="tablist">' +
+              panes
+                .map(
+                  (x, i) =>
+                    '<button type="button" role="tab" data-sw="' + i + '" aria-selected="' +
+                    (i === 0) + '">' + escapeHtml(x.name) + '</button>'
+                )
+                .join('') +
+              '</div>' +
+              panes
+                .map(
+                  (x, i) =>
+                    '<div class="code console" data-sw-pane="' + i + '"' +
+                    (i === 0 ? '' : ' hidden') + '><pre><code>' +
+                    escapeHtml(x.lines.join('\n').replace(/^\n+|\n+$/g, '')) +
+                    '</code></pre></div>'
+                )
+                .join('') +
+            '</div>'
+          );
+          continue;
+        }
+      }
+
+      // A legend fence annotates the console directly above it. Each line is
+      // Label | what that part of the screen is, and the strip renders joined
+      // to the pane so the reader stays on the picture instead of dropping
+      // into a paragraph underneath it.
+      if (lang === 'legend' || lang === 'note') {
+        const rows = body
+          .map((raw) => raw.trim())
+          .filter(Boolean)
+          .map((raw) => {
+            const cut = raw.indexOf('|');
+            return cut === -1
+              ? { label: '', text: raw }
+              : { label: raw.slice(0, cut).trim(), text: raw.slice(cut + 1).trim() };
+          });
+        if (rows.length) {
+          out.push(
+            '<div class="legend' + (lang === 'note' ? ' loose' : '') + '">' +
+              rows
+                .map(
+                  (r) =>
+                    '<div class="legend-row">' +
+                    (r.label ? '<b>' + inline(r.label) + '</b>' : '<b class="dot">\u2022</b>') +
+                    '<span>' + inline(r.text) + '</span></div>'
+                )
+                .join('') +
+            '</div>'
+          );
+          continue;
+        }
+      }
+
+      // A callout fence is the one thing on a page that steps out of the walk.
+      // The words after the fence tag are its title.
+      if (lang === 'callout') {
+        const title = fence[2].trim().split(/\s+/).slice(1).join(' ');
+        out.push(
+          '<div class="callout">' +
+            (title ? '<b class="callout-title">' + inline(title) + '</b>' : '') +
+            renderBlocks(body.join('\n'), toc, depth).html +
+          '</div>'
+        );
+        continue;
+      }
+
+      // capture:<name> prefers a recorded screen over the inline text.
+      let text = body.join('\n');
+      if (lang.startsWith('capture:')) {
+        const name = lang.slice(8).replace(/[^a-zA-Z0-9_-]/g, '');
+        const file = path.join(SITE_DIR, 'captures', name + '.txt');
+        if (fs.existsSync(file)) text = fs.readFileSync(file, 'utf8').replace(/\s+$/, '');
+        lang = 'console';
+      }
+
       out.push(
-        '<div class="code" data-lang="' +
+        '<div class="code' +
+          (SHELL_LANGS.has(lang.toLowerCase()) ? ' console' : '') +
+          '" data-lang="' +
           escapeHtml(lang) +
           '"><pre><code>' +
-          escapeHtml(body.join('\n')) +
+          escapeHtml(text) +
           '</code></pre></div>'
       );
       continue;
@@ -250,8 +350,22 @@ function renderBlocks(src, toc, depth) {
       }
 
       const rendered = items.map((raw) => {
-        const first = raw[0];
-        const rest = raw.length > 1 ? stripIndent(raw.slice(1)) : [];
+        // Lines wrapped under an item are the same sentence, not a new block.
+        // They join back into the head text so the browser decides where the
+        // line breaks, rather than the width the author happened to type at.
+        const cont = [];
+        let k = 1;
+        while (
+          k < raw.length &&
+          raw[k].trim() &&
+          !isListStart(raw[k]) &&
+          !/^\s*(```|~~~|#{1,6}\s|>|\||-{3,}|\*{3,}|_{3,})/.test(raw[k].trim())
+        ) {
+          cont.push(raw[k].trim());
+          k++;
+        }
+        const first = [raw[0]].concat(cont).join(' ');
+        const rest = raw.length > k ? stripIndent(raw.slice(k)) : [];
         const task = first.match(/^\[([ xX])\]\s*(.*)$/);
         const headText = task ? task[2] : first;
         const mark = task
@@ -432,6 +546,7 @@ function handWrittenPages() {
       const { html, toc } = renderMarkdown(body);
       return {
         tabs: buildTabs(html, parseTabSpec(meta.tabs)),
+        journey: String(meta.journey || '').toLowerCase() === 'true',
         id: name.replace(/\.md$/, '').replace(/^\d+-/, ''),
         title: meta.title || name,
         section: meta.section || 'Start here',
@@ -501,12 +616,14 @@ const EXAMPLE_CONCEPTS = {
 };
 
 // Every example README follows the template's headings, so one grouping
-// covers all eight. Anything else the README carries lands under "More".
+// covers every one. Anything else the README carries lands under "More".
+// Heading names drift between READMEs, so each tab lists every heading it
+// will accept. Anything unmatched still ships, in a trailing More tab.
 const EXAMPLE_TABS = [
-  ['Overview', 'What you will see', 'How it works'],
+  ['Overview', 'What you will see', 'The point', 'How it works', 'The build', 'The four hooks'],
   ['The prompt', 'The prompt'],
   ['Watch for', 'What to watch for'],
-  ['Running it', 'Running it', 'Speaker notes'],
+  ['Running it', 'Running it', 'Run it', 'The format is the point', 'Ask two more'],
   ['Try next', 'Try next'],
 ];
 
@@ -515,7 +632,7 @@ const EXAMPLE_DOCS = {
   '02-hooks': [['Hooks guide', 'hooks-guide'], ['Hooks reference', 'hooks'], ['Settings', 'settings']],
   '03-prompt-craft': [['Skills', 'skills'], ['Slash commands', 'slash-commands']],
   '04-progressive': [['Memory and CLAUDE.md', 'memory'], ['Context window', 'context-window']],
-  '05-tools-and-output': [['MCP', 'mcp'], ['Hooks reference', 'hooks'], ['Costs', 'costs']],
+  '05-tools-and-output': [['Costs', 'costs'], ['Settings', 'settings'], ['Permissions', 'permissions']],
   '06-agent-board': [['Subagents', 'sub-agents'], ['Hooks reference', 'hooks'], ['Permissions', 'permissions']],
   '07-commands': [['Slash commands', 'slash-commands'], ['Command reference', 'commands']],
   '08-report-style': [['Output styles', 'output-styles'], ['Settings', 'settings']],
@@ -557,7 +674,7 @@ function examplePages() {
       related: EXAMPLE_CONCEPTS[ws.name] || [],
       id: ws.name,
       title: ws.name,
-      section: 'The eight examples',
+      section: 'The examples',
       order: index,
       summary,
       facts,
@@ -580,6 +697,8 @@ function fieldNotePages() {
       summary: 'The checks that move between Claude Code versions.' },
     { file: 'docs/decisions.md', id: 'decisions', title: 'Decisions', order: 30,
       summary: 'Five open questions from the build plan, and what got chosen.' },
+    { file: 'docs/captures.md', id: 'captures', title: 'Terminal captures', order: 35,
+      summary: 'Every terminal pane on the site, with the exact command to run when replacing it with a real capture.' },
     { file: 'CLAUDE.md', id: 'repo-claude-md', title: 'The root CLAUDE.md', order: 40,
       summary: 'The writing rules and the layout rules for this repository.' },
     { file: 'template/README.md', id: 'template', title: 'The workspace template', order: 50,
@@ -629,6 +748,8 @@ const STYLES = `
   --line:#dde1e8;
   --line-strong:#c3cad4;
   --accent:#8a5606;
+  --claude:#d27c5c;      /* the Claude Code logo colour, from the terminal */
+  --claude-ink:#a84e33;  /* darkened so button text clears 4.5:1 on the ground */
   --accent-soft:#f6ecd9;
   --accent-line:#dcb877;
   --code-bg:#f2f4f7;
@@ -656,7 +777,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* ---------- frame ---------- */
 .shell{display:grid;grid-template-columns:206px minmax(0,1fr);min-height:100vh}
 .shell[data-view="home"]{grid-template-columns:minmax(0,1fr)}
-.shell[data-view="home"] nav{display:none}
+.shell[data-view="home"] #nav{display:none}
 .masthead{
   grid-column:1 / -1;display:flex;align-items:center;gap:16px;
   padding:0 24px;height:56px;border-bottom:1px solid var(--line);
@@ -675,7 +796,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 #q::placeholder{color:var(--muted-text)}
 
 /* ---------- nav ---------- */
-nav{
+#nav{
   border-right:1px solid var(--line);background:var(--surface);
   padding:20px 0 60px;position:sticky;top:56px;align-self:start;
   height:calc(100vh - 56px);overflow-y:auto;
@@ -697,14 +818,14 @@ nav{
 .navgroup.open .navhead .ct{opacity:0}
 .navlinks{display:none;padding-bottom:10px}
 .navgroup.open .navlinks{display:block}
-nav a{
+#nav a{
   display:block;padding:4px 18px 4px 17px;border:0;border-left:2px solid transparent;
   color:var(--ink-2);font-size:13.5px;line-height:1.45;
 }
-nav a:hover{background:var(--surface-2);color:var(--ink);border-bottom:0}
-nav a.on{border-left-color:var(--accent);color:var(--ink);background:var(--accent-soft);font-weight:500}
-nav a .n{font-family:var(--mono);font-size:11px;color:var(--muted-text);margin-right:7px}
-nav a.on .n{color:var(--accent)}
+#nav a:hover{background:var(--surface-2);color:var(--ink);border-bottom:0}
+#nav a.on{border-left-color:var(--accent);color:var(--ink);background:var(--accent-soft);font-weight:500}
+#nav a .n{font-family:var(--mono);font-size:11px;color:var(--muted-text);margin-right:7px}
+#nav a.on .n{color:var(--accent)}
 
 /* ---------- main ---------- */
 main{min-width:0}
@@ -748,7 +869,46 @@ h1.title .num{color:var(--accent-line);margin-right:12px;font-variant-numeric:ta
 }
 .tabs button:hover{color:var(--ink)}
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:500}
+.tabs button .tnum{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:17px;height:17px;margin-right:7px;border-radius:50%;
+  background:var(--surface-2);color:var(--muted-text);
+  font-family:var(--mono);font-size:10.5px;line-height:1;vertical-align:-2px;
+}
+.tabs button[aria-selected="true"] .tnum{background:var(--accent);color:var(--surface)}
 .panel{padding-top:8px}
+
+/* ---------- walkthrough ---------- */
+.stephead{display:flex;align-items:center;gap:16px;margin:10px 0 0;flex-wrap:wrap}
+.stephead .sn{
+  font-family:var(--cond);font-weight:600;font-size:34px;line-height:1;
+  color:var(--muted-text);white-space:nowrap;
+}
+.stephead .sarrow{
+  flex:none;width:42px;height:22px;fill:none;stroke:var(--claude);
+  stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+}
+.stephead h1.title{margin:0;font-size:38px}
+.eyebrow a{color:var(--muted-text);border-bottom-color:var(--line-strong)}
+.eyebrow a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+.substeps{display:none;margin:2px 0 6px}
+.substeps.open{display:block}
+#nav a.substep{
+  display:flex;align-items:center;gap:9px;
+  padding:4px 18px 4px 30px;font-size:13px;color:var(--muted-text);
+}
+#nav a.substep .sn{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;background:var(--surface-2);
+  font-family:var(--mono);font-size:9.5px;color:var(--muted-text);
+}
+#nav a.substep:hover{color:var(--ink)}
+#nav a.substep.on{
+  color:var(--ink);font-weight:500;background:var(--accent-soft);
+  border-left-color:var(--accent);
+}
+#nav a.substep.on .sn{background:var(--accent);color:var(--surface)}
 
 /* prose */
 article h2{font-family:var(--cond);font-weight:600;font-size:22px;line-height:1.25;margin:30px 0 10px;text-wrap:balance}
@@ -772,8 +932,59 @@ code{
   font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-text);
 }
 .code pre{margin:0;padding:13px 15px}
+/* Anything you would type at a prompt is a console pane. It is the one place
+   the page leaves the light palette, which makes it read as a terminal at
+   once. The window dots replace the language label. */
+.code.console{background:#12161c;border-color:#12161c}
+.code.console pre{padding:30px 16px 15px}
+.code.console code{color:#c9d1da;font-size:12.5px;line-height:1.75}
+.switch{margin:0 0 16px;border:1px solid #12161c;border-radius:4px;overflow:hidden}
+.switch-bar{display:flex;gap:2px;padding:0 6px;background:#1b212a;overflow-x:auto}
+.switch-bar button{
+  flex:none;background:none;border:0;cursor:pointer;padding:9px 12px 8px;
+  border-bottom:2px solid transparent;color:#8f9aa8;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;white-space:nowrap;
+}
+.switch-bar button:hover{color:#e6eaf0}
+.switch-bar button[aria-selected="true"]{color:#f0f3f7;border-bottom-color:var(--claude)}
+.switch .code{margin:0;border:0;border-radius:0}
+.switch .code::before{display:none}
+.switch .code pre{padding:15px 16px}
+.code.console::before{content:"";top:11px;left:14px;right:auto;
+  width:9px;height:9px;border-radius:50%;background:#3a4553;
+  box-shadow:15px 0 0 #3a4553, 30px 0 0 #3a4553;}
 .code code{background:none;border:0;padding:0;font-size:13px;line-height:1.6}
 pre{overflow-x:auto}
+
+/* A legend is an annotation strip welded to the console above it: the
+   explanation sits on the picture rather than in a paragraph after it. */
+.legend{
+  margin:-16px 0 18px;padding:11px 14px;background:var(--surface-2);
+  border:1px solid var(--line);border-top:0;border-radius:0 0 4px 4px;
+  display:grid;gap:7px 0;
+}
+.legend.loose{margin-top:0;border-top:1px solid var(--line);border-radius:4px}
+.legend-row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:0 14px;align-items:baseline}
+.legend-row b{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted-text);font-weight:500;line-height:1.7;
+}
+.legend-row b.dot{letter-spacing:0;font-size:13px;text-align:right}
+.legend-row span{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.switch + .legend{border-color:var(--line)}
+/* The line straight after a platform switcher is a caption for it. */
+.switch + p{font-size:13px;color:var(--ink-2);margin-top:-8px}
+
+.callout{
+  margin:0 0 18px;padding:13px 16px;background:var(--accent-soft);
+  border:1px solid var(--accent-line);border-left-width:3px;border-radius:4px;
+}
+.callout > :last-child{margin-bottom:0}
+.callout p{font-size:14px}
+.callout-title{
+  display:block;font-family:var(--cond);font-size:14px;font-weight:600;
+  color:var(--ink);margin:0 0 4px;
+}
 
 .table-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:4px}
 table{border-collapse:collapse;width:100%;font-size:14px}
@@ -809,7 +1020,19 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 .docs a{border:0;border-left:2px solid var(--accent-line);padding:2px 0 2px 11px;color:var(--ink-2);font-size:14px}
 .docs a:hover{border-left-color:var(--accent);color:var(--accent)}
 .docs .host{display:block;font-family:var(--mono);font-size:10px;color:var(--muted-text)}
-.srcnote{font-family:var(--mono);font-size:10.5px;color:var(--muted-text);margin:44px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.pager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:48px 0 0}
+.pager a{
+  display:flex;flex-direction:column;gap:5px;border:1px solid var(--line);
+  border-radius:5px;padding:14px 16px;background:var(--surface);color:var(--ink);
+}
+.pager a:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.pager a.next{align-items:flex-end;text-align:right}
+/* A step stays on this page. A plain card leaves it. */
+.pager a.prev.step{border-left:2px solid var(--accent-line)}
+.pager a.next.step{border-right:2px solid var(--accent-line)}
+.pager .dir{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-text)}
+.pager .t{font-family:var(--cond);font-weight:600;font-size:16px;line-height:1.25}
+.srcnote{font-family:var(--mono);font-size:10.5px;color:var(--muted-text);margin:30px 0 0;padding-top:16px;border-top:1px solid var(--line)}
 /* Inline, not inline-flex: the note continues in text after this link, and a
    flex box would sit on its own baseline and step out of the line. */
 .srcnote .srclink{color:var(--muted-text);border-bottom:1px solid transparent}
@@ -838,8 +1061,9 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
   font-size:13.5px;border:1px solid var(--line-strong);color:var(--ink-2);background:var(--surface);
 }
 .btn:hover{border-color:var(--accent-line);color:var(--ink)}
-.btn.primary{border:1.5px solid var(--accent);color:var(--accent);background:transparent}
-.btn.primary:hover{background:var(--accent-soft)}
+.btn.primary{border:1.5px solid var(--claude);color:var(--claude-ink);background:transparent}
+.btn.primary:hover{background:#fbf1ed;border-color:var(--claude-ink)}
+.btn:hover{border-color:var(--claude);color:var(--ink)}
 .srows{margin-top:72px;border-top:1px solid var(--line)}
 .srow{
   display:flex;align-items:center;gap:36px;padding:26px 0;
@@ -894,8 +1118,11 @@ mark{background:var(--accent-soft);color:var(--accent);padding:0 1px}
 
 @media (max-width:900px){
   .shell{grid-template-columns:1fr}
-  nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 0}
+  #nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 0}
   .doc{padding:26px 20px 80px}
+  .stephead .sn{font-size:24px}
+  .stephead h1.title{font-size:27px}
+  .stephead .sarrow{width:30px}
   .home-wrap{padding:56px 20px 80px}
   .home-wrap h1{font-size:34px}
   .hero{flex-direction:column;align-items:flex-start;gap:22px}
@@ -915,10 +1142,10 @@ mark{background:var(--accent-soft);color:var(--accent);padding:0 1px}
 `;
 
 const SECTION_BLURBS = {
-  'Start here': 'Install it, run one example, and learn the three rules the rest of the repository depends on.',
+  'Getting started with Claude': 'Install it, run one example, and learn the three rules the rest of the repository depends on.',
   'Repo staples': 'The files every workspace repeats. What each one is for, and what happens when it is wrong.',
   'Claude Code concepts': 'One page per feature. Where it lives, when it loads, and whether it is context or enforcement.',
-  'The eight examples': 'Generated from each workspace README, with its prompt and its reset manifest read off disk.',
+  'The examples': 'Generated from each workspace README, with its prompt and its reset manifest read off disk.',
   'Scripts': 'The repository tooling, and how to add a page or a ninth example to this site.',
   'Field notes': 'The project memory, the checks that move between versions, and the decisions behind the build.',
 };
@@ -936,7 +1163,7 @@ const SECTION_ICONS = {
     '<path d="M12 7.5C10.6 6 8.8 5.2 6.5 5.2H4v12h2.5c2.3 0 4.1.8 5.5 2.3"/>' +
     '<path d="M12 7.5c1.4-1.5 3.2-2.3 5.5-2.3H20v12h-2.5c-2.3 0-4.1.8-5.5 2.3"/>' +
     '<path d="M12 7.5v12"/>',
-  'The eight examples':
+  'The examples':
     '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/>' +
     '<rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/>' +
     '<rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/>' +
@@ -1026,7 +1253,20 @@ function buildBody(pages, meta) {
         .map((p) => {
           const num = /^\d\d-/.test(p.id) ? '<span class="n">' + p.id.slice(0, 2) + '</span>' : '';
           const label = /^\d\d-/.test(p.id) ? p.title.slice(3) : p.title;
-          return '<a href="#/' + p.id + '" data-id="' + p.id + '">' + num + escapeHtml(label) + '</a>';
+          const self =
+            '<a href="#/' + p.id + '" data-id="' + p.id + '">' + num + escapeHtml(label) + '</a>';
+          // A walkthrough hangs its steps under itself, so the whole path is
+          // visible from the nav rather than hidden behind a tab bar.
+          if (!p.journey || !p.tabs) return self;
+          const steps = p.tabs
+            .map(
+              (t, i) =>
+                '<a class="substep" href="#/' + p.id + '/' + (i + 1) + '" data-id="' + p.id +
+                '" data-step="' + i + '"><span class="sn">' + (i + 1) + '</span>' +
+                escapeHtml(t.name) + '</a>'
+            )
+            .join('');
+          return self + '<div class="substeps" data-for="' + p.id + '">' + steps + '</div>';
         })
         .join('');
       const gid = 'g' + gi;
@@ -1044,7 +1284,7 @@ function buildBody(pages, meta) {
     .join('');
 
   const sections = bySection
-    .filter((s) => s.name !== 'Start here')
+    .filter((s) => s.name !== 'Getting started with Claude')
     .map((s) => ({
       name: s.name,
       count: s.pages.length,
@@ -1053,26 +1293,49 @@ function buildBody(pages, meta) {
       icon: sectionIcon(s.name),
     }));
 
+  const order = bySection.flatMap((sec) => sec.pages.map((p) => p.id));
+
+  // Counts belong to the build, never to the prose. {{examples}} and {{pages}}
+  // are filled in here so a ninth workspace does not make a sentence wrong.
+  // {{examples}} gives the numeral, {{Examples}} the word, so a sentence can
+  // open with it and still read like English.
+  const WORDS = [
+    'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight',
+    'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
+    'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty',
+  ];
+  const word = (n, capital) => {
+    const w = WORDS[n] || String(n);
+    return capital ? w : w.toLowerCase();
+  };
+  const fill = (t) =>
+    String(t == null ? '' : t)
+      .replace(/\{\{Examples\}\}/g, word(meta.examples, true))
+      .replace(/\{\{examplesWord\}\}/g, word(meta.examples, false))
+      .replace(/\{\{examples\}\}/g, String(meta.examples))
+      .replace(/\{\{pages\}\}/g, String(meta.pages));
+
   const data = pages.map((p) => ({
     id: p.id,
     title: p.title,
     section: p.section,
-    summary: p.summary,
+    summary: fill(p.summary),
     facts: p.facts,
     docs: p.docs,
     related: p.related || [],
-    tabs: p.tabs || null,
+    tabs: p.tabs ? p.tabs.map((t) => ({ name: t.name, html: fill(t.html) })) : null,
+    journey: !!p.journey,
     source: p.source,
     repo: p.repo || '',
     generated: p.generated,
-    html: p.html,
+    html: fill(p.html),
     text: p.text,
   }));
 
-  const startId = (bySection.find((s) => s.name === 'Start here') || { pages: [] }).pages
+  const startId = (bySection.find((s) => s.name === 'Getting started with Claude') || { pages: [] }).pages
     .map((p) => p.id)
     .filter((id) => id !== 'index')[0] || 'index';
-  const exampleId = (bySection.find((s) => s.name === 'The eight examples') || { pages: [] }).pages
+  const exampleId = (bySection.find((s) => s.name === 'The examples') || { pages: [] }).pages
     .map((p) => p.id)[0] || 'index';
 
   return `<title>Claude Code Crash Course</title>
@@ -1093,6 +1356,7 @@ function buildBody(pages, meta) {
 <script>
 const PAGES = ${JSON.stringify(data)};
 const SECTIONS = ${JSON.stringify(sections)};
+const ORDER = ${JSON.stringify(order)};
 const BUILT = ${JSON.stringify(meta)};
 const LOGO = ${JSON.stringify(logo)};
 const REPO = ${JSON.stringify(REPO_URL)};
@@ -1114,6 +1378,11 @@ const byId = Object.fromEntries(PAGES.map(p => [p.id, p]));
 const shell = document.getElementById('shell');
 const main = document.getElementById('main');
 let currentPage = null;
+let currentTabs = [];      // the tabs of the page on screen
+let currentTab = 0;        // which one is open
+let stepCount = 0;         // authored steps, so the Docs tab is not counted
+let openLastTab = false;   // set when stepping back into the previous page
+let requestedStep = 0;     // the step named in the address, for a walkthrough
 
 function esc(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 function md(s){
@@ -1172,7 +1441,7 @@ function renderHome(){
       '</div>' +
       '<div class="actions">' +
         '<a class="btn primary" href="#/' + START_ID + '">Start here</a>' +
-        '<a class="btn" href="#/' + EXAMPLE_ID + '">The eight examples</a>' +
+        '<a class="btn" href="#/' + EXAMPLE_ID + '">The ' + BUILT.examples + ' examples</a>' +
         '<a class="btn repo" href="' + REPO + '" target="_blank" rel="noopener">' +
           GIT_MARK + 'The repository</a>' +
       '</div>' +
@@ -1200,6 +1469,45 @@ function fitMark(){
   if(h > 0) mark.style.width = Math.round(h * MARK_RATIO) + 'px';
 }
 
+// Next walks the steps on this page before it moves to the next page, so a
+// reader following Next never skips past the middle of a walkthrough.
+function pagerHtml(p){
+  const at = ORDER.indexOf(p.id);
+  const pageAt = (n) => (at === -1 ? null : byId[ORDER[at + n]] || null);
+
+  const count = (i) =>
+    p.journey && i < stepCount ? ' &middot; step ' + (i + 1) + ' of ' + stepCount : '';
+
+  const stepCard = (i, dir, label) =>
+    '<a class="' + dir + ' step" href="#" data-goto="' + i + '">' +
+    '<span class="dir">' + label + count(i) + '</span>' +
+    '<span class="t">' + esc(currentTabs[i].name) + '</span></a>';
+
+  const pageCard = (page, dir, label, back) => page
+    ? '<a class="' + dir + '" href="#/' + page.id + '"' + (back ? ' data-back="1"' : '') + '>' +
+      '<span class="dir">' + label + '</span>' +
+      '<span class="t">' + esc(shortTitle(page)) + '</span></a>'
+    : '<span></span>';
+
+  // On a walkthrough each step has its own address, so the browser's own back
+  // button retraces it too.
+  const stepLink = (i, dir, label) =>
+    '<a class="' + dir + ' step" href="#/' + p.id + '/' + (i + 1) + '">' +
+    '<span class="dir">' + label + count(i) + '</span>' +
+    '<span class="t">' + esc(currentTabs[i].name) + '</span></a>';
+  const move = p.journey ? stepLink : stepCard;
+
+  const n = currentTabs.length;
+  const prev = n && currentTab > 0
+    ? move(currentTab - 1, 'prev', 'Back')
+    : pageCard(pageAt(-1), 'prev', 'Previous', true);
+  const next = n && currentTab < n - 1
+    ? move(currentTab + 1, 'next', 'Next')
+    : pageCard(pageAt(1), 'next', 'Next');
+
+  return prev + next;
+}
+
 function renderDoc(p){
   shell.setAttribute('data-view', 'doc');
   const isNumbered = /^\\d\\d-/.test(p.id);
@@ -1220,27 +1528,62 @@ function renderDoc(p){
       p.related.map(id => '<a class="chip" href="#/' + id + '">' + esc(id) + '</a>').join('') + '</div>'
     : '';
 
+  const journey = p.journey && (p.tabs || []).length;
   const tabs = (p.tabs || []).slice();
-  if (tabs.length && p.docs.length) tabs.push({ name: 'Docs', html: docsHtml(p) });
+  stepCount = tabs.length;
+  // A walkthrough keeps the docs at the foot of its last step rather than
+  // making them an eighth step nobody walks to.
+  if (tabs.length && p.docs.length && !journey) tabs.push({ name: 'Docs', html: docsHtml(p) });
+
+  currentTabs = tabs;
+  currentTab = openLastTab && tabs.length
+    ? tabs.length - 1
+    : Math.min(requestedStep, Math.max(0, tabs.length - 1));
+  openLastTab = false;
 
   let bodyHtml;
-  if (tabs.length){
+  if (journey){
+    // One step on screen. The path lives in the sidebar and the pager.
+    const last = currentTab === tabs.length - 1;
+    bodyHtml = '<div class="panel" data-panel="' + currentTab + '">' +
+      tabs[currentTab].html +
+      (last && p.docs.length ? docsHtml(p) : '') + '</div>';
+  } else if (tabs.length){
     bodyHtml =
       '<div class="tabs" role="tablist">' + tabs.map((t, i) =>
-        '<button type="button" role="tab" data-tab="' + i + '" aria-selected="' + (i === 0) + '">' +
+        '<button type="button" role="tab" data-tab="' + i + '" aria-selected="' + (i === currentTab) + '">' +
+        (p.journey && i < stepCount ? '<span class="tnum">' + (i + 1) + '</span>' : '') +
         esc(t.name) + '</button>').join('') + '</div>' +
       tabs.map((t, i) =>
-        '<div class="panel" data-panel="' + i + '"' + (i === 0 ? '' : ' hidden') + '>' + t.html + '</div>').join('');
+        '<div class="panel" data-panel="' + i + '"' + (i === currentTab ? '' : ' hidden') + '>' + t.html + '</div>').join('');
   } else {
     bodyHtml = '<div class="panel">' + p.html + (p.docs.length ? docsHtml(p) : '') + '</div>';
   }
 
+  const pager = '<nav class="pager" id="pager">' + pagerHtml(p) + '</nav>';
+
+  const ARROW = '<svg class="sarrow" viewBox="0 0 44 24" aria-hidden="true">' +
+    '<path d="M2 12h36" /><path d="M30 4l9 8-9 8" /></svg>';
+
+  const head = journey
+    ? '<div class="eyebrow"><a href="#/' + p.id + '">' + esc(shortTitle(p)) + '</a>' +
+      ' &middot; step ' + (currentTab + 1) + ' of ' + stepCount + '</div>' +
+      '<div class="stephead">' +
+        '<span class="sn">Step ' + (currentTab + 1) + '</span>' + ARROW +
+        '<h1 class="title">' + esc(tabs[currentTab].name) + '</h1>' +
+      '</div>'
+    : '<div class="eyebrow">' + esc(p.section) + '</div>' +
+      '<h1 class="title">' + num + esc(shortTitle(p)) + '</h1>';
+
+  // The lead and the fact strip introduce the walkthrough, so they belong on
+  // its opening step only.
+  const intro = !journey || currentTab === 0;
+
   main.innerHTML =
     '<div class="doc"><article>' +
-      '<div class="eyebrow">' + esc(p.section) + '</div>' +
-      '<h1 class="title">' + num + esc(shortTitle(p)) + '</h1>' +
-      (p.summary ? '<p class="lead">' + md(p.summary) + '</p>' : '') +
-      chips + strip + more + bodyHtml +
+      head +
+      (p.summary && intro ? '<p class="lead">' + md(p.summary) + '</p>' : '') +
+      chips + (intro ? strip + more : '') + bodyHtml + pager +
       '<div class="srcnote">' +
         (p.repo
           ? '<a class="srclink" href="' + repoHref(p.repo) + '" target="_blank" rel="noopener">' +
@@ -1249,20 +1592,34 @@ function renderDoc(p){
         (p.generated ? ' &middot; generated by npm run build' : ' &middot; edit and rebuild') + '</div>' +
     '</article></div>';
 
-  markNav(p.id);
+  markNav(p.id, journey ? currentTab : null);
 }
 
-function selectTab(i){
+function selectTab(i, scroll){
+  currentTab = i;
   main.querySelectorAll('[data-tab]').forEach(b =>
     b.setAttribute('aria-selected', String(Number(b.dataset.tab) === i)));
   main.querySelectorAll('[data-panel]').forEach(el => {
     el.hidden = Number(el.dataset.panel) !== i;
   });
+  const pager = document.getElementById('pager');
+  if(pager && currentPage) pager.innerHTML = pagerHtml(currentPage);
+  if(scroll){
+    const bar = main.querySelector('.tabs');
+    if(bar) bar.scrollIntoView({ block: 'start' });
+  }
 }
 
-function markNav(id){
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.id === id));
-  const active = document.querySelector('#nav a.on');
+function markNav(id, step){
+  document.querySelectorAll('#nav a').forEach(a => {
+    const mine = a.dataset.id === id;
+    const isStep = a.classList.contains('substep');
+    a.classList.toggle('on', mine && (isStep ? Number(a.dataset.step) === step : step === null));
+  });
+  document.querySelectorAll('.substeps').forEach(el =>
+    el.classList.toggle('open', el.dataset.for === id));
+  const active = document.querySelector('#nav a.on') ||
+    document.querySelector('#nav a[data-id="' + id + '"]');
   document.querySelectorAll('.navgroup').forEach(g => {
     const holds = active && g.contains(active);
     g.classList.toggle('open', !!holds);
@@ -1292,8 +1649,11 @@ function search(term){
 
 function route(){
   const raw = location.hash.replace(/^#\\//, '');
-  const [id, anchor] = raw.split('#');
-  const p = byId[id || 'index'];
+  const [path, anchor] = raw.split('#');
+  const bits = (path || 'index').split('/');
+  const id = bits[0] || 'index';
+  requestedStep = bits[1] ? Math.max(1, parseInt(bits[1], 10)) - 1 : 0;
+  const p = byId[id];
   currentPage = p || byId['index'];
   if(currentPage.id === 'index') renderHome(); else renderDoc(currentPage);
   window.scrollTo(0, 0);
@@ -1308,6 +1668,22 @@ function route(){
 }
 
 main.addEventListener('click', e => {
+  const sw = e.target.closest('[data-sw]');
+  if(sw){
+    const box = sw.closest('.switch');
+    const i = Number(sw.dataset.sw);
+    box.querySelectorAll('[data-sw]').forEach(btn =>
+      btn.setAttribute('aria-selected', String(Number(btn.dataset.sw) === i)));
+    box.querySelectorAll('[data-sw-pane]').forEach(el => {
+      el.hidden = Number(el.dataset.swPane) !== i;
+    });
+    return;
+  }
+  const goto = e.target.closest('[data-goto]');
+  if(goto){ e.preventDefault(); selectTab(Number(goto.dataset.goto), true); return; }
+  // Stepping back into the previous page lands on its last step, so Back
+  // retraces the path Next took.
+  if(e.target.closest('[data-back]')) openLastTab = true;
   const tab = e.target.closest('[data-tab]');
   if(tab) selectTab(Number(tab.dataset.tab));
 });
@@ -1335,7 +1711,7 @@ function buildDocument(body) {
   return (
     '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8" />\n' +
     '<meta name="viewport" content="width=device-width, initial-scale=1" />\n' +
-    '<meta name="description" content="Field manual for the eight example workspaces. What each Claude Code feature does, how the repository is put together, and what breaks." />\n' +
+    '<meta name="description" content="Field manual for the example workspaces. What each Claude Code feature does, how the repository is put together, and what breaks." />\n' +
     buildFavicon() +
     '<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none !important}</style>\n' +
     '</head>\n<body>\n' +

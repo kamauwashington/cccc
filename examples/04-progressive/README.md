@@ -63,7 +63,7 @@ money rule appear part way through the session, on demand, in the lean run.
 3. Run `/context`. Record the Memory files line and the total.
 4. Run `/start` and let it finish. Count the tool calls before the first edit,
    and record the session tokens at the end.
-5. Run `/mode-fat` to swap in the 470 line root file, then repeat steps 2 to 4.
+5. Run `/mode-fat` to swap in the 401 line root file, then repeat steps 2 to 4.
 6. Compare the two. Ten runs per mode, median on the result, because a single
    run of an agent is close to a coin flip.
 

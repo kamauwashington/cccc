@@ -8,7 +8,7 @@ facts:
   Past the cap | head and tail kept, middle dropped
   Raise it with | `BASH_MAX_OUTPUT_LENGTH`, to at most 150,000
   Inspect with | `/context`
-  Shown here by | 04 and 05
+  Shown here by | 05 for output, 04 for startup
 docs:
   Context window | context-window
   Costs | costs
@@ -56,13 +56,27 @@ is possible.
 
 ## Measure it yourself
 
-Example 05 walks the measurement in four steps. Run `/context` and write down
-the number. Run the unbounded command. Run `/context` again. Then run the
-designed form and compare. Same information for the task at hand, two orders of
-magnitude in tokens.
+Example 05 is the one to run for the output half. Ask the board question, watch
+the tool print a headline and a handful of rows, and note what did not happen:
+320 rows of JSON sat in `data/board.json` the whole time and none of them
+entered the conversation.
 
-If `/context` is missing on the machine, `wc -c` makes the same point with no
-UI.
+```term
+  node tools/board.mjs stats
+
+  board  320 messages  6 channels  newest 2026-08-22
+
+    deploys       59
+    general       57
+    incidents     57
+```
+
+```legend
+The headline | Carries the counts, so nothing has to be recounted downstream.
+The rows | Fixed width, newest first, capped by the tool rather than by the model.
+The rule that makes it stick | `Read(./data/**)` is denied in `.claude/settings.json`. Without it, reading the raw JSON is the cheapest path.
+Take the number | Run `/context` before and after. If `/context` is missing on the machine, `wc -c` on the raw file makes the same point with no UI.
+```
 
 ## The startup half
 
@@ -71,10 +85,12 @@ That is `CLAUDE.md` and every parent copy of it, unconditional rules files,
 skill names and descriptions, and every connected MCP server's tool list.
 Exploration is paid once, and only when it is needed.
 
-Example 04 is the measurement for that half. Two versions of one root file,
-byte identical code underneath, and a procedure for taking the numbers
-yourself. Ten runs per mode, median on the slide, because a single run of an
-agent is close to a coin flip.
+Example 04 is the measurement for that half. Two versions of one root file, a
+401 line description of every domain against a 32 line map, with byte identical
+code underneath. `/mode-fat` and `/mode-lean` swap which one is live, `/clear`
+makes the new one load, and `/context` is where the difference shows up. Ten
+runs per mode, median on the slide, because a single run of an agent is close
+to a coin flip.
 
 ## What breaks
 

@@ -2,7 +2,7 @@
 title: Workspace anatomy
 section: Repo staples
 order: 1
-summary: Every folder under examples/ is a copy of template/. Same files, same names, same jobs. Learn the skeleton once and all eight examples read the same way.
+summary: Every folder under examples/ is a copy of template/. Same files, same names, same jobs. Learn the skeleton once and every example reads the same way.
 facts:
   Canonical copy | `template/`
   Checked by | `scripts/verify.mjs`
@@ -48,11 +48,10 @@ The skeleton is the floor. An example adds only the folder its lesson needs.
 
 | Folder | Added by |
 | --- | --- |
-| `.claude/skills/` | 01, 03, 05, 06 |
+| `.claude/skills/` | 01, 03, 06 |
 | `.claude/agents/` | 06 |
 | `.claude/output-styles/` | 08 |
 | `.claude/rules/` | 04 |
-| `.mcp.json` | 05 |
 
 ## Where CLAUDE.md sits
 
@@ -82,8 +81,8 @@ to the part they want.
   confusing npx failure.
 - **An absolute path in a committed `settings.json`.** The folder stops being
   copyable. `verify.mjs` fails the build.
-- **Anything added to the root `.claude/`.** It loads into all eight examples.
+- **Anything added to the root `.claude/`.** It loads into every example.
   See [Isolation and leakage](#/isolation).
 - **`git init` inside an example.** An embedded git repository makes the parent
-  repository stop tracking that folder's contents. Example 07 injects git
-  history from `fixtures/history.txt` for this reason.
+  repository stop tracking that folder's contents. No workspace here holds one.
+  An example that needs history should read it from a committed file instead.

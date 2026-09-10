@@ -1,7 +1,7 @@
 ---
 title: The three rules
-section: Start here
-order: 3
+section: Getting started with Claude
+order: 4
 summary: Launch from inside the example folder. Reset between runs. Read PROMPT.md before you type anything. Every failure mode in this repository comes from breaking one of these.
 docs:
   Settings and where they live | settings

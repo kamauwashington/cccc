@@ -1,8 +1,8 @@
 ---
 title: The field manual
-section: Start here
+section: Getting started with Claude
 order: 1
-summary: Eight small projects. Each one teaches a single Claude Code feature, has one prompt, and ends somewhere a test can check. Four start red and get fixed. The other four start green and show you a difference instead. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
+summary: {{Examples}} small projects, each teaching a single Claude Code feature. Every one has a single prompt and ends somewhere a test can check. Some start red and get fixed. The rest start green and show you a difference instead. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
 ---
 
 ## How this site is built
@@ -12,11 +12,11 @@ site cannot drift from the code. The concept pages are written by hand.
 
 | Part of the site | Comes from |
 | --- | --- |
-| The eight example pages | `examples/NN-name/README.md`, plus the prompt and the reset manifest read off disk |
+| The example pages | `examples/NN-name/README.md`, plus the prompt and the reset manifest read off disk |
 | Field notes | `MEMORY.md`, `docs/`, the root `CLAUDE.md`, `template/README.md` |
 | Everything else | `site/content/*.md`, written by hand |
 
-Add a ninth example and its page appears with no edit to the build script.
+Add another example and its page appears with no edit to the build script.
 Change an example README and the page changes with it. Run `npm run build` to
 rebuild, and see [Adding to this site](#/adding).
 

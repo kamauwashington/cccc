@@ -22,7 +22,7 @@ tabs:
 
 By default auto memory lives under the user's config directory, keyed off the
 git repository. For a demo that is the wrong place twice over. It is invisible,
-and all eight examples share one repository, so they would share one memory
+and every example shares one repository, so they would share one memory
 directory.
 
 `scripts/setup.mjs` writes an absolute `autoMemoryDirectory` per workspace, so
