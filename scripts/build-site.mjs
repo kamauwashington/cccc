@@ -1072,7 +1072,7 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 /* The arrow is not rotated, so its head keeps pointing where it was drawn to
    point: the middle of the first button. Only the writing is tilted. */
 .newnote{
-  position:absolute;left:26px;bottom:8px;
+  position:absolute;left:16px;bottom:4px;
   display:flex;align-items:flex-end;gap:4px;pointer-events:none;
 }
 .newnote span{
@@ -1084,7 +1084,7 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:760px){ .newnote{display:none} }
 
-.srows{margin-top:72px;border-top:1px solid var(--line)}
+.srows{margin-top:34px;border-top:1px solid var(--line)}
 .srow{
   display:flex;align-items:center;gap:36px;padding:26px 0;
   border-bottom:1px solid var(--line);border-left:0;color:var(--ink);
