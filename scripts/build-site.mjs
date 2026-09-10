@@ -1068,18 +1068,19 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
    the button they want, in a voice the rest of the page deliberately does
    not use. Hidden on a phone, where the buttons stack and there is no room
    beside them. */
-.actions{position:relative}
+.actions{position:relative;padding-bottom:118px}
+/* The arrow is not rotated, so its head keeps pointing where it was drawn to
+   point: the middle of the first button. Only the writing is tilted. */
 .newnote{
-  position:absolute;left:2px;top:100%;margin-top:14px;
-  display:flex;align-items:flex-end;gap:8px;
-  transform:rotate(-6deg);transform-origin:left center;pointer-events:none;
+  position:absolute;left:26px;bottom:8px;
+  display:flex;align-items:flex-end;gap:4px;pointer-events:none;
 }
 .newnote span{
   font-family:"Caveat","Bradley Hand","Segoe Script",cursive;
   font-size:22px;line-height:1;color:var(--claude);white-space:nowrap;
-  padding-bottom:6px;
+  padding-bottom:10px;transform:rotate(-7deg);transform-origin:left bottom;
 }
-.newnote svg{flex:none;width:52px;height:46px;fill:none;stroke:var(--claude);
+.newnote svg{flex:none;width:64px;height:78px;fill:none;stroke:var(--claude);
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:760px){ .newnote{display:none} }
 
@@ -1380,10 +1381,10 @@ const SECTIONS = ${JSON.stringify(sections)};
 const ORDER = ${JSON.stringify(order)};
 const NEW_NOTE =
   '<div class="newnote" aria-hidden="true">' +
-    '<svg viewBox="0 0 52 46">' +
-      '<path d="M45 42 C 38 30, 30 18, 15 7" />' +
-      '<path d="M15 7 L 26 10" />' +
-      '<path d="M15 7 L 14 18" />' +
+    '<svg viewBox="0 0 64 78">' +
+      '<path d="M54 72 C 26 66, 8 44, 30 8" />' +
+      '<path d="M30 8 L 20 15" />' +
+      '<path d="M30 8 L 29 20" />' +
     '</svg>' +
     '<span>I&rsquo;m new to Claude Code!!!</span>' +
   '</div>';
