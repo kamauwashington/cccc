@@ -1064,6 +1064,25 @@ a.chip:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary{border:1.5px solid var(--claude);color:var(--claude-ink);background:transparent}
 .btn.primary:hover{background:#fbf1ed;border-color:var(--claude-ink)}
 .btn:hover{border-color:var(--claude);color:var(--ink)}
+/* The one hand written thing on the site. It points a first time reader at
+   the button they want, in a voice the rest of the page deliberately does
+   not use. Hidden on a phone, where the buttons stack and there is no room
+   beside them. */
+.actions{position:relative}
+.newnote{
+  position:absolute;left:2px;top:100%;margin-top:14px;
+  display:flex;align-items:flex-end;gap:8px;
+  transform:rotate(-6deg);transform-origin:left center;pointer-events:none;
+}
+.newnote span{
+  font-family:"Caveat","Bradley Hand","Segoe Script",cursive;
+  font-size:22px;line-height:1;color:var(--claude);white-space:nowrap;
+  padding-bottom:6px;
+}
+.newnote svg{flex:none;width:52px;height:46px;fill:none;stroke:var(--claude);
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:760px){ .newnote{display:none} }
+
 .srows{margin-top:72px;border-top:1px solid var(--line)}
 .srow{
   display:flex;align-items:center;gap:36px;padding:26px 0;
@@ -1343,7 +1362,7 @@ function buildBody(pages, meta) {
   return `<title>Claude Code Crash Course</title>
 <style>${STYLES}</style>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@600&display=swap" />
 
 <div class="shell" id="shell" data-view="doc">
   <header class="masthead">
@@ -1359,6 +1378,16 @@ function buildBody(pages, meta) {
 const PAGES = ${JSON.stringify(data)};
 const SECTIONS = ${JSON.stringify(sections)};
 const ORDER = ${JSON.stringify(order)};
+const NEW_NOTE =
+  '<div class="newnote" aria-hidden="true">' +
+    '<svg viewBox="0 0 52 46">' +
+      '<path d="M45 42 C 38 30, 30 18, 15 7" />' +
+      '<path d="M15 7 L 26 10" />' +
+      '<path d="M15 7 L 14 18" />' +
+    '</svg>' +
+    '<span>I&rsquo;m new to Claude Code!!!</span>' +
+  '</div>';
+
 const BUILT = ${JSON.stringify(meta)};
 const LOGO = ${JSON.stringify(logo)};
 const REPO = ${JSON.stringify(REPO_URL)};
@@ -1446,6 +1475,7 @@ function renderHome(){
         '<a class="btn" href="#/' + EXAMPLE_ID + '">The examples</a>' +
         '<a class="btn repo" href="' + REPO + '" target="_blank" rel="noopener">' +
           GIT_MARK + 'The repository</a>' +
+        NEW_NOTE +
       '</div>' +
       '<div class="srows">' + rows + '</div>' +
       deckCard() +
