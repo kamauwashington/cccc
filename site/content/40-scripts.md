@@ -2,7 +2,7 @@
 title: Repository scripts
 section: Scripts
 order: 1
-summary: Thirteen scripts under scripts/, twelve in Node and one in Python. Setup and reset run automatically. Verify, preflight, prose lint, and check solutions are the gates. Go, start, and solution are for the stage.
+summary: The tooling under scripts/, in Node with one Python helper. Setup and reset run automatically. Verify, preflight, prose lint, and check solutions are the gates. Go, start, and solution are for the stage.
 facts:
   Live at | `scripts/*.mjs`, plus `scripts/capture-console.py`
   Shared helpers | `scripts/lib.mjs`

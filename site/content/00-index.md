@@ -2,7 +2,7 @@
 title: The field manual
 section: Getting started with Claude
 order: 1
-summary: {{Examples}} small projects, each teaching a single Claude Code feature. Every one has a single prompt and ends somewhere a test can check. Some start red and get fixed. The rest start green and show you a difference instead. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
+summary: A growing set of small projects, each teaching a single Claude Code feature. Every one has a single prompt and ends somewhere a test can check. Some start red and get fixed. The rest start green and show you a difference instead. This site documents what is in the repository, what every recurring file does, and where the official docs cover the same ground.
 ---
 
 ## How this site is built

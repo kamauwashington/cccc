@@ -10,7 +10,7 @@
 //                           the section, the spec strip, and the links out to
 //                           the Claude Code docs.
 //   2. The repository       Every examples/NN-name/README.md, PROMPT.md and
-//                           reset.json, plus MEMORY.md and docs/. Add a ninth
+//                           reset.json, plus MEMORY.md and docs/. Add a new
 //                           example and it shows up here with no edit to this
 //                           script.
 //
@@ -1016,7 +1016,7 @@ a.chip{border-bottom:1px solid var(--line-strong)}
 a.chip:hover{border-color:var(--accent);color:var(--accent)}
 
 /* docs panel */
-.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 26px;margin:6px 0 0}
+.docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px 20px;margin:6px 0 0}
 .docs a{border:0;border-left:2px solid var(--accent-line);padding:2px 0 2px 11px;color:var(--ink-2);font-size:14px}
 .docs a:hover{border-left-color:var(--accent);color:var(--accent)}
 .docs .host{display:block;font-family:var(--mono);font-size:10px;color:var(--muted-text)}
@@ -1146,7 +1146,7 @@ const SECTION_BLURBS = {
   'Repo staples': 'The files every workspace repeats. What each one is for, and what happens when it is wrong.',
   'Claude Code concepts': 'One page per feature. Where it lives, when it loads, and whether it is context or enforcement.',
   'The examples': 'Generated from each workspace README, with its prompt and its reset manifest read off disk.',
-  'Scripts': 'The repository tooling, and how to add a page or a ninth example to this site.',
+  'Scripts': 'The repository tooling, and how to add a page or an example to this site.',
   'Field notes': 'The project memory, the checks that move between versions, and the decisions behind the build.',
 };
 
@@ -1443,7 +1443,7 @@ function renderHome(){
       '</div>' +
       '<div class="actions">' +
         '<a class="btn primary" href="#/' + START_ID + '">Start here</a>' +
-        '<a class="btn" href="#/' + EXAMPLE_ID + '">The ' + BUILT.examplesWord + ' examples</a>' +
+        '<a class="btn" href="#/' + EXAMPLE_ID + '">The examples</a>' +
         '<a class="btn repo" href="' + REPO + '" target="_blank" rel="noopener">' +
           GIT_MARK + 'The repository</a>' +
       '</div>' +

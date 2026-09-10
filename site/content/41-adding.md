@@ -13,12 +13,12 @@ facts:
 docs:
   Common workflows | common-workflows
 tabs:
-  Adding to it | Add a ninth example | Add a concept page
+  Adding to it | Add an example | Add a concept page
   How it works | The mechanism | The two sections every concept page has | Keep it honest | The build
   What breaks | What breaks
 ---
 
-## Add a ninth example
+## Add an example
 
 Copy `template/` into `examples/09-name/`, fill in the README, and run
 `npm run build`. The page appears in the nav with no edit to the build script.
