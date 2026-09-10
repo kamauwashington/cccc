@@ -1315,6 +1315,8 @@ function buildBody(pages, meta) {
       .replace(/\{\{examples\}\}/g, String(meta.examples))
       .replace(/\{\{pages\}\}/g, String(meta.pages));
 
+  meta.examplesWord = word(meta.examples, false);
+
   const data = pages.map((p) => ({
     id: p.id,
     title: p.title,
@@ -1441,7 +1443,7 @@ function renderHome(){
       '</div>' +
       '<div class="actions">' +
         '<a class="btn primary" href="#/' + START_ID + '">Start here</a>' +
-        '<a class="btn" href="#/' + EXAMPLE_ID + '">The ' + BUILT.examples + ' examples</a>' +
+        '<a class="btn" href="#/' + EXAMPLE_ID + '">The ' + BUILT.examplesWord + ' examples</a>' +
         '<a class="btn repo" href="' + REPO + '" target="_blank" rel="noopener">' +
           GIT_MARK + 'The repository</a>' +
       '</div>' +
